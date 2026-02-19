@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AbonEx Tático - Peixinho</title>
+    
+    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNNTAgNSBMMTAgMjAgVjQ1IEMxMCA3MCAzMCA5MCA1MCA5NSBDNzAgOTAgOTAgNzAgOTAgNDUgVjIwIFoiIGZpbGw9IiMxMjE0MTYiIHN0cm9rZT0iI2ZmNDA4MSIgc3Ryb2tlLXdpZHRoPSI1Ii8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmNDA4MSIgc3Ryb2tlLXdpZHRoPSI0Ii8+PHBhdGggZD0iTTUwIDIwIEw1MCA4MCBNMjAgNTAgTDgwIDUwIiBzdHJva2U9IiNmZjQwODEiIHN0cm9rZS13aWR0aD0iNCIvPjwvc3ZnPg==" type="image/svg+xml">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* ================= ESTILOS TÁTICOS PFEM (DARK MODE) ================= */
+        :root {
+            --bg-body: #121416; --bg-panel: #1e2124;
+            --primary: #c2185b; --primary-dark: #880e4f;
+            --tech-accent: #ff4081; --text-main: #e0e0e0; --border: #383f45;
+            --status-pago: #15803d; --status-pendente: #b91c1c;
+            --calc-bg: #2b3035; --calc-header: #c2185b;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Roboto', sans-serif; 
+            background: var(--bg-body) radial-gradient(#2c2f33 1px, transparent 1px) 0 0/20px 20px; 
+            color: var(--text-main); 
+            padding: 30px;
+            padding-bottom: 0; 
+            min-height: 100vh;
+        }
+
+        .container { 
+            width: 100%; 
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--bg-panel); 
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            min-height: calc(100vh - 60px);
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden;
+        }
+
+        /* HEADER */
+        .main-header { background: linear-gradient(180deg, #2b3035 0%, #1c1f22 100%); border-bottom: 2px solid var(--primary); padding: 15px 30px; display: flex; justify-content: space-between; align-items: flex-start; }
+        .header-left-block { display: flex; flex-direction: column; gap: 5px; }
+        .title-line { display: flex; align-items: center; gap: 10px; }
+        
+        /* LOGO TÁTICA FINANCEIRA ROSA */
+        .main-icon { filter: drop-shadow(0 0 5px rgba(255, 64, 129, 0.5)); }
+        .logo-title { font-family: 'Rajdhani', sans-serif; font-size: 28px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main); line-height: 1; }
+        
+        .user-id-line { display: flex; align-items: center; gap: 8px; font-size: 16px; color: #e0e0e0; font-weight: 600; letter-spacing: 1px; background: rgba(194, 24, 91, 0.3); padding: 5px 10px; border-radius: 4px; border-left: 3px solid var(--tech-accent); width: fit-content;}
+        .peto-skull { color: #ccc; }
+        #live-datetime { font-size: 12px; color: #8899a6; margin-top: 2px; }
+        .header-right-info { text-align: right; font-size: 11px; color: #8899a6; text-transform: uppercase; letter-spacing: 1px; display: flex; flex-direction: column; justify-content: center;}
+
+        /* TABS */
+        .tabs { display: flex; background: #181a1d; border-bottom: 1px solid var(--border); overflow-x: auto; }
+        .tab-btn { padding: 18px 20px; background: none; border: none; cursor: pointer; font-weight: 600; color: #8899a6; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; font-family: 'Rajdhani'; border-bottom: 3px solid transparent; transition: 0.3s; flex: 1; white-space: nowrap; }
+        .tab-btn.active { color: var(--tech-accent); border-bottom-color: var(--tech-accent); background: rgba(255, 64, 129, 0.05); }
+        .content { padding: 30px; display: none; animation: fadeIn 0.3s; }
+        .content.active { display: block; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+
+        /* FILTRO */
+        .filter-bar { display: flex; gap: 15px; background: #181a1d; padding: 15px; border: 1px solid var(--border); margin-bottom: 20px; border-radius: 4px; align-items: center; flex-wrap: wrap; }
+        .filter-label { color: var(--tech-accent); font-weight: bold; font-size: 14px; text-transform: uppercase; font-family: 'Rajdhani'; }
+        .filter-select { background: #121416; color: white; border: 1px solid #444; padding: 10px; border-radius: 2px; min-width: 120px; font-weight: bold; cursor: pointer; }
+        .filter-select:focus { border-color: var(--tech-accent); outline: none; }
+
+        /* UI GERAL */
+        .btn-toolbar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        button { border: none; border-radius: 2px; cursor: pointer; font-size: 13px; font-weight: 700; padding: 12px 25px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px; font-family: 'Rajdhani'; transition: 0.2s; }
+        .btn-primary { background: var(--primary); color: white; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-primary:hover { background: var(--primary-dark); border-color: var(--tech-accent); box-shadow: 0 0 10px rgba(255, 64, 129, 0.3); }
+        .btn-del { background: #96281b; color: white; }
+        .btn-check { background: var(--status-pago); color: white; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-check:hover { background: #1a9c4b; border-color: #fff; box-shadow: 0 0 10px rgba(76, 175, 80, 0.4); }
+        
+        /* PASTE ZONE */
+        .paste-zone { border: 2px dashed #444; background: #16181b; padding: 20px; text-align: center; color: #888; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 10px; position: relative; }
+        .paste-zone:hover { border-color: var(--tech-accent); color: var(--tech-accent); background: rgba(255, 64, 129, 0.05); }
+        .paste-zone:focus { outline: 2px solid var(--tech-accent); border-color: transparent; }
+        .paste-preview { max-width: 100%; max-height: 150px; margin-top: 10px; border: 1px solid var(--tech-accent); display: none; }
+        .remove-btn-mini { background: #c0392b; color: white; border: none; font-size: 10px; padding: 2px 8px; border-radius: 2px; cursor: pointer; display: none; margin-top: 5px; text-transform: uppercase; font-weight: bold; }
+
+        .table-container { border-radius: 4px; border: 1px solid var(--border); background: #181a1d; overflow-x: auto; max-height: 60vh; }
+        table { width: 100%; border-collapse: collapse; min-width: 1000px; }
+        thead { background: #0f1012; color: var(--tech-accent); position: sticky; top: 0; z-index: 10; border-bottom: 2px solid var(--primary); }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; }
+        
+        .badge { padding: 4px 8px; border-radius: 2px; font-size: 10px; font-weight: 700; text-transform: uppercase; color: white; display: inline-block; }
+        .badge-pago { background: var(--status-pago); } .badge-pendente { background: var(--status-pendente); }
+        .city-badge { font-weight: bold; padding: 3px 8px; border-radius: 3px; font-size: 11px; text-transform: uppercase; color: #fff; text-shadow: 1px 1px 1px rgba(0,0,0,0.5); letter-spacing: 0.5px; }
+
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .card-stat { background: linear-gradient(135deg, #1e2124 0%, #181a1d 100%); padding: 20px; border-radius: 4px; border: 1px solid var(--border); text-align: center; border-left: 4px solid var(--primary); }
+        .card-stat .value { font-family: 'Rajdhani'; font-size: 24px; font-weight: 700; }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .modal-box { background: #1e2124; width: 100%; max-width: 700px; padding: 25px; border: 1px solid var(--primary); border-radius: 4px; max-height: 95vh; overflow-y: auto; }
+        .form-row { display: flex; gap: 15px; margin-bottom: 15px; } .form-group { flex: 1; }
+        .form-label { display: block; margin-bottom: 5px; font-size: 11px; font-weight: 700; color: var(--tech-accent); text-transform: uppercase; }
+        .form-control { width: 100%; padding: 10px; border: 1px solid #444; border-radius: 2px; font-size: 14px; background: #121416; color: white; }
+        .form-control:focus { outline: none; border-color: var(--tech-accent); }
+        
+        .bot-gestor-box { background: #16181b; border: 1px solid var(--primary); border-left: 5px solid var(--tech-accent); padding: 15px; margin-bottom: 30px; display: flex; gap: 15px; align-items: flex-start; box-shadow: 0 0 15px rgba(0,0,0,0.3); position: relative; overflow: hidden; }
+        .bot-avatar { width: 50px; height: 50px; background: var(--primary); color: white; border-radius: 2px; display: flex; justify-content: center; align-items: center; font-size: 24px; flex-shrink: 0; box-shadow: 0 0 10px rgba(255, 64, 129, 0.5); }
+        .bot-content-area { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+        .bot-header-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 5px; }
+        .bot-title { color: var(--tech-accent); font-family:'Rajdhani'; font-weight:bold; font-size: 16px; text-transform: uppercase; }
+        .bot-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
+        .bot-stat-item { background: #121416; border: 1px solid #333; padding: 8px; border-radius: 4px; text-align: center; }
+        .bot-stat-label { font-size: 10px; color: #888; text-transform: uppercase; display: block; margin-bottom: 3px; }
+        .bot-stat-val { font-family: 'Rajdhani'; font-weight: bold; font-size: 18px; color: white; }
+        .bot-stat-sub { font-size: 10px; color: #666; margin-top: 2px; display: block; }
+        .bot-live-indicator { width: 8px; height: 8px; background: #e74c3c; border-radius: 50%; display: inline-block; margin-right: 5px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
+        .charts-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 20px; }
+        .chart-box { background: #16181b; padding: 20px; border-radius: 4px; border: 1px solid #333; position: relative; }
+        .chart-title { font-family: 'Rajdhani'; color: var(--tech-accent); font-size: 18px; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .doughnut-container { height: 250px; position: relative; display: flex; justify-content: center; }
+        .doughnut-center-text { position: absolute; top: 55%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none; }
+        .dct-value { font-size: 32px; font-weight: bold; color: var(--text-main); line-height: 1; }
+        .dct-label { font-size: 12px; color: #666; text-transform: uppercase; }
+
+        .progress-wrapper { background: #16181b; padding: 20px; border-radius: 4px; border: 1px solid #333; margin-bottom: 30px; }
+        .progress-label { color: var(--tech-accent); font-weight: bold; font-family: 'Rajdhani'; font-size: 16px; margin-bottom: 10px; display:flex; justify-content:space-between; }
+        .progress-bg { height: 25px; background: #0f1012; border-radius: 12px; border: 1px solid #333; overflow: hidden; position: relative; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--tech-accent)); width: 0%; transition: width 0.5s ease; position: relative; }
+        .progress-text { position: absolute; right: 10px; top: 0; line-height: 25px; font-size: 12px; font-weight: bold; color: white; text-shadow: 1px 1px 2px black; }
+
+        /* RELATÓRIO */
+        .analysis-filters { display: flex; gap: 15px; margin-bottom: 20px; background: #181a1d; padding: 15px; border-radius: 4px; border: 1px solid var(--border); align-items: center; flex-wrap: wrap; }
+        .report-table th { background: #222; color: #ccc; font-size: 11px; text-transform: uppercase; cursor: pointer; user-select: none; transition: 0.2s; }
+        .report-table th:hover { background: #333; color: var(--tech-accent); }
+        .report-table td { font-size: 12px; border-bottom: 1px solid #333; }
+        .turn-badge { font-size: 10px; padding: 2px 6px; border-radius: 3px; font-weight: bold; }
+        .turn-day { background: #f39c12; color: #000; }
+        .turn-night { background: #2c3e50; color: #fff; border: 1px solid #555; }
+
+        /* CALCULADORA NOVA */
+        .calc-wrapper { background: #16181b; border: 1px solid #333; border-radius: 8px; overflow: hidden; }
+        .calc-tabs-header { display: flex; border-bottom: 1px solid #333; background: #0f1012; }
+        .c-tab { flex: 1; padding: 15px; text-align: center; cursor: pointer; color: #888; font-family: 'Rajdhani'; font-weight: bold; text-transform: uppercase; border-bottom: 3px solid transparent; transition: 0.3s; background: transparent; }
+        .c-tab.active { color: white; border-bottom-color: var(--calc-header); background: #222; }
+        .calc-body { padding: 25px; }
+        .calc-alert { background: rgba(255, 193, 7, 0.1); border-left: 4px solid #ffc107; color: #ffca28; padding: 15px; border-radius: 4px; font-size: 13px; margin-bottom: 20px; line-height: 1.4; }
+        .calc-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .calc-card { background: #1e2124; border: 1px solid #333; border-radius: 6px; padding: 15px; position: relative; transition: 0.3s; }
+        .calc-card:hover { border-color: var(--calc-header); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .calc-card-label { font-size: 11px; color: #888; text-transform: uppercase; font-weight: bold; margin-bottom: 5px; display: block; }
+        .calc-input-styled { width: 100%; background: #121416; border: 1px solid #444; color: white; padding: 8px; font-size: 16px; border-radius: 4px; font-weight: bold; }
+        .calc-btn-action { width: 100%; background: var(--calc-header); color: white; border: none; padding: 15px; font-size: 16px; font-weight: bold; text-transform: uppercase; border-radius: 4px; cursor: pointer; transition: 0.2s; font-family: 'Rajdhani'; margin-top: 10px; }
+        .he-result-box { background: #121416; margin-top: 25px; border-radius: 6px; border: 1px solid #333; display: none; overflow: hidden; }
+        .he-res-header { background: #1f2226; padding: 10px 20px; font-size: 14px; font-weight: bold; color: var(--tech-accent); border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
+        .he-res-body { padding: 20px; }
+        .he-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; color: #ccc; border-bottom: 1px solid #222; padding-bottom: 5px; }
+        .he-row.total { font-size: 16px; color: white; border-top: 1px solid #444; padding-top: 10px; margin-top: 10px; border-bottom: none; font-weight: bold; }
+        .he-val.plus { color: var(--tech-accent); }
+        .he-val.minus { color: #e74c3c; }
+
+        .ref-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .ref-card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .ref-header { background: #1f6fb2; color: white; padding: 12px; text-align: center; font-weight: bold; text-transform: uppercase; font-size: 14px; }
+        .ref-table-styled { width: 100%; border-collapse: collapse; font-family: 'Roboto', sans-serif; }
+        .ref-table-styled th { background: #f0f2f5; color: #555; font-size: 10px; text-transform: uppercase; padding: 8px 10px; border-bottom: 1px solid #ddd; }
+        .ref-table-styled td { padding: 8px 10px; color: #333; font-size: 12px; text-align: center; border-bottom: 1px solid #eee; }
+        .ref-row-highlight { font-weight: bold; color: #000; background: #fffde7; }
+        
+        .notepad-area { width: 100%; height: 300px; background: #121416; border: 1px solid #444; color: var(--tech-accent); padding: 15px; font-family: 'Courier New', monospace; resize: none; }
+        .tactical-tool-panel { position: absolute; top: 80px; width: 320px; background: #1e2124; border: 2px solid var(--tech-accent); z-index: 100; display: none; box-shadow: 0 10px 40px rgba(0,0,0,0.9); padding: 20px; border-radius: 8px; }
+        .tool-header { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #444; padding-bottom: 10px; color: var(--tech-accent); font-family: 'Rajdhani'; font-size: 18px; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; }
+        .calc-display { width: 100%; height: 70px; background: #08090a; color: var(--tech-accent); font-family: 'Courier New', monospace; text-align: right; padding: 15px; margin-bottom: 15px; border: 1px solid #333; border-radius: 4px; font-size: 32px; font-weight: bold; text-shadow: 0 0 8px rgba(255, 64, 129, 0.4); }
+        .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .calc-btn { background: #2b3035; color: white; padding: 15px 0; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 18px; font-family: 'Rajdhani'; box-shadow: 0 4px 0 #181a1d; transition: all 0.1s; }
+        .calc-btn:active { transform: translateY(4px); box-shadow: none; }
+        .calc-btn.op { background: #1e3a29; color: var(--tech-accent); border: 1px solid rgba(139,195,74,0.2); }
+        .calc-btn.clear { background: #5a1a1a; color: #ff9999; }
+        .calc-btn.equal { background: var(--tech-accent); color: black; box-shadow: 0 4px 0 #558b2f; }
+
+        @media (max-width: 768px) {
+            body { padding: 0; }
+            .container { max-width: 100%; border-radius: 0; border: none; min-height: 100vh; }
+        }
+
+        /* ================= ESTILOS DO MODO CLARO (FIX CORRIGIDO) ================= */
+        body.light-mode {
+            --bg-body: #f4f4f5;
+            --bg-panel: #ffffff;
+            --primary: #880e4f;
+            --primary-dark: #4a0024;    
+            --tech-accent: #d81b60;
+            --text-main: #18181b;
+            --text-muted: #52525b;
+            --border: #d4d4d8;
+            --calc-bg: #e4e4e7;
+            --calc-header: #c2185b;
+            background-image: radial-gradient(#d4d4d8 1px, transparent 1px);
+        }
+
+        body.light-mode .main-header { background: #ffffff; border-bottom: 2px solid var(--primary); }
+        body.light-mode .logo-title { color: var(--primary-dark); }
+        body.light-mode .user-id-line { background: rgba(216, 27, 96, 0.1); color: var(--primary-dark); }
+        body.light-mode .peto-skull { color: var(--primary); }
+        
+        body.light-mode .tabs { background: #f4f4f5; border-color: #d4d4d8; }
+        body.light-mode .tab-btn { color: #555; }
+        body.light-mode .tab-btn:hover { background: rgba(0,0,0,0.05); }
+        body.light-mode .tab-btn.active { background: rgba(216, 27, 96, 0.1); color: var(--tech-accent); }
+        
+        body.light-mode table thead { background-color: #e4e4e7; color: var(--primary-dark); border-color: #d4d4d8; }
+        body.light-mode table td { color: #333; border-color: #d4d4d8; }
+        
+        body.light-mode .card-stat, body.light-mode .chart-wrapper, body.light-mode .bot-gestor-box, body.light-mode .filter-bar, body.light-mode .analysis-filters, body.light-mode .progress-wrapper, body.light-mode .chart-box { background: #ffffff; border-color: #d4d4d8; }
+        body.light-mode .card-stat h4, body.light-mode .chart-title, body.light-mode .bot-title { color: var(--primary-dark); }
+        
+        body.light-mode .bot-stat-item { background: #f4f4f5; border-color: #d4d4d8; }
+        body.light-mode .bot-stat-val { color: var(--primary-dark); }
+        body.light-mode .bot-stat-sub, body.light-mode .bot-stat-label { color: #555; }
+        
+        body.light-mode .modal-box { background: #ffffff; border-color: #d4d4d8; }
+        body.light-mode .form-control, body.light-mode .filter-select { background: #ffffff; color: #18181b; border: 1px solid #a1a1aa; }
+        body.light-mode .form-control:focus, body.light-mode .filter-select:focus { border-color: var(--primary); }
+        
+        body.light-mode .table-container { background: #ffffff; border-color: #d4d4d8; }
+        body.light-mode .modal-overlay { background: rgba(255,255,255,0.85); }
+        body.light-mode .popup-success { background: #ffffff; box-shadow: 0 0 50px rgba(0,0,0,0.1); }
+        body.light-mode .success-text { color: #18181b; }
+        
+        body.light-mode .calc-wrapper { border-color: #d4d4d8; background: #ffffff; }
+        body.light-mode .calc-tabs-header { background: #e4e4e7; border-color: #d4d4d8; }
+        body.light-mode .c-tab { color: #555; }
+        body.light-mode .c-tab.active { background: #ffffff; color: var(--primary-dark); border-bottom-color: var(--calc-header); }
+        body.light-mode .calc-card { background: #f4f4f5; border-color: #d4d4d8; }
+        body.light-mode .calc-input-styled { background: #ffffff; color: #18181b; border-color: #a1a1aa; }
+        body.light-mode .he-result-box { background: #ffffff; border-color: #d4d4d8; }
+        body.light-mode .he-res-header { background: #fce4ec; color: var(--primary-dark); border-color: #d4d4d8; }
+        body.light-mode .he-row { color: #333; border-color: #d4d4d8; }
+        body.light-mode .he-row.total { color: var(--primary-dark); border-color: #a1a1aa; }
+        body.light-mode .he-val.plus { color: var(--primary-dark); }
+        
+        body.light-mode .paste-zone { background: #f4f4f5; border-color: #a1a1aa; color: #555; }
+        body.light-mode .paste-zone:hover { background: #fce4ec; border-color: var(--primary); color: var(--primary); }
+        
+        body.light-mode .report-table th { background: #e4e4e7; color: var(--primary-dark); border-color: #d4d4d8; }
+        body.light-mode .report-table th:hover { background: #d4d4d8; }
+        body.light-mode .report-table td { border-color: #d4d4d8; }
+        
+        body.light-mode .ref-header { background: var(--calc-header); }
+        
+        body.light-mode .dct-value { color: var(--primary-dark); }
+        body.light-mode .progress-bg { background: #e4e4e7; border-color: #d4d4d8; }
+        
+        body.light-mode .notepad-area { background: #f4f4f5; color: #18181b; border-color: #a1a1aa; }
+        body.light-mode .tactical-tool-panel { background: #ffffff; border-color: var(--primary); box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        body.light-mode .calc-display { background: #f4f4f5; color: var(--primary-dark); border-color: #a1a1aa; text-shadow: none; }
+        body.light-mode .calc-btn { background: #e4e4e7; color: #18181b; box-shadow: 0 4px 0 #d4d4d8; }
+        body.light-mode .calc-btn:hover { background: #d4d4d8; color: var(--primary); }
+        body.light-mode .calc-btn.op { background: #fce4ec; color: var(--primary-dark); border: 1px solid #f8bbd0; }
+        body.light-mode .calc-btn.equal { background: var(--primary); color: white; box-shadow: 0 4px 0 var(--primary-dark); }
+        body.light-mode .calc-btn.clear { background: #ffebee; color: #c2185b; }
+    </style>
+</head>
+<body>
+
+    <div id="img-viewer" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:6000; justify-content:center; align-items:center;" onclick="this.style.display='none'">
+        <img id="img-full" style="max-width:90%; max-height:90%; border:2px solid var(--tech-accent);">
+    </div>
+
+    <div id="modal" class="modal-overlay">
+        <div class="modal-box">
+            <h3 style="color:var(--tech-accent); margin-bottom:15px; border-bottom:1px solid #444; padding-bottom:10px;">REGISTRO DE OPERAÇÃO</h3>
+            <input type="hidden" id="edit-id">
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Cidade</label>
+                    <select id="m-cidade" class="form-control" onchange="verificarCidade(this)"></select>
+                </div>
+                <div class="form-group"><label class="form-label">Data</label><input type="date" id="m-data" class="form-control"></div>
+            </div>
+            
+            <div class="form-group" style="margin-bottom:15px;">
+                <label class="form-label">Operação / Evento</label>
+                <input type="text" id="m-operacao" class="form-control" placeholder="Ex: Op. Amanhecer, Festas Juninas...">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Turno (Regime)</label>
+                    <select id="m-periodo" class="form-control">
+                        <option value="DIURNO">DIURNO (Dia)</option>
+                        <option value="NOTURNO">NOTURNO (Noite)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tipo</label>
+                    <select id="m-tipo" class="form-control">
+                        <option value="H.E">HORA EXTRA (H.E)</option>
+                        <option value="V.D">VALOR DIÁRIA (V.D)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Natureza</label>
+                    <select id="m-natureza" class="form-control">
+                        <option value="VOLUNTÁRIO">VOLUNTÁRIO</option>
+                        <option value="ABONO">ABONO</option>
+                        <option value="PERMUTA">PERMUTA</option>
+                        <option value="P.O">P.O</option>
+                    </select>
+                </div>
+                <div class="form-group"><label class="form-label">Horas (Qtd)</label><input type="number" id="m-horas" class="form-control" placeholder="8"></div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group"><label class="form-label">Valor (R$)</label><input type="text" id="m-valor" class="form-control" onkeyup="formatarMoeda(this)"></div>
+                <div class="form-group"><label class="form-label">Status</label><select id="m-status" class="form-control"><option value="A RECEBER">A RECEBER</option><option value="PAGO">PAGO</option></select></div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Anexo de Escala (PDF OFICIAL)</label>
+                <input type="file" id="m-pdf-escala" class="form-control" accept="application/pdf" style="margin-bottom:5px; border-color:var(--primary);">
+                <div style="display:flex; justify-content:space-between;">
+                    <small style="color:var(--primary); font-size:10px;">*Recomendado anexar PDF somente se &lt; 3MB.</small>
+                    <button id="btn-remove-pdf" class="remove-btn-mini" onclick="removerPdf()">REMOVER PDF</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Print/Foto (Opcional)</label>
+                <input type="file" id="input-paste-file" accept="image/*" style="display:none;" onchange="handleFileSelect(this)">
+                
+                <div class="paste-zone" id="paste-zone" tabindex="0" onclick="triggerFileSelect()">
+                    <i class="fas fa-camera fa-2x"></i>
+                    <span>Clique ou Ctrl+V para colar imagem</span>
+                    <img id="paste-preview-img" class="paste-preview">
+                </div>
+                <button id="btn-remove-img" class="remove-btn-mini" style="width:100%; margin-top:0;" onclick="removerImagem()">REMOVER IMAGEM</button>
+            </div>
+            
+            <div class="form-group"><label class="form-label">Observações</label><textarea id="m-obs" class="form-control" rows="2"></textarea></div>
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button class="btn-primary" style="flex:1" onclick="salvarRegistro()">GRAVAR</button>
+                <button class="btn-del" onclick="fecharModal()">CANCELAR</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-header">
+            <div class="header-left-block">
+                <div class="title-line">
+                    <svg class="main-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32">
+                      <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" style="stop-color:#ff4081;stop-opacity:1" />
+                          <stop offset="100%" style="stop-color:#c2185b;stop-opacity:1" />
+                        </linearGradient>
+                      </defs>
+                      <path d="M50 5 L85 20 V45 C85 65 70 85 50 95 C30 85 15 65 15 45 V20 Z" fill="none" stroke="url(#grad1)" stroke-width="3" stroke-linejoin="round"/>
+                      <path d="M35 30 H65 V70 H35 Z" fill="#c2185b" opacity="0.3"/>
+                      <path d="M35 30 H55 L65 40 V70 H35 Z" fill="none" stroke="#ff4081" stroke-width="2"/>
+                      <path d="M55 30 V40 H65" fill="none" stroke="#ff4081" stroke-width="2"/>
+                      <path d="M40 60 L50 50 L55 55 L70 35" fill="none" stroke="#ff4081" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                      <circle cx="70" cy="35" r="5" fill="none" stroke="#ff4081" stroke-width="2"/>
+                      <path d="M70 30 V40 M65 35 H75" stroke="#ff4081" stroke-width="2"/>
+                    </svg>
+                    <span class="logo-title">GestorPro - AbonEx <span style="font-size:14px; color:#666">PFEM TACTICAL</span></span>
+                </div>
+                <div class="user-id-line">
+                    <i class="fas fa-skull peto-skull"></i> SD PM PEIXINHO
+                </div>
+                <span id="live-datetime">...</span>
+            </div>
+            <div class="header-right-info">
+                 <span>BASE OPERACIONAL</span><br>
+                 <span id="sync-status" style="font-size:10px; color:#666; font-weight:bold;"><i class="fas fa-wifi"></i> CONECTADO</span>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="nav('painel', this)"><i class="fas fa-list-alt"></i> Painel</button>
+            <button class="tab-btn" onclick="nav('analise', this)"><i class="fas fa-chart-line"></i> Análise</button>
+            <button class="tab-btn" onclick="nav('calc-he-tab', this)"><i class="fas fa-calculator"></i> Calculadora H.E</button>
+            <button class="tab-btn" onclick="nav('ferramentas', this)"><i class="fas fa-toolbox"></i> Ferramentas</button>
+        </div>
+
+        <div id="painel" class="content active">
+            <div class="bot-gestor-box">
+                <div class="bot-avatar"><i class="fas fa-user-secret"></i></div>
+                <div class="bot-content-area">
+                    <div class="bot-header-row">
+                        <span class="bot-title">BOT PEIXINHO TÁTICA</span>
+                        <div style="display:flex; align-items:center;">
+                            <span class="bot-live-indicator"></span>
+                            <span style="font-size:10px; opacity:0.7; font-weight:bold; letter-spacing:1px;">MONITORAMENTO EM TEMPO REAL (MÊS ATUAL)</span>
+                        </div>
+                    </div>
+                    <div id="bot-dashboard" class="bot-stats-grid"></div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="card-stat"><h4>Total</h4><div class="value" id="dash-total">R$ 0,00</div></div>
+                <div class="card-stat"><h4>Total Horas</h4><div class="value" id="dash-horas" style="color:var(--tech-accent)">0h</div></div>
+                <div class="card-stat" style="border-color:var(--status-pago)"><h4>Pago</h4><div class="value" style="color:var(--status-pago)" id="dash-pago">R$ 0,00</div></div>
+                <div class="card-stat" style="border-color:var(--status-pendente)"><h4>Pendente</h4><div class="value" style="color:var(--status-pendente)" id="dash-pendente">R$ 0,00</div></div>
+            </div>
+            
+            <div class="filter-bar">
+                <i class="fas fa-filter" style="color:var(--tech-accent)"></i>
+                <span class="filter-label">FILTRAR:</span>
+                <select id="filtro-mes" class="filter-select" onchange="renderTable()">
+                    <option value="">MÊS (TODOS)</option>
+                    <option value="01">Janeiro</option><option value="02">Fevereiro</option><option value="03">Março</option>
+                    <option value="04">Abril</option><option value="05">Maio</option><option value="06">Junho</option>
+                    <option value="07">Julho</option><option value="08">Agosto</option><option value="09">Setembro</option>
+                    <option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option>
+                </select>
+                <select id="filtro-ano" class="filter-select" onchange="renderTable()"></select>
+                <select id="filtro-status" class="filter-select" onchange="renderTable()">
+                    <option value="all">STATUS (TODOS)</option>
+                    <option value="PAGO">PAGO</option>
+                    <option value="A RECEBER">A RECEBER</option>
+                </select>
+                <select id="filtro-tipo" class="filter-select" onchange="renderTable()">
+                    <option value="all">TIPO (TODOS)</option>
+                    <option value="H.E">HORA EXTRA (H.E)</option>
+                    <option value="V.D">VALOR DIÁRIA (V.D)</option>
+                </select>
+                <button class="btn-del" style="padding: 5px 10px; font-size: 10px;" onclick="resetFiltros()">LIMPAR</button>
+            </div>
+
+            <div class="btn-toolbar">
+                <button class="btn-primary" onclick="abrirModal()"><i class="fas fa-plus-circle"></i> Lançar</button>
+                <button class="btn-primary" style="background:#27ae60;" onclick="exportarCSV()"><i class="fas fa-file-export"></i> CSV</button>
+                <button class="btn-del" onclick="limparBase()"><i class="fas fa-skull"></i> Reset</button>
+                <button class="btn-primary" style="background:#2980b9;" onclick="carregarNuvem(true)"><i class="fas fa-sync"></i> Forçar Sync</button>
+            </div>
+            <div class="table-container">
+                <table id="tabela-extras">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Cidade</th>
+                            <th>Operação</th>
+                            <th>Tipo / Natureza</th>
+                            <th style="text-align:center;">Qtd Horas</th>
+                            <th>Status</th>
+                            <th>Valor</th>
+                            <th>PDF Escala / Obs</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-extras"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="analise" class="content">
+            <h2 class="section-title" style="color:var(--tech-accent);">Análise Operacional</h2>
+            <div class="analysis-filters">
+                <i class="fas fa-filter" style="color:var(--tech-accent)"></i>
+                <span class="filter-label">FILTRO GRÁFICOS:</span>
+                <select id="an-filtro-mes" class="filter-select" onchange="triggerUpdateAnalysis()">
+                    <option value="">MÊS ATUAL</option>
+                    <option value="all">TODOS OS MESES</option>
+                    <option value="01">Janeiro</option><option value="02">Fevereiro</option><option value="03">Março</option>
+                    <option value="04">Abril</option><option value="05">Maio</option><option value="06">Junho</option>
+                    <option value="07">Julho</option><option value="08">Agosto</option><option value="09">Setembro</option>
+                    <option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option>
+                </select>
+                <select id="an-filtro-ano" class="filter-select" onchange="triggerUpdateAnalysis()"></select>
+                <select id="an-filtro-status" class="filter-select" onchange="triggerUpdateAnalysis()">
+                    <option value="all">STATUS (TODOS)</option>
+                    <option value="PAGO">PAGO</option>
+                    <option value="A RECEBER">A RECEBER</option>
+                </select>
+                <select id="an-filtro-tipo" class="filter-select" onchange="triggerUpdateAnalysis()">
+                    <option value="all">TIPO (TODOS)</option>
+                    <option value="H.E">HORA EXTRA (H.E)</option>
+                    <option value="V.D">VALOR DIÁRIA (V.D)</option>
+                </select>
+            </div>
+
+            <div class="progress-wrapper">
+                <div class="progress-label">
+                    <span>LIMITE H.E (60H)</span>
+                    <span id="prog-text-label-he">0%</span>
+                </div>
+                <div class="progress-bg">
+                    <div id="prog-bar-fill-he" class="progress-fill">
+                        <div id="prog-text-he" class="progress-text">0h / 60h</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-wrapper">
+                <div class="progress-label">
+                    <span>LIMITE V.D (60H)</span>
+                    <span id="prog-text-label-vd">0%</span>
+                </div>
+                <div class="progress-bg">
+                    <div id="prog-bar-fill-vd" class="progress-fill">
+                        <div id="prog-text-vd" class="progress-text">0h / 60h</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-bottom:30px; background:var(--bg-panel); padding:15px; border-radius:4px; border:1px solid var(--border);">
+                <h4 style="color:var(--tech-accent); border-bottom:1px solid var(--border); padding-bottom:10px; margin-bottom:15px; text-transform:uppercase; display:flex; justify-content:space-between; align-items:center;">
+                    <span><i class="fas fa-list"></i> Relatório de Serviço</span>
+                    <small style="font-size:10px; color:#666;">CLIQUE NAS COLUNAS P/ ORDENAR</small>
+                </h4>
+                <div style="overflow-x:auto;">
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th onclick="setSort('data')">Data <i class="fas fa-sort"></i></th>
+                                <th onclick="setSort('cidade')">Cidade <i class="fas fa-sort"></i></th>
+                                <th>Turno</th>
+                                <th style="text-align:center;">Horas</th>
+                                <th>Tipo</th>
+                                <th onclick="setSort('valor')">Valor <i class="fas fa-sort"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody id="report-tbody"></tbody>
+                    </table>
+                </div>
+             </div>
+
+            <div class="charts-wrapper">
+                <div class="chart-box">
+                    <div class="chart-title"><i class="fas fa-chart-pie"></i> Distribuição de Horas</div>
+                    <div class="doughnut-container">
+                        <canvas id="doughnutChart"></canvas>
+                        <div class="doughnut-center-text">
+                            <div class="dct-value" id="dct-total">0</div>
+                            <div class="dct-label">HORAS TOTAIS</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-box">
+                    <div class="chart-title"><i class="fas fa-chart-bar"></i> Comparativo Anual (Horas)</div>
+                    <div style="height: 250px;">
+                        <canvas id="comparisonChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="calc-he-tab" class="content">
+            <h2 class="section-title" style="color:var(--tech-accent); border-bottom:1px solid var(--border); padding-bottom:10px; margin-bottom:20px;">CALCULADORA & TABELAS</h2>
+            
+            <div class="calc-wrapper">
+                <div class="calc-tabs-header">
+                    <button id="tab-calc-c1" class="c-tab active" onclick="switchCalcTab('c-calc')"><i class="fas fa-calculator"></i> Calculadora</button>
+                    <button id="tab-calc-c2" class="c-tab" onclick="switchCalcTab('c-table')"><i class="fas fa-table"></i> Tabelas de Valores</button>
+                    <button id="tab-calc-c3" class="c-tab" onclick="switchCalcTab('c-info')"><i class="fas fa-info-circle"></i> Informações</button>
+                </div>
+
+                <div id="c-calc" class="calc-body">
+                    <div class="calc-alert">
+                        <strong>⚠️ SISTEMA HÍBRIDO (V11.8):</strong><br>
+                        • Selecione <strong>"SD PM (GAP III)"</strong> para sua realidade atual.<br>
+                        • Selecione <strong>"SD PM (GAP IV)"</strong> para simulação de promoção.<br>
+                        • Imposto de Renda (27,5%) incide APENAS sobre Hora Extra.
+                    </div>
+
+                    <div class="form-group" style="margin-bottom:20px;">
+                        <label class="calc-card-label">SELECIONE SEU POSTO/GRADUAÇÃO</label>
+                        <select id="he-posto" class="calc-input-styled">
+                            <option value="">-- SELECIONE --</option>
+                            <option value="SD PM GAP3" selected>SD PM (GAP III)</option>
+                            <option value="SD PM GAP4">SD PM (GAP IV)</option>
+                            <option value="SD PM GAP5" style="color:#f39c12; font-weight:bold;">SD PM (GAP V)</option>
+                            <option value="CEL PM">CEL PM</option><option value="TC PM">TC PM</option><option value="MAJ PM">MAJ PM</option><option value="CAP PM">CAP PM</option><option value="TEN PM">TEN PM</option><option value="ASP PM">ASP PM</option><option value="AL OF PM">AL OF PM</option><option value="ST PM">ST PM</option><option value="SGT PM">SGT PM</option><option value="CB PM">CB PM</option><option value="AL SD PM">AL SD PM</option><option value="FUNC CIVIL">FUNC CIVIL</option>
+                        </select>
+                    </div>
+
+                    <div class="calc-card-grid">
+                        <div class="calc-card">
+                            <label class="calc-card-label"><i class="fas fa-sun"></i> H.E. DIURNAS</label>
+                            <input type="number" id="he-normal" class="calc-input-styled" min="0" value="0" step="0.5">
+                        </div>
+                        <div class="calc-card">
+                            <label class="calc-card-label"><i class="fas fa-moon"></i> H.E. NOTURNAS</label>
+                            <input type="number" id="he-noturna" class="calc-input-styled" min="0" value="0" step="0.5">
+                        </div>
+                        <div class="calc-card">
+                            <label class="calc-card-label"><i class="fas fa-sun"></i> V.D. DIURNO (QTD)</label>
+                            <input type="number" id="vd-normal" class="calc-input-styled" min="0" value="0">
+                        </div>
+                        <div class="calc-card">
+                            <label class="calc-card-label"><i class="fas fa-moon"></i> V.D. NOTURNO (QTD)</label>
+                            <input type="number" id="vd-noturno" class="calc-input-styled" min="0" value="0">
+                        </div>
+                    </div>
+
+                    <button class="calc-btn-action" onclick="calcularHorasOficial()">CALCULAR PREVISÃO</button>
+
+                    <div id="he-resultado" class="he-result-box">
+                        <div class="he-res-header">
+                            <span><i class="fas fa-file-invoice-dollar"></i> EXTRATO DETALHADO</span>
+                            <span style="font-size:10px; opacity:0.7">BASE SELECIONADA</span>
+                        </div>
+                        <div class="he-res-body">
+                            <div class="he-row"><span>H.E. Diurnas (Bruto)</span><span id="res-he-normal" class="he-val plus">R$ 0,00</span></div>
+                            <div class="he-row"><span>H.E. Noturnas (Bruto)</span><span id="res-he-noturna" class="he-val plus">R$ 0,00</span></div>
+                            <div class="he-row"><span>V.D. Diurno (Isento)</span><span id="res-vd-normal" class="he-val plus">R$ 0,00</span></div>
+                            <div class="he-row"><span>V.D. Noturno (Isento)</span><span id="res-vd-noturno" class="he-val plus">R$ 0,00</span></div>
+                            <div style="border-bottom:1px dashed var(--border); margin:10px 0;"></div>
+                            <div class="he-row"><span>(-) IRRF s/ Hora Extra (27,5%)</span><span id="res-irrf" class="he-val minus">R$ 0,00</span></div>
+                            <div class="he-row total"><span>LÍQUIDO ESTIMADO</span><span id="res-liquido" class="he-val" style="color:#2ecc71; font-size:20px;">R$ 0,00</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="c-table" class="calc-body" style="display:none; background:var(--bg-panel); min-height:400px;">
+                    <div style="margin-bottom:20px;">
+                        <h4 style="color:var(--text-main); font-family:'Rajdhani'; font-weight:bold; margin-bottom:5px;">TABELAS DE REFERÊNCIA</h4>
+                        <div style="background:var(--bg-body); border-left:4px solid var(--calc-header); padding:10px; margin-bottom:15px; color:var(--text-main); font-size:12px; line-height:1.4;">
+                            <strong>EVOLUÇÃO SD PM:</strong><br>
+                            1. <strong>GAP III:</strong> R$ 27,16 (Realidade Atual)<br>
+                            2. <strong>GAP IV:</strong> R$ 30,58 (Simulação)<br>
+                            3. <strong>GAP V (Oficial):</strong> R$ 34,14
+                        </div>
+                    </div>
+                    
+                    <div class="ref-grid">
+                        <div class="ref-card" style="background: var(--bg-body);">
+                            <div class="ref-header">HORAS EXTRAS (HE)</div>
+                            <table class="ref-table-styled" style="background: transparent;">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:left;">POST/GRAD</th>
+                                        <th>VL-HE</th>
+                                        <th>VL-AN</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-ref-he"></tbody>
+                            </table>
+                        </div>
+
+                        <div class="ref-card" style="background: var(--bg-body);">
+                            <div class="ref-header">VALOR DIÁRIO (VD - FIXO)</div>
+                            <table class="ref-table-styled" style="background: transparent;">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:left;">POST/GRAD</th>
+                                        <th>VL-VD</th>
+                                        <th>VL-AN</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-ref-vd"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="c-info" class="calc-body" style="display:none;">
+                    <h3 style="color:var(--tech-accent); font-family:'Rajdhani'">Sobre os Cálculos</h3>
+                    <p style="margin-bottom:10px; font-size:13px; color:#ccc;">Dados configurados conforme Tabela Oficial e Realidade do Usuário.</p>
+                    <ul style="margin-left:20px; font-size:13px; color:#ccc; line-height:1.6;">
+                        <li><strong>Hora Extra (HE):</strong> Tributada (IRRF 27,5%).</li>
+                        <li><strong>Valor Diário (VD):</strong> Valores fixos indenizatórios. <strong>ISENTOS</strong> de Imposto.</li>
+                        <li><strong>SD PM GAP5 Padrão:</strong> Segue tabela oficial (HE: 34,14 / AN: 17,07).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="ferramentas" class="content">
+            <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
+                <div style="flex:1; min-width:300px;">
+                    <h2 class="section-title">Bloco Tático</h2>
+                    <textarea id="notepad" class="notepad-area" onkeyup="salvarNotas()"></textarea>
+                    <div style="text-align:right; margin-top:10px;"><button class="btn-del" onclick="if(confirm('Limpar?')){document.getElementById('notepad').value='';salvarNotas();}"><i class="fas fa-trash"></i> Limpar</button></div>
+                </div>
+                
+                <div id="calculator-tactical" class="tactical-tool-panel" style="display:block; position:relative; top:0; width:300px; box-shadow:none;">
+                    <div class="tool-header">CALCULADORA OPERACIONAL</div>
+                    <input type="text" id="calc-display" class="calc-display" readonly>
+                    <div class="calc-grid">
+                        <div class="calc-btn clear" onclick="calcClear()">C</div>
+                        <div class="calc-btn op" onclick="calcInput('/')">/</div>
+                        <div class="calc-btn op" onclick="calcInput('*')">*</div>
+                        <div class="calc-btn op" onclick="calcInput('-')">-</div>
+                        
+                        <div class="calc-btn" onclick="calcInput('7')">7</div>
+                        <div class="calc-btn" onclick="calcInput('8')">8</div>
+                        <div class="calc-btn" onclick="calcInput('9')">9</div>
+                        <div class="calc-btn op" onclick="calcInput('+')">+</div>
+                        
+                        <div class="calc-btn" onclick="calcInput('4')">4</div>
+                        <div class="calc-btn" onclick="calcInput('5')">5</div>
+                        <div class="calc-btn" onclick="calcInput('6')">6</div>
+                        <div class="calc-btn equal" style="grid-row: span 2;" onclick="calcResult()">=</div>
+                        
+                        <div class="calc-btn" onclick="calcInput('1')">1</div>
+                        <div class="calc-btn" onclick="calcInput('2')">2</div>
+                        <div class="calc-btn" onclick="calcInput('3')">3</div>
+                        
+                        <div class="calc-btn" style="grid-column: span 2;" onclick="calcInput('0')">0</div>
+                        <div class="calc-btn" onclick="calcInput('.')">.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <script>
+    // =========================================================
+    // ⚠️ API DELA CONFIGURADA AQUI ⚠️
+    const API_URL = "https://script.google.com/macros/s/AKfycbxx4AyorepYKw6S99QONXD9Fmvxz4VzC8wDs6f3tJaMiWlVMxmOBQrmYXzv-rY5-DU7Pg/exec"; 
+    // =========================================================
+
+    // Cidades Atualizadas
+    let dbExtras=[], cidades=["CALDAS DO JORRO", "TUCANO", "EUCLIDES DA CUNHA", "QUEIMADAS", "CANUDOS"];
+    let tempAnexoBase64=null;
+    let tempPdfBase64=null;
+    let lastBotMsgIndex = 0;
+    let donutChart = null; 
+    let comparisonChart = null;
+    let analysisSort = 'data'; 
+    
+    // Cores das Cidades (Atualizado)
+    const cityColorMap = {"CALDAS DO JORRO": "#e74c3c", "TUCANO": "#8e44ad", "EUCLIDES DA CUNHA": "#3498db", "QUEIMADAS": "#f39c12", "CANUDOS": "#16a085"};
+    const defaultCityColor = "#95a5a6";
+
+    // =========================================================
+    const tabelaValoresPM = {
+        'CEL PM': { he: [127.84, 63.92], vd: [67.94, 81.48] },
+        'TC PM':  { he: [116.60, 58.30], vd: [66.13, 79.33] },
+        'MAJ PM': { he: [106.85, 53.42], vd: [65.57, 78.66] },
+        'CAP PM': { he: [92.46, 46.23],  vd: [65.40, 78.40] },
+        'TEN PM': { he: [72.03, 36.01],  vd: [64.90, 77.86] },
+        'ASP PM': { he: [46.42, 23.21],  vd: [45.16, 54.18] },
+        'AL OF PM': { he: [36.23, 18.11], vd: [36.19, 43.40] },
+        'ST PM':  { he: [45.40, 22.70],  vd: [33.83, 40.61] },
+        'SGT PM': { he: [41.92, 20.96],  vd: [29.36, 35.46] },
+        'CB PM':  { he: [38.73, 19.36],  vd: [28.03, 33.83] },
+        'SD PM GAP3':  { he: [27.16, 13.56],  vd: [26.72, 32.29] }, 
+        'SD PM GAP4': { he: [30.58, 15.25],  vd: [26.72, 32.29] }, 
+        'SD PM GAP5': { he: [34.14, 17.07],  vd: [26.72, 32.29] }, 
+        'AL SD PM': { he: [26.72, 13.36], vd: [26.72, 32.29] },
+        'FUNC CIVIL': { he: [0, 0],      vd: [26.72, 32.29] }
+    };
+
+    // --- INTEGRAÇÃO TEMA CLARO/ESCURO ---
+    window.addEventListener('message', function(event) {
+        if (event.data && event.data.theme) {
+            (event.data.theme === 'light') ? document.body.classList.add('light-mode') : document.body.classList.remove('light-mode');
+        }
+    });
+    function aplicarTemaSalvo() {
+        (localStorage.getItem('peixinho_theme') === 'light') ? document.body.classList.add('light-mode') : document.body.classList.remove('light-mode');
+    }
+
+    window.onload=function(){
+        aplicarTemaSalvo();
+        carregarLocal(); 
+        
+        // Renderiza estrutura base imediatamente para evitar tela vazia
+        renderTable();
+
+        sincronizar(false); 
+        setInterval(atualizarHora,1000); atualizarHora();
+        setInterval(botRotinaGestor, 5000); 
+        setupGlobalPaste();
+        renderRefTables();
+        
+        document.getElementById('m-pdf-escala').addEventListener('change', function(e){
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(ev) { tempPdfBase64 = ev.target.result; document.getElementById('btn-remove-pdf').style.display = 'block'; };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    };
+
+    // --- NOVA LÓGICA DE SINCRONIZAÇÃO BLINDADA ---
+    async function sincronizar(isSaving = false) {
+        const statusDiv = document.getElementById('sync-status');
+        
+        if(!API_URL || API_URL === "") {
+            statusDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> SEM API';
+            statusDiv.style.color = '#e53e3e';
+            return;
+        }
+
+        if(isSaving) {
+            statusDiv.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> SALVANDO...';
+            statusDiv.style.color = '#ffc107';
+        } else {
+            statusDiv.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> BAIXANDO...';
+        }
+
+        try {
+            const res = await fetch(API_URL);
+            const bancoCompleto = await res.json();
+            
+            if(isSaving) {
+                bancoCompleto.abonos_extras = dbExtras;
+                await fetch(API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(bancoCompleto)
+                });
+                statusDiv.innerHTML = '<i class="fas fa-check-double"></i> SALVO';
+                statusDiv.style.color = 'var(--tech-accent)';
+
+            } else {
+                if(bancoCompleto && bancoCompleto.abonos_extras) {
+                    dbExtras = bancoCompleto.abonos_extras;
+                    salvarLocal(false); 
+                    renderTable();
+                }
+                statusDiv.innerHTML = '<i class="fas fa-wifi"></i> CONECTADO';
+                statusDiv.style.color = 'var(--tech-accent)';
+            }
+
+        } catch (erro) {
+            console.error("Erro Sync:", erro);
+            statusDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> ERRO REDE';
+            statusDiv.style.color = '#e53e3e';
+            if(isSaving) setTimeout(() => sincronizar(true), 5000);
+        }
+    }
+
+    function carregarNuvem(force = false) { sincronizar(false); }
+    function salvarNuvem() { sincronizar(true); }
+
+    function atualizarHora(){ const h=new Date(); const s=h.toLocaleDateString('pt-BR',{weekday:'long',year:'numeric',month:'long',day:'numeric'}); document.getElementById('live-datetime').innerText=s.charAt(0).toUpperCase()+s.slice(1)+", "+h.toLocaleTimeString('pt-BR'); }
+
+    function botRotinaGestor() {
+        if(!dbExtras || dbExtras.length === 0) return;
+        
+        const hoje = new Date();
+        const mesAtualStr = String(hoje.getMonth()+1).padStart(2,'0');
+        const anoAtualStr = String(hoje.getFullYear());
+        
+        // Blindagem contra datas vazias/corrompidas na nuvem
+        let dadosMes = dbExtras.filter(d => d.data && typeof d.data === 'string' && d.data.split('-')[1] === mesAtualStr && d.data.split('-')[0] === anoAtualStr);
+        
+        let heTotal = 0, vdTotal = 0;
+        let pendenteTotal = 0;
+
+        dadosMes.forEach(d => {
+            let h = parseFloat(d.horas || 0);
+            if(d.tipo === 'H.E') heTotal += h;
+            if(d.tipo === 'V.D') vdTotal += h;
+        });
+
+        pendenteTotal = dbExtras.filter(x => x.status !== 'PAGO').reduce((a,b) => a + b.valor, 0);
+
+        let heRestante = 60 - heTotal; if(heRestante < 0) heRestante = 0;
+        let vdRestante = 60 - vdTotal; if(vdRestante < 0) vdRestante = 0;
+
+        const getColor = (val) => val < 10 ? '#e74c3c' : (val < 20 ? '#f39c12' : '#2ecc71');
+
+        const html = `
+            <div class="bot-stat-item">
+                <span class="bot-stat-label">H.E (60h)</span>
+                <span class="bot-stat-val" style="color:${getColor(heRestante)}">${heTotal}h</span>
+                <span class="bot-stat-sub">Resta: ${heRestante}h</span>
+            </div>
+            <div class="bot-stat-item">
+                <span class="bot-stat-label">V.D (60h)</span>
+                <span class="bot-stat-val" style="color:${getColor(vdRestante)}">${vdTotal}h</span>
+                <span class="bot-stat-sub">Resta: ${vdRestante}h</span>
+            </div>
+            <div class="bot-stat-item" style="border-color:${pendenteTotal > 0 ? '#e74c3c' : 'var(--border)'}">
+                <span class="bot-stat-label">A RECEBER</span>
+                <span class="bot-stat-val" style="color:${pendenteTotal > 0 ? '#e74c3c' : 'var(--tech-accent)'}">${toBRL(pendenteTotal)}</span>
+                <span class="bot-stat-sub">Financeiro Geral</span>
+            </div>
+        `;
+        
+        const dash = document.getElementById('bot-dashboard');
+        if(dash) dash.innerHTML = html;
+    }
+
+    function carregarLocal(){
+        // Usa chaves separadas para a Peixinho para não misturar no mesmo PC
+        const db=localStorage.getItem('peixinho_db_extras_v1'); 
+        const c=localStorage.getItem('peixinho_db_cidades_v1');
+        if(db) dbExtras = JSON.parse(db);
+        if(c) cidades=JSON.parse(c); 
+        
+        const notas = localStorage.getItem('peixinho_tactical_notepad');
+        if(notas) document.getElementById('notepad').value = notas;
+        
+        atualizarSelectCidades(); atualizarFiltroAno(); renderTable(); 
+    }
+    
+    function salvarLocal(sync = false){ 
+        localStorage.setItem('peixinho_db_extras_v1',JSON.stringify(dbExtras)); 
+        atualizarFiltroAno(); 
+        if(sync) salvarNuvem(); 
+    }
+
+    /* --- UPLOAD LOGIC --- */
+    function triggerFileSelect() { document.getElementById('input-paste-file').click(); }
+    function handleFileSelect(input) { if (input.files && input.files[0]) { const reader = new FileReader(); reader.onload = function(e) { tempAnexoBase64 = e.target.result; document.getElementById('paste-preview-img').src = tempAnexoBase64; document.getElementById('paste-preview-img').style.display = 'block'; document.getElementById('btn-remove-img').style.display = 'block'; }; reader.readAsDataURL(input.files[0]); } }
+    function setupGlobalPaste() { document.addEventListener('paste', function(e) { if(document.getElementById('modal').style.display !== 'flex') return; const items = (e.clipboardData || e.originalEvent.clipboardData).items; for (let index in items) { const item = items[index]; if (item.kind === 'file' && item.type.startsWith('image/')) { const blob = item.getAsFile(); const reader = new FileReader(); reader.onload = function(event) { tempAnexoBase64 = event.target.result; document.getElementById('paste-preview-img').src = tempAnexoBase64; document.getElementById('paste-preview-img').style.display = 'block'; document.getElementById('btn-remove-img').style.display = 'block'; }; reader.readAsDataURL(blob); } } }); }
+    function removerImagem() { tempAnexoBase64 = null; document.getElementById('paste-preview-img').src = ''; document.getElementById('paste-preview-img').style.display = 'none'; document.getElementById('btn-remove-img').style.display = 'none'; document.getElementById('input-paste-file').value = ''; }
+    function removerPdf() { tempPdfBase64 = null; document.getElementById('m-pdf-escala').value = ''; document.getElementById('btn-remove-pdf').style.display = 'none'; }
+
+    /* --- DEMAIS FUNÇÕES --- */
+    function verificarCidade(s){ if(s.value==='NOVA'){ const n=prompt("Nova cidade:"); if(n&&n.trim()){ cidades.push(n.toUpperCase()); localStorage.setItem('peixinho_db_cidades_v1',JSON.stringify(cidades)); atualizarSelectCidades(); s.value=n.toUpperCase(); } else s.value=cidades[0]; } }
+    function atualizarSelectCidades(){ const s=document.getElementById('m-cidade'); s.innerHTML=''; cidades.forEach(c=>{ let o=document.createElement('option'); o.value=c; o.text=c; s.add(o); }); let oN=document.createElement('option'); oN.value='NOVA'; oN.text='>> NOVA CIDADE'; oN.style.color='var(--tech-accent)'; s.add(oN); }
+    
+    function atualizarFiltroAno() {
+        // Blindagem contra dados zumbis
+        let anosValidos = dbExtras.filter(d => d.data && typeof d.data === 'string');
+        let anosDados = [...new Set(anosValidos.map(d => d.data.split('-')[0]))];
+        
+        let anoAtual = String(new Date().getFullYear());
+        if(!anosDados.includes(anoAtual)) anosDados.push(anoAtual);
+        anosDados.sort((a,b) => b - a);
+        
+        const criarOpcoes = (selectorId) => {
+            const sel = document.getElementById(selectorId); if(!sel) return;
+            const valorAtual = sel.value; sel.innerHTML = ''; 
+            let optAll = document.createElement('option'); optAll.value="all"; optAll.text="TODOS OS ANOS"; sel.add(optAll);
+            if(selectorId === 'filtro-ano') { let optCurr = document.createElement('option'); optCurr.value=anoAtual; optCurr.text="ANO ATUAL ("+anoAtual+")"; sel.add(optCurr); }
+            anosDados.forEach(a => { if(a !== anoAtual || selectorId !== 'filtro-ano') { let o = document.createElement('option'); o.value = a; o.text = a; sel.add(o); } });
+            if(valorAtual && (anosDados.includes(valorAtual) || valorAtual === 'all')) sel.value = valorAtual;
+        };
+        criarOpcoes('filtro-ano'); criarOpcoes('an-filtro-ano');
+    }
+
+    function resetFiltros() { 
+        document.getElementById('filtro-mes').value=''; 
+        document.getElementById('filtro-ano').value='all'; 
+        document.getElementById('filtro-status').value='all'; 
+        document.getElementById('filtro-tipo').value='all'; 
+        renderTable(); 
+    }
+    
+    function triggerUpdateAnalysis() { updateAnalysis(dbExtras); }
+    function getCityColor(nomeCidade) { return cityColorMap[nomeCidade] || defaultCityColor; }
+    function setSort(col) { analysisSort = col; triggerUpdateAnalysis(); }
+
+    function updateAnalysis(fullData) {
+        if(!fullData) return;
+        
+        // Limpar lixos antes de filtrar
+        let safeData = fullData.filter(d => d.data && typeof d.data === 'string');
+
+        const fMes = document.getElementById('an-filtro-mes').value; 
+        const fAno = document.getElementById('an-filtro-ano').value;
+        const fStatus = document.getElementById('an-filtro-status') ? document.getElementById('an-filtro-status').value : 'all';
+        const fTipo = document.getElementById('an-filtro-tipo') ? document.getElementById('an-filtro-tipo').value : 'all';
+
+        let currentYear = String(new Date().getFullYear());
+        let currentMonth = String(new Date().getMonth()+1).padStart(2,'0');
+        let filteredData = safeData;
+
+        let targetAno = fAno;
+        let targetMes = fMes;
+
+        if ((!targetAno || targetAno === 'all') && targetMes === "") targetAno = currentYear;
+        if (targetMes === "") targetMes = currentMonth;
+
+        if (targetAno && targetAno !== 'all') filteredData = filteredData.filter(d => d.data.split('-')[0] === targetAno);
+        if (targetMes && targetMes !== 'all') filteredData = filteredData.filter(d => d.data.split('-')[1] === targetMes);
+        if (fStatus && fStatus !== 'all') filteredData = filteredData.filter(d => d.status === fStatus);
+        if (fTipo && fTipo !== 'all') filteredData = filteredData.filter(d => d.tipo === fTipo);
+
+        if(analysisSort === 'data') filteredData.sort((a,b) => new Date(b.data) - new Date(a.data));
+        if(analysisSort === 'valor') filteredData.sort((a,b) => b.valor - a.valor);
+        if(analysisSort === 'cidade') filteredData.sort((a,b) => a.cidade.localeCompare(b.cidade));
+
+        const reportBody = document.getElementById('report-tbody'); reportBody.innerHTML = '';
+        filteredData.forEach(d => {
+            let turnoClass = d.periodo === 'DIURNO' ? 'turn-day' : 'turn-night';
+            reportBody.innerHTML += `<tr><td>${d.data.split('-').reverse().join('/')}</td><td><span class="city-badge" style="background:${getCityColor(d.cidade)}">${d.cidade}</span></td><td><span class="turn-badge ${turnoClass}">${d.periodo||'N/A'}</span></td><td style="text-align:center; font-weight:bold;">${d.horas}h</td><td>${d.tipo}</td><td style="color:var(--tech-accent);">${toBRL(d.valor)}</td></tr>`;
+        });
+
+        let naturezas = {}; let totalHorasPeriodo = 0;
+        let totalHE = 0;
+        let totalVD = 0;
+
+        filteredData.forEach(d => { 
+            let nat = d.natureza || 'OUTROS'; 
+            let h = parseFloat(d.horas || 0); 
+            if(!naturezas[nat]) naturezas[nat] = 0; 
+            naturezas[nat] += h; 
+            totalHorasPeriodo += h; 
+
+            if(d.tipo === 'H.E') totalHE += h;
+            if(d.tipo === 'V.D') totalVD += h;
+        });
+        
+        document.getElementById('dct-total').innerText = totalHorasPeriodo;
+
+        let percentHE = (totalHE / 60) * 100; if(percentHE > 100) percentHE = 100;
+        const progFillHE = document.getElementById('prog-bar-fill-he');
+        progFillHE.style.width = percentHE + '%';
+        document.getElementById('prog-text-he').innerText = `${totalHE}h / 60h`;
+        document.getElementById('prog-text-label-he').innerText = percentHE.toFixed(1) + '%';
+        if(percentHE < 50) progFillHE.style.background = 'linear-gradient(90deg, #c2185b, #ff4081)';
+        else if(percentHE < 90) progFillHE.style.background = 'linear-gradient(90deg, #f57f17, #ffc107)';
+        else progFillHE.style.background = 'linear-gradient(90deg, #c62828, #e53e3e)';
+
+        let percentVD = (totalVD / 60) * 100; if(percentVD > 100) percentVD = 100;
+        const progFillVD = document.getElementById('prog-bar-fill-vd');
+        progFillVD.style.width = percentVD + '%';
+        document.getElementById('prog-text-vd').innerText = `${totalVD}h / 60h`;
+        document.getElementById('prog-text-label-vd').innerText = percentVD.toFixed(1) + '%';
+        if(percentVD < 50) progFillVD.style.background = 'linear-gradient(90deg, #c2185b, #ff4081)';
+        else if(percentVD < 90) progFillVD.style.background = 'linear-gradient(90deg, #f57f17, #ffc107)';
+        else progFillVD.style.background = 'linear-gradient(90deg, #c62828, #e53e3e)';
+
+
+        const ctxDonut = document.getElementById('doughnutChart').getContext('2d');
+        if(donutChart) donutChart.destroy();
+        donutChart = new Chart(ctxDonut, { type: 'doughnut', data: { labels: Object.keys(naturezas), datasets: [{ data: Object.values(naturezas), backgroundColor: ['#ff4081', '#03a9f4', '#ffc107', '#e91e63', '#9c27b0'], borderColor: 'transparent', borderWidth: 2 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { position: 'bottom', labels: { color: '#ccc', font: {family: 'Roboto', size:10} } } } } });
+
+        let chartAno = targetAno !== 'all' ? targetAno : currentYear;
+        let yearData = safeData.filter(d => d.data.split('-')[0] === chartAno);
+        if (fStatus && fStatus !== 'all') yearData = yearData.filter(d => d.status === fStatus);
+        if (fTipo && fTipo !== 'all') yearData = yearData.filter(d => d.tipo === fTipo);
+        
+        let extraHours = new Array(12).fill(0); let abonoHours = new Array(12).fill(0);
+        yearData.forEach(d => { let mIndex = parseInt(d.data.split('-')[1]) - 1; let h = parseFloat(d.horas || 0); if(d.natureza === 'ABONO') abonoHours[mIndex] += h; else extraHours[mIndex] += h; });
+        
+        const ctxComp = document.getElementById('comparisonChart').getContext('2d');
+        if(comparisonChart) comparisonChart.destroy();
+        comparisonChart = new Chart(ctxComp, { type: 'bar', data: { labels: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'], datasets: [ { label: 'Extras (h)', data: extraHours, backgroundColor: '#ff4081', borderRadius: 4 }, { label: 'Abonos (h)', data: abonoHours, backgroundColor: '#880e4f', borderRadius: 4 } ] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, grid: { color: '#333' }, ticks: { color: '#999' } }, x: { grid: { display: false }, ticks: { color: '#ccc' } } }, plugins: { legend: { labels: { color: '#ccc' } } } } });
+    }
+
+    function abrirModal(id=null){
+        removerImagem(); removerPdf();
+        document.getElementById('edit-id').value = '';
+        document.getElementById('m-valor').value = ''; document.getElementById('m-obs').value = ''; document.getElementById('m-horas').value = '8'; document.getElementById('m-periodo').value = 'DIURNO'; document.getElementById('m-tipo').value = 'H.E'; document.getElementById('m-natureza').value = 'VOLUNTÁRIO'; document.getElementById('m-status').value = 'A RECEBER'; document.getElementById('m-operacao').value = '';
+        const hoje = new Date(); let anoSug = hoje.getFullYear(); let mesSug = String(hoje.getMonth()+1).padStart(2,'0'); let diaSug = String(hoje.getDate()).padStart(2,'0'); document.getElementById('m-data').value = `${anoSug}-${mesSug}-${diaSug}`;
+        document.getElementById('modal').style.display='flex'; 
+        if(id){
+            document.getElementById('edit-id').value = id;
+            const i = dbExtras.find(x => x.id == id);
+            if(i) {
+                document.getElementById('m-cidade').value = i.cidade;
+                document.getElementById('m-data').value = i.data; document.getElementById('m-valor').value = toBRL(i.valor); document.getElementById('m-tipo').value = i.tipo || 'H.E'; document.getElementById('m-natureza').value = i.natureza || 'VOLUNTÁRIO'; document.getElementById('m-horas').value = i.horas; document.getElementById('m-status').value = i.status; document.getElementById('m-obs').value = i.obs; document.getElementById('m-periodo').value = i.periodo || 'DIURNO'; document.getElementById('m-operacao').value = i.operacao || '';
+                if(i.anexo){ tempAnexoBase64=i.anexo; document.getElementById('paste-preview-img').src=i.anexo; document.getElementById('paste-preview-img').style.display='block'; document.getElementById('btn-remove-img').style.display = 'block'; }
+                if(i.pdfEscala) { tempPdfBase64 = i.pdfEscala; document.getElementById('btn-remove-pdf').style.display = 'block'; }
+            }
+        }
+    }
+    function fecharModal(){ document.getElementById('modal').style.display='none'; }
+    
+    function salvarRegistro(){
+        const id=document.getElementById('edit-id').value;
+        const obj={ id:id?parseInt(id):Date.now(), cidade:document.getElementById('m-cidade').value, operacao:document.getElementById('m-operacao').value, data:document.getElementById('m-data').value, valor:lerMoeda(document.getElementById('m-valor').value), tipo:document.getElementById('m-tipo').value, natureza:document.getElementById('m-natureza').value, horas:document.getElementById('m-horas').value, status:document.getElementById('m-status').value, obs:document.getElementById('m-obs').value, periodo:document.getElementById('m-periodo').value, anexo:tempAnexoBase64, pdfEscala: tempPdfBase64 };
+        if(id) dbExtras[dbExtras.findIndex(x=>x.id==id)]=obj; else dbExtras.push(obj);
+        salvarLocal(true); fecharModal(); renderTable(); 
+    }
+
+    function marcarComoPago(id) {
+        const index = dbExtras.findIndex(x => x.id == id);
+        if (index > -1 && confirm("Confirmar recebimento deste valor?")) {
+            dbExtras[index].status = 'PAGO'; salvarLocal(true); renderTable();
+        }
+    }
+
+    function renderTable(){
+        const tb=document.getElementById('tbody-extras'); tb.innerHTML='';
+        const fMes = document.getElementById('filtro-mes').value; 
+        const fAno = document.getElementById('filtro-ano').value;
+        const fStatus = document.getElementById('filtro-status') ? document.getElementById('filtro-status').value : 'all';
+        const fTipo = document.getElementById('filtro-tipo') ? document.getElementById('filtro-tipo').value : 'all';
+        
+        // Blindagem
+        let lista = dbExtras.filter(d => d.data && typeof d.data === 'string');
+        lista = lista.sort((a,b)=>new Date(b.data)-new Date(a.data));
+        
+        if(fMes) lista = lista.filter(d => d.data.split('-')[1] === fMes);
+        if(fAno && fAno !== 'all') lista = lista.filter(d => d.data.split('-')[0] === fAno);
+        if(fStatus && fStatus !== 'all') lista = lista.filter(d => d.status === fStatus);
+        if(fTipo && fTipo !== 'all') lista = lista.filter(d => d.tipo === fTipo);
+        
+        let t=0,pg=0,pd=0, th=0;
+        lista.forEach(d=>{
+            t+=d.valor; th+=parseFloat(d.horas || 0);
+            if(d.status==='PAGO') pg+=d.valor; else pd+=d.valor;
+            let ax = d.anexo ? `<i class="fas fa-image" style="color:var(--tech-accent);cursor:pointer;margin-right:5px;" onclick="verImagem('${d.anexo}')" title="Ver Print"></i>` : '';
+            let pdfIcon = d.pdfEscala ? `<i class="fas fa-file-pdf" style="color:#e74c3c;cursor:pointer;margin-right:5px;" onclick="baixarPDF('${d.pdfEscala}', '${d.data}_${d.cidade}')" title="Baixar Escala"></i>` : '';
+            let btnCheck = d.status === 'A RECEBER' ? `<button class="btn-check" style="padding:5px 10px; margin-right:5px;" onclick="marcarComoPago(${d.id})"><i class="fas fa-check"></i></button>` : '';
+            tb.innerHTML+=`<tr><td>${d.data.split('-').reverse().join('/')}</td><td><span class="city-badge" style="background:${getCityColor(d.cidade)}">${d.cidade}</span></td><td>${d.operacao || '-'}</td><td>${d.tipo} <small>(${d.natureza||'-'})</small> <br><small style="color:#666">${d.periodo||''}</small></td><td style="text-align:center;">${d.horas}h</td><td><span class="badge ${d.status==='PAGO'?'badge-pago':'badge-pendente'}">${d.status}</span></td><td style="color:var(--tech-accent);font-weight:bold">${toBRL(d.valor)}</td><td>${pdfIcon} ${ax} <small>${d.obs.substring(0,15)}</small></td><td>${btnCheck}<button class="btn-primary" style="padding:5px 10px" onclick="abrirModal(${d.id})"><i class="fas fa-pen"></i></button> <button class="btn-del" style="padding:5px 10px" onclick="excluir(${d.id})"><i class="fas fa-trash"></i></button></td></tr>`;
+        });
+        document.getElementById('dash-total').innerText=toBRL(t); document.getElementById('dash-pago').innerText=toBRL(pg); document.getElementById('dash-pendente').innerText=toBRL(pd); document.getElementById('dash-horas').innerText=th + 'h'; 
+        updateAnalysis(dbExtras); botRotinaGestor();
+    }
+    
+    function excluir(id){ 
+        if(confirm("EXCLUIR REGISTRO? A ação será sincronizada imediatamente.")){ 
+            dbExtras = dbExtras.filter(x => x.id != id); 
+            salvarLocal(false);
+            renderTable(); 
+            sincronizar(true);
+        } 
+    }
+
+    function verImagem(s){ document.getElementById('img-full').src=s; document.getElementById('img-viewer').style.display='flex'; }
+    function baixarPDF(base64, nome) { const link = document.createElement('a'); link.href = base64; link.download = `ESCALA_${nome}.pdf`; link.click(); }
+    function limparBase(){ if(confirm("RESETAR TUDO? ISSO APAGARÁ A NUVEM!")){ dbExtras = []; salvarLocal(true); location.reload(); } }
+    
+    // ==========================================
+    // FUNÇÕES CALCULADORA
+    // ==========================================
+    function calcularHorasOficial() {
+        const posto = document.getElementById('he-posto').value;
+        const heNormal = parseFloat(document.getElementById('he-normal').value) || 0; 
+        const heNoturna = parseFloat(document.getElementById('he-noturna').value) || 0; 
+        const vdNormal = parseFloat(document.getElementById('vd-normal').value) || 0; 
+        const vdNoturno = parseFloat(document.getElementById('vd-noturno').value) || 0;
+        
+        if (!posto) { alert('Selecione seu posto/graduação.'); return; }
+        
+        const valores = tabelaValoresPM[posto]; 
+        
+        const totalHENormal = heNormal * valores.he[0]; 
+        const totalHENoturna = heNoturna * (valores.he[0] + valores.he[1]); 
+        const totalHEBruto = totalHENormal + totalHENoturna;
+        const irrfHE = totalHEBruto * 0.275; 
+        
+        const totalVDNormal = vdNormal * valores.vd[0]; 
+        const totalVDNoturno = vdNoturno * valores.vd[1]; 
+        const totalVDBruto = totalVDNormal + totalVDNoturno;
+
+        const totalLiquido = (totalHEBruto - irrfHE) + totalVDBruto;
+
+        document.getElementById('res-he-normal').innerText = toBRL(totalHENormal); 
+        document.getElementById('res-he-noturna').innerText = toBRL(totalHENoturna); 
+        document.getElementById('res-vd-normal').innerText = toBRL(totalVDNormal); 
+        document.getElementById('res-vd-noturno').innerText = toBRL(totalVDNoturno); 
+        
+        document.getElementById('res-irrf').innerText = "- " + toBRL(irrfHE); 
+        document.getElementById('res-liquido').innerText = toBRL(totalLiquido); 
+        
+        document.getElementById('he-resultado').style.display = 'block';
+    }
+
+    function switchCalcTab(tabId) {
+        document.getElementById('c-calc').style.display = 'none';
+        document.getElementById('c-table').style.display = 'none';
+        document.getElementById('c-info').style.display = 'none';
+        
+        document.querySelectorAll('.calc-tabs-header .c-tab').forEach(b => b.classList.remove('active'));
+
+        document.getElementById(tabId).style.display = 'block';
+        
+        if(tabId === 'c-calc') document.getElementById('tab-calc-c1').classList.add('active');
+        if(tabId === 'c-table') document.getElementById('tab-calc-c2').classList.add('active');
+        if(tabId === 'c-info') document.getElementById('tab-calc-c3').classList.add('active');
+    }
+
+    function renderRefTables() {
+        const tbodyHE = document.getElementById('tbody-ref-he');
+        const tbodyVD = document.getElementById('tbody-ref-vd');
+        tbodyHE.innerHTML = ''; tbodyVD.innerHTML = '';
+
+        for (const [posto, vals] of Object.entries(tabelaValoresPM)) {
+            let rowHE = document.createElement('tr');
+            if(posto.includes('SD PM')) rowHE.classList.add('ref-row-highlight');
+            rowHE.innerHTML = `<td style="text-align:left;">${posto}</td><td>${vals.he[0].toFixed(2).replace('.',',')}</td><td>${vals.he[1].toFixed(2).replace('.',',')}</td>`;
+            tbodyHE.appendChild(rowHE);
+
+            if(posto !== 'SD PM GAP5' && posto !== 'SD PM GAP4') {
+                let rowVD = document.createElement('tr');
+                if(posto === 'SD PM') rowVD.classList.add('ref-row-highlight');
+                rowVD.innerHTML = `<td style="text-align:left;">${posto}</td><td>${vals.vd[0].toFixed(2).replace('.',',')}</td><td>${vals.vd[1].toFixed(2).replace('.',',')}</td>`;
+                tbodyVD.appendChild(rowVD);
+            }
+        }
+    }
+
+    function calcInput(v) { document.getElementById('calc-display').value += v; }
+    function calcClear() { document.getElementById('calc-display').value = ''; }
+    function calcResult() { try { document.getElementById('calc-display').value = eval(document.getElementById('calc-display').value); } catch(e) { document.getElementById('calc-display').value = 'ERRO'; } }
+
+    function nav(id,btn){ document.querySelectorAll('.content').forEach(c=>c.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); document.getElementById(id).classList.add('active'); btn.classList.add('active'); }
+    function salvarNotas(){ localStorage.setItem('peixinho_tactical_notepad',document.getElementById('notepad').value); }
+    function exportarCSV(){ let csv="DATA;CIDADE;TURNO;TIPO;NATUREZA;HORAS;VALOR;STATUS;OBS\n"; dbExtras.forEach(d=>{ csv+=`${d.data};${d.cidade};${d.periodo||''};${d.tipo};${d.natureza||''};${d.horas};${d.valor.toFixed(2).replace('.',',')};${d.status};${d.obs}\n` }); let link=document.createElement('a'); link.href='data:text/csv;charset=utf-8,'+encodeURI(csv); link.download='EXTRAS_PEIXINHO.csv'; link.click(); }
+    function toBRL(v){ return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
+    function formatarMoeda(e){ let v=e.value.replace(/\D/g,''); v=(v/100).toFixed(2)+''; v=v.replace('.',',').replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.'); e.value='R$ '+v; }
+    function lerMoeda(v){ return parseFloat(v.replace('R$','').trim().replaceAll('.','').replace(',','.'))||0; }
+    
+    window.gerarBackupCompleto = function() {
+        const backupData = {
+            abonos_extras: dbExtras,
+            cidades: cidades,
+            sistema: "ABONEX_PEIXINHO"
+        };
+        const jsonDados = JSON.stringify(backupData, null, 2);
+        const blob = new Blob([jsonDados], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `BACKUP_ABONEX_PEIXINHO_${new Date().toISOString().slice(0,10)}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    };
+    </script>
+</body>
+</html>
