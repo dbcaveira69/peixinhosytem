@@ -173,7 +173,7 @@
 
     <div class="mobile-header">
         <button class="mobile-btn" onclick="toggleMenuMobile()"><i class="fas fa-bars"></i></button>
-        <span style="font-weight: 700; color: var(--accent); letter-spacing: 1px;">SD PM PEIXINHO</span>
+        <span style="font-weight: 700; color: var(--accent); letter-spacing: 1px;">PEIXINHO TÁTICA</span>
         <div style="width: 20px;"></div>
     </div>
 
@@ -191,7 +191,7 @@
             
             <div class="profile-text">
                 <div class="user-name">SD PM PEIXINHO</div>
-                <div class="user-detail">5º BPM</div>
+                <div class="user-detail">Policial Feminina</div>
             </div>
         </div>
 
@@ -203,7 +203,7 @@
                 <span>Gestor Pro</span>
             </button>
 
-            <button class="nav-btn" onclick="alert('Módulo AbonEx em desenvolvimento.')">
+            <button class="nav-btn" onclick="carregarApp('AbonExPeixinho.html', this)">
                 <i class="fas fa-file-contract"></i>
                 <span>AbonEx</span>
             </button>
@@ -255,6 +255,7 @@
             document.getElementById('theme-text').innerText = isLight ? 'Modo Claro' : 'Modo Escuro';
             localStorage.setItem('peixinho_theme', isLight ? 'light' : 'dark');
 
+            // Envia mensagem para qualquer iFrame (GestorPro ou AbonEx) que estiver aberto
             const iframe = document.getElementById('app-frame');
             if(iframe && iframe.contentWindow) {
                 iframe.contentWindow.postMessage({ theme: isLight ? 'light' : 'dark' }, '*');
@@ -281,12 +282,25 @@
 
             const loader = document.getElementById('loader');
             loader.style.opacity = '1'; loader.style.display = 'flex';
-            document.getElementById('app-frame').src = url;
+            
+            // Verifica o tema atual e anexa à URL para carregar na cor certa imediatamente
+            const isLight = document.body.classList.contains('light-mode');
+            const frameUrl = new URL(url, window.location.href);
+            frameUrl.searchParams.set('theme', isLight ? 'light' : 'dark');
+            
+            document.getElementById('app-frame').src = frameUrl.href;
         }
 
         function hideLoader() {
             const l = document.getElementById('loader');
             l.style.opacity = '0'; setTimeout(() => l.style.display = 'none', 500);
+            
+            // Garante que o tema será aplicado logo após carregar o iframe
+            const isLight = document.body.classList.contains('light-mode');
+            const iframe = document.getElementById('app-frame');
+            if(iframe && iframe.contentWindow) {
+                iframe.contentWindow.postMessage({ theme: isLight ? 'light' : 'dark' }, '*');
+            }
         }
 
         window.addEventListener('load', () => {
@@ -311,6 +325,4 @@
         setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}); }, 1000);
     </script>
 </body>
-
 </html>
-
