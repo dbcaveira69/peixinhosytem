@@ -104,7 +104,7 @@
         .sidebar.collapsed .edit-badge, .sidebar.collapsed .profile-text { display: none; opacity: 0; }
 
         .profile-text { text-align: center; white-space: nowrap; overflow: hidden; transition: opacity 0.2s; }
-        .user-name { font-weight: 600; font-size: 14px; color: var(--text-primary); }
+        .user-name { font-weight: 600; font-size: 14px; color: var(--text-primary); letter-spacing: 0.5px;}
 
         .nav-container { flex: 1; padding: 16px 12px; overflow-y: auto; overflow-x: hidden; }
         .menu-category { font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin: 16px 0 8px 12px; white-space: nowrap; }
@@ -172,7 +172,7 @@
 
     <div class="mobile-header">
         <button class="mobile-btn" onclick="toggleMenuMobile()"><i class="fas fa-bars"></i></button>
-        <span style="font-weight: 700; color: var(--accent); letter-spacing: 1px;">PEIXINHO SYSTEM MANAGEMENT</span>
+        <span style="font-weight: 700; color: var(--accent); letter-spacing: 1px;">PEIXINHO TÁTICA</span>
         <div style="width: 20px;"></div>
     </div>
 
@@ -190,11 +190,11 @@
             
             <div class="profile-text">
                 <div class="user-name">SD PM PEIXINHO</div>
-                </div>
+            </div>
         </div>
 
         <div class="nav-container">
-            <div class="menu-category">Módulos</div>
+            <div class="menu-category">Módulos de Sistema</div>
             
             <button class="nav-btn active" onclick="carregarApp('GestorProPeixinho.html', this)">
                 <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNNTAgNSBMMTAgMjAgVjQ1IEMxMCA3MCAzMCA5MCA1MCA5NSBDNzAgOTAgOTAgNzAgOTAgNDUgVjIwIFoiIGZpbGw9IiMxMjE0MTYiIHN0cm9rZT0iI2ZmNDA4MSIgc3Ryb2tlLXdpZHRoPSI1Ii8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmNDA4MSIgc3Ryb2tlLXdpZHRoPSI0Ii8+PHBhdGggZD0iTTUwIDIwIEw1MCA4MCBNMjAgNTAgTDgwIDUwIiBzdHJva2U9IiNmZjQwODEiIHN0cm9rZS13aWR0aD0iNCIvPjwvc3ZnPg==">
@@ -206,17 +206,10 @@
                 <span>AbonEx</span>
             </button>
 
-            <div class="menu-category">Externos</div>
-
-            <a href="https://sigespol.sistemas.pm.ba.gov.br/painel" target="_blank" class="nav-btn">
-                <i class="fas fa-desktop" style="color:#3498db"></i> <span>Sigespol</span>
-            </a>
-            <a href="https://rhbahia.ba.gov.br/" target="_blank" class="nav-btn">
-                <i class="fas fa-id-card" style="color:#e67e22"></i> <span>RH Bahia</span>
-            </a>
-            <a href="http://www.pm.ba.gov.br/" target="_blank" class="nav-btn">
-                <i class="fas fa-shield-alt" style="color:#e74c3c"></i> <span>Site PMBA</span>
-            </a>
+            <button class="nav-btn" onclick="carregarApp('EstudoTaticoPeixinho.html', this)">
+                <i class="fas fa-edit"></i>
+                <span>Controle de Estudos</span>
+            </button>
 
             <div class="menu-category">Consultas Online</div>
 
@@ -234,6 +227,18 @@
             </a>
             <a href="https://portalbnmp.cnj.jus.br/" target="_blank" class="nav-btn">
                 <i class="fas fa-gavel" style="color:#795548"></i> <span>Mandados (BNMP)</span>
+            </a>
+
+            <div class="menu-category">Externos</div>
+
+            <a href="https://sigespol.sistemas.pm.ba.gov.br/painel" target="_blank" class="nav-btn">
+                <i class="fas fa-desktop" style="color:#3498db"></i> <span>Sigespol</span>
+            </a>
+            <a href="https://rhbahia.ba.gov.br/" target="_blank" class="nav-btn">
+                <i class="fas fa-id-card" style="color:#e67e22"></i> <span>RH Bahia</span>
+            </a>
+            <a href="http://www.pm.ba.gov.br/" target="_blank" class="nav-btn">
+                <i class="fas fa-shield-alt" style="color:#e74c3c"></i> <span>Site PMBA</span>
             </a>
 
             <div class="menu-category">Sistema</div>
@@ -271,7 +276,7 @@
             document.getElementById('theme-text').innerText = isLight ? 'Modo Claro' : 'Modo Escuro';
             localStorage.setItem('peixinho_theme', isLight ? 'light' : 'dark');
 
-            // Envia mensagem para qualquer iFrame (GestorPro ou AbonEx) que estiver aberto
+            // Envia mensagem para qualquer iFrame (GestorPro, AbonEx ou Estudos) que estiver aberto
             const iframe = document.getElementById('app-frame');
             if(iframe && iframe.contentWindow) {
                 iframe.contentWindow.postMessage({ theme: isLight ? 'light' : 'dark' }, '*');
@@ -342,4 +347,3 @@
     </script>
 </body>
 </html>
-
