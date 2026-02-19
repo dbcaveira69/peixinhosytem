@@ -62,7 +62,12 @@
         th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; color: #ccc;}
         .subject-badge { background: rgba(194, 24, 91, 0.2); color: var(--tech-accent); border: 1px solid var(--primary); padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; text-transform: uppercase; }
 
-        /* ABA EDITAL */
+        /* ABA EDITAL & MULTIPLOS EDITAIS */
+        .edital-tabs-container { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
+        .btn-edital-tab { background: #2b3035; color: #888; border: 1px solid #444; padding: 8px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; white-space: nowrap; }
+        .btn-edital-tab:hover { border-color: var(--tech-accent); color: white; }
+        .btn-edital-tab.active { background: var(--tech-accent); color: white; border-color: var(--tech-accent); }
+        
         .edital-header-row { background: var(--primary-dark); color: white; font-weight: bold; text-transform: uppercase; font-size: 14px; }
         .edital-header-row td { padding: 15px; border-bottom: none; color: white; }
         .edital-item-row { background: #16181b; transition: 0.2s; }
@@ -88,8 +93,6 @@
 
         .btn-add-crono { background: transparent; border: 1px dashed #444; color: #888; padding: 10px; border-radius: 4px; cursor: pointer; width: 100%; transition: 0.2s; font-weight: bold; text-transform: uppercase; font-size: 11px; margin-top: auto;}
         .btn-add-crono:hover { border-color: var(--tech-accent); color: var(--tech-accent); background: rgba(255, 64, 129, 0.05); }
-
-        /* Painel Detalhes da Missão (Abaixo do Cronograma) */
         .crono-detalhes-panel { display: none; margin-top: 20px; background: #16181b; border: 1px solid var(--tech-accent); border-radius: 8px; padding: 20px; animation: fadeIn 0.3s; }
 
         /* FILTRO ANÁLISE */
@@ -131,8 +134,6 @@
         .modal-box { background: #1e2124; width: 100%; max-width: 600px; padding: 25px; border: 1px solid var(--primary); border-radius: 6px; max-height: 95vh; overflow-y: auto;}
         
         .date-selector { display: flex; gap: 10px; margin-bottom: 20px; align-items: center; }
-        .btn-date { background: #2b3035; color: #888; border: 1px solid #444; padding: 8px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .btn-date.active { background: var(--tech-accent); color: white; border-color: var(--tech-accent); }
         .form-row { display: flex; gap: 15px; margin-bottom: 15px; align-items: flex-end;} 
         .form-group { flex: 1; }
         .form-label { display: block; margin-bottom: 5px; font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; }
@@ -157,6 +158,7 @@
             .timer-display { font-size: 50px; }
             .analysis-split, .an-dates-row { flex-direction: column; align-items: stretch; grid-template-columns: 1fr; }
             .form-row { flex-direction: column; gap: 10px; align-items: stretch; }
+            .edital-tabs-container { padding-bottom: 10px; }
         }
 
         /* --- LIGHT MODE --- */
@@ -196,7 +198,9 @@
         body.light-mode .edital-item-row { background: #ffffff; }
         body.light-mode .edital-item-row:hover { background: #f4f4f5; }
 
-        /* Light mode cronograma */
+        body.light-mode .btn-edital-tab { background: #e4e4e7; color: #555; border-color: #d4d4d8; }
+        body.light-mode .btn-edital-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+
         body.light-mode .crono-header { background: #fce4ec; color: #880e4f; }
         body.light-mode .crono-card { background: #f4f4f5; border-left-color: var(--primary); color: #555; }
         body.light-mode .crono-card:hover { background: #e4e4e7; }
@@ -214,7 +218,7 @@
     <div id="modal-importar" class="modal-overlay" style="z-index: 2600;">
         <div class="modal-box">
             <h3 style="color:var(--tech-accent); font-family:'Rajdhani'; border-bottom:1px solid #444; padding-bottom:10px; margin-bottom:15px;"><i class="fas fa-paste"></i> IMPORTAR EDITAL</h3>
-            <p style="font-size:12px; color:#888; margin-bottom:10px;">Cole o texto do seu edital. O sistema tentará organizar Matérias e Tópicos automaticamente baseado em números e letras maiúsculas.</p>
+            <p style="font-size:12px; color:#888; margin-bottom:10px;">Cole o texto do seu edital. O sistema criará novas matérias e organizará os tópicos no edital ativo.</p>
             <textarea id="import-texto" class="form-control" rows="10" placeholder="Ex:\n1 LÍNGUA PORTUGUESA\n1.1 Compreensão de textos\n1.2 Tipologia textual..." style="border: 1px solid #444;"></textarea>
             <div style="display:flex; gap:10px; margin-top:20px;">
                 <button class="btn-primary" style="flex:1" onclick="processarImportacao()"><i class="fas fa-magic"></i> PROCESSAR TEXTO</button>
@@ -228,7 +232,7 @@
             <h3 style="color:var(--tech-accent); font-family:'Rajdhani'; border-bottom:1px solid #444; padding-bottom:10px; margin-bottom:15px;">NOVO TÓPICO / MATÉRIA</h3>
             
             <div class="form-group" style="margin-bottom:15px;">
-                <label class="form-label">DISCIPLINA PRINCIPAL</label>
+                <label class="form-label">Vincular a Disciplina Existente?</label>
                 <select id="nova-topico-materia" class="form-control">
                     <option value="">[ + CRIAR NOVA MATÉRIA ]</option>
                 </select>
@@ -444,8 +448,19 @@
         </div>
 
         <div id="edital" class="content">
-            <div class="section-title">
-                <span><i class="fas fa-graduation-cap"></i> Edital Verticalizado PCBA</span>
+            <div class="section-title" style="margin-bottom: 10px;">
+                <span><i class="fas fa-graduation-cap"></i> Controle de Editais</span>
+            </div>
+            
+            <div class="edital-tabs-container" id="edital-tabs-container">
+                </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                <h3 style="color:var(--text-main); font-family:'Rajdhani'; margin:0; font-size:24px; display:flex; align-items:center; gap:10px;">
+                    <span id="current-edital-name" style="text-transform:uppercase; color:var(--tech-accent);">NOME DO EDITAL</span>
+                    <button class="btn-icon" style="background:transparent; color:#888;" onclick="renomearEditalAtual()" title="Renomear Edital"><i class="fas fa-pen"></i></button>
+                    <button class="btn-icon" style="background:transparent; color:#e74c3c;" onclick="excluirEditalAtual()" title="Excluir Edital"><i class="fas fa-trash"></i></button>
+                </h3>
                 <div style="display:flex; gap:10px;">
                     <button class="btn-primary" style="background:#2c3e50;" onclick="abrirModalImportar()"><i class="fas fa-paste"></i> Importar</button>
                     <button class="btn-primary" style="background:#8e24aa;" onclick="document.getElementById('modal-nova-materia').style.display='flex'"><i class="fas fa-plus"></i> Add Tópico</button>
@@ -560,15 +575,16 @@
 
     <script>
         const DB_KEY = "peixinho_controle_estudos_v3";
-        const EDITAL_KEY = "peixinho_edital_tracker_v2";
+        const EDITAIS_KEY = "peixinho_editais_v3"; // Nova chave para múltiplos editais
         const CRONOGRAMA_KEY = "peixinho_cronograma_v1";
         
         let dbEstudos = [];
-        let dbEdital = [];
+        let dbEditais = [];
+        let currentEditalId = null;
         let dbCronograma = [];
         let currentCronoID = null;
         
-        // Base Edital PCBA Exato (PDF)
+        // Base Edital PCBA Exato
         const editalPadraoPCBA = [
             { materia: "LÍNGUA PORTUGUESA", topicos: [ { id: 101, nome: "Compreensão e interpretação de textos", estudado: false, revisado: false }, { id: 102, nome: "Tipologia textual", estudado: false, revisado: false }, { id: 103, nome: "Ortografia oficial e Acentuação gráfica", estudado: false, revisado: false }, { id: 104, nome: "Emprego das classes de palavras", estudado: false, revisado: false }, { id: 105, nome: "Emprego do sinal indicativo de crase", estudado: false, revisado: false }, { id: 106, nome: "Sintaxe da oração e do período / Pontuação", estudado: false, revisado: false }, { id: 107, nome: "Concordância e Regência (nominal e verbal)", estudado: false, revisado: false }, { id: 108, nome: "Significação das palavras", estudado: false, revisado: false }, { id: 109, nome: "Correspondência oficial (Manual PR)", estudado: false, revisado: false } ] },
             { materia: "RACIOCÍNIO LÓGICO", topicos: [ { id: 201, nome: "Estruturas lógicas", estudado: false, revisado: false }, { id: 202, nome: "Lógica de argumentação", estudado: false, revisado: false }, { id: 203, nome: "Lógica sentencial (Tabela verdade, equivalências)", estudado: false, revisado: false }, { id: 204, nome: "Princípios de contagem e probabilidade", estudado: false, revisado: false }, { id: 205, nome: "Operações com conjuntos", estudado: false, revisado: false } ] },
@@ -604,12 +620,18 @@
             const d = localStorage.getItem(DB_KEY);
             if(d) dbEstudos = JSON.parse(d);
 
-            const ed = localStorage.getItem(EDITAL_KEY);
-            if(ed) dbEdital = JSON.parse(ed);
-            else {
-                dbEdital = JSON.parse(JSON.stringify(editalPadraoPCBA)); // Clone
-                localStorage.setItem(EDITAL_KEY, JSON.stringify(dbEdital));
+            const ed = localStorage.getItem(EDITAIS_KEY);
+            if(ed) {
+                dbEditais = JSON.parse(ed);
+            } else {
+                dbEditais = [{
+                    id: Date.now(),
+                    nome: "Edital PCBA",
+                    materias: JSON.parse(JSON.stringify(editalPadraoPCBA))
+                }];
+                localStorage.setItem(EDITAIS_KEY, JSON.stringify(dbEditais));
             }
+            if(dbEditais.length > 0) currentEditalId = dbEditais[0].id;
 
             const cr = localStorage.getItem(CRONOGRAMA_KEY);
             if(cr) dbCronograma = JSON.parse(cr);
@@ -621,7 +643,7 @@
 
         function salvarLocal() {
             localStorage.setItem(DB_KEY, JSON.stringify(dbEstudos));
-            localStorage.setItem(EDITAL_KEY, JSON.stringify(dbEdital));
+            localStorage.setItem(EDITAIS_KEY, JSON.stringify(dbEditais));
             localStorage.setItem(CRONOGRAMA_KEY, JSON.stringify(dbCronograma));
         }
         
@@ -634,7 +656,11 @@
 
         function atualizarSelectsMaterias() {
             const sels = ['m-materia', 'c-materia', 'f-materia', 'an-filtro-cat', 'nova-topico-materia', 'cr-materia'];
-            const materias = dbEdital.map(m => m.materia).sort();
+            
+            // Extrai todas as matérias únicas de todos os editais
+            let allMats = new Set();
+            dbEditais.forEach(ed => { ed.materias.forEach(m => allMats.add(m.materia)); });
+            const materias = Array.from(allMats).sort();
             
             sels.forEach(id => {
                 const el = document.getElementById(id);
@@ -650,18 +676,29 @@
         }
 
         function atualizarTopicosRegistro() {
-            const mat = document.getElementById('m-materia').value;
+            const matName = document.getElementById('m-materia').value;
             const selTop = document.getElementById('m-conteudo');
             selTop.innerHTML = '<option value="">-- Escolha um conteúdo --</option>';
-            const cat = dbEdital.find(c => c.materia === mat);
-            if(cat && cat.topicos) cat.topicos.forEach(t => selTop.add(new Option(t.nome, t.nome)));
+            
+            let allTops = new Set();
+            dbEditais.forEach(ed => {
+                const cat = ed.materias.find(c => c.materia === matName);
+                if(cat && cat.topicos) cat.topicos.forEach(t => allTops.add(t.nome));
+            });
+            Array.from(allTops).sort().forEach(t => selTop.add(new Option(t, t)));
         }
+
         function atualizarTopicosCronometro() {
-            const mat = document.getElementById('c-materia').value;
+            const matName = document.getElementById('c-materia').value;
             const selTop = document.getElementById('c-conteudo');
             selTop.innerHTML = '<option value="">-- Opcional --</option>';
-            const cat = dbEdital.find(c => c.materia === mat);
-            if(cat && cat.topicos) cat.topicos.forEach(t => selTop.add(new Option(t.nome, t.nome)));
+            
+            let allTops = new Set();
+            dbEditais.forEach(ed => {
+                const cat = ed.materias.find(c => c.materia === matName);
+                if(cat && cat.topicos) cat.topicos.forEach(t => allTops.add(t.nome));
+            });
+            Array.from(allTops).sort().forEach(t => selTop.add(new Option(t, t)));
         }
 
         function nav(id, btn) {
@@ -674,6 +711,7 @@
             if(id === 'analise') renderAnalise();
             if(id === 'edital') renderEdital();
             if(id === 'cronograma') renderCronograma();
+            if(id === 'calendario') renderCalendario(); // BUG RESOLVIDO: Atualiza calendário!
         }
 
         function renderizarTudo() { renderDashboard(); renderHistorico(); renderEdital(); renderCronograma(); }
@@ -687,7 +725,7 @@
         function getDataFormatada(dateObj) { return `${dateObj.getFullYear()}-${String(dateObj.getMonth()+1).padStart(2,'0')}-${String(dateObj.getDate()).padStart(2,'0')}`; }
         function parseDataBR(dataISO) { return dataISO.split('-').reverse().join('/'); }
 
-        // --- ABA: CRONOGRAMA SEMANAL (NOVA COM CHECKBOX) ---
+        // --- ABA: CRONOGRAMA SEMANAL ---
         function renderCronograma() {
             const container = document.getElementById('crono-grid-container');
             container.innerHTML = '';
@@ -729,9 +767,7 @@
                 item.concluido = isChecked;
                 salvarLocal();
                 renderCronograma();
-                if(currentCronoID === id) {
-                    abrirDetalhesCronograma(id); 
-                }
+                if(currentCronoID === id) { abrirDetalhesCronograma(id); }
             }
         }
 
@@ -759,37 +795,10 @@
             painel.scrollIntoView({behavior: 'smooth', block: 'center'});
         }
 
-        function fecharDetalhesCronograma() {
-            document.getElementById('crono-details-panel').style.display = 'none';
-            currentCronoID = null;
-        }
-
-        function toggleConcluirAtual() {
-            if(!currentCronoID) return;
-            const item = dbCronograma.find(x => x.id === currentCronoID);
-            if(item) {
-                toggleConcluidoCronograma(currentCronoID, !item.concluido);
-            }
-        }
-
-        function editarCronogramaAtual() {
-            if(!currentCronoID) return;
-            const item = dbCronograma.find(x => x.id === currentCronoID);
-            if(item) {
-                fecharDetalhesCronograma();
-                abrirModalCronograma(item.dia, item.id);
-            }
-        }
-
-        function excluirCronogramaAtual() {
-            if(!currentCronoID) return;
-            if(confirm("Excluir definitivamente esta missão do cronograma?")) {
-                dbCronograma = dbCronograma.filter(x => x.id !== currentCronoID);
-                salvarLocal();
-                fecharDetalhesCronograma();
-                renderCronograma();
-            }
-        }
+        function fecharDetalhesCronograma() { document.getElementById('crono-details-panel').style.display = 'none'; currentCronoID = null; }
+        function toggleConcluirAtual() { if(!currentCronoID) return; const item = dbCronograma.find(x => x.id === currentCronoID); if(item) toggleConcluidoCronograma(currentCronoID, !item.concluido); }
+        function editarCronogramaAtual() { if(!currentCronoID) return; const item = dbCronograma.find(x => x.id === currentCronoID); if(item) { fecharDetalhesCronograma(); abrirModalCronograma(item.dia, item.id); } }
+        function excluirCronogramaAtual() { if(!currentCronoID) return; if(confirm("Excluir definitivamente esta missão?")) { dbCronograma = dbCronograma.filter(x => x.id !== currentCronoID); salvarLocal(); fecharDetalhesCronograma(); renderCronograma(); } }
 
         function abrirModalCronograma(dia, id = null) {
             document.getElementById('crono-edit-id').value = '';
@@ -825,53 +834,81 @@
             
             if(id) {
                 const idx = dbCronograma.findIndex(x => x.id == id);
-                if(idx > -1) {
-                    obj.concluido = dbCronograma[idx].concluido; // preserve state
-                    dbCronograma[idx] = obj;
-                }
-            } else {
-                dbCronograma.push(obj);
-            }
+                if(idx > -1) { obj.concluido = dbCronograma[idx].concluido; dbCronograma[idx] = obj; }
+            } else { dbCronograma.push(obj); }
 
-            salvarLocal();
-            renderCronograma();
-            document.getElementById('modal-crono').style.display = 'none';
+            salvarLocal(); renderCronograma(); document.getElementById('modal-crono').style.display = 'none';
         }
 
-        function excluirCronograma() {
-            const id = document.getElementById('crono-edit-id').value;
-            if(id && confirm("Excluir esta missão do cronograma?")) {
-                dbCronograma = dbCronograma.filter(x => x.id != id);
+        function excluirCronograma() { const id = document.getElementById('crono-edit-id').value; if(id && confirm("Excluir esta missão do cronograma?")) { dbCronograma = dbCronograma.filter(x => x.id != id); salvarLocal(); renderCronograma(); document.getElementById('modal-crono').style.display = 'none'; } }
+
+        // --- ABA: EDITAL (MULTI-GUIAS) ---
+        function switchEdital(id) { currentEditalId = id; renderEdital(); }
+        
+        function criarNovoEdital() {
+            const nome = prompt("Nome do novo edital:");
+            if(nome && nome.trim()) {
+                const newEd = { id: Date.now(), nome: nome.trim(), materias: [] };
+                dbEditais.push(newEd);
+                currentEditalId = newEd.id;
                 salvarLocal();
-                renderCronograma();
-                document.getElementById('modal-crono').style.display = 'none';
+                renderEdital();
             }
         }
 
-        // --- ABA: EDITAL E IMPORTAÇÃO ---
+        function renomearEditalAtual() {
+            if(!currentEditalId) return;
+            const ed = dbEditais.find(e => e.id === currentEditalId);
+            if(ed) {
+                const nome = prompt("Novo nome para o edital:", ed.nome);
+                if(nome && nome.trim()) { ed.nome = nome.trim(); salvarLocal(); renderEdital(); }
+            }
+        }
+
+        function excluirEditalAtual() {
+            if(!currentEditalId) return;
+            if(confirm("ATENÇÃO: Apagar este edital e todos os tópicos dentro dele? (O histórico de estudos será mantido)")) {
+                dbEditais = dbEditais.filter(e => e.id !== currentEditalId);
+                if(dbEditais.length > 0) currentEditalId = dbEditais[0].id;
+                else currentEditalId = null;
+                salvarLocal(); atualizarSelectsMaterias(); renderEdital();
+            }
+        }
+
         function renderEdital() {
+            const tabsContainer = document.getElementById('edital-tabs-container');
+            tabsContainer.innerHTML = '';
+            
+            dbEditais.forEach(ed => {
+                const isActive = ed.id === currentEditalId ? 'active' : '';
+                tabsContainer.innerHTML += `<button class="btn-edital-tab ${isActive}" onclick="switchEdital(${ed.id})">${ed.nome}</button>`;
+            });
+            tabsContainer.innerHTML += `<button class="btn-edital-tab" style="background:transparent; border:1px dashed var(--tech-accent); color:var(--tech-accent);" onclick="criarNovoEdital()"><i class="fas fa-plus"></i> Novo Edital</button>`;
+
             const tb = document.getElementById('tbody-edital');
             tb.innerHTML = '';
             
-            let totEstudado = 0;
-            let totItems = 0;
+            const currentEdital = dbEditais.find(e => e.id === currentEditalId);
+            if(!currentEdital) {
+                document.getElementById('tabela-edital').style.display = 'none';
+                document.getElementById('current-edital-name').innerText = "NENHUM EDITAL";
+                document.getElementById('edital-pct-text').innerText = `0% CONCLUÍDO`;
+                document.getElementById('edital-pct-fill').style.width = `0%`;
+                return;
+            }
 
-            dbEdital.forEach((cat, index) => {
+            document.getElementById('tabela-edital').style.display = 'table';
+            document.getElementById('current-edital-name').innerText = currentEdital.nome;
+
+            let totEstudado = 0; let totItems = 0;
+
+            currentEdital.materias.forEach((cat, index) => {
                 tb.innerHTML += `<tr class="edital-header-row"><td colspan="4">${index + 1}. ${cat.materia}</td><td style="text-align:center"><button class="btn-del" style="background:transparent; color:inherit; border:1px solid rgba(255,255,255,0.3); padding:4px 8px; font-size:10px;" onclick="excluirMateriaEdital('${cat.materia}')"><i class="fas fa-trash"></i></button></td></tr>`;
                 
                 cat.topicos.forEach((topico, tIndex) => {
                     totItems++;
                     if(topico.estudado) totEstudado++;
-                    
-                    tb.innerHTML += `
-                        <tr class="edital-item-row">
-                            <td class="edital-num">${index + 1}.${tIndex + 1}</td>
-                            <td>${topico.nome}</td>
-                            <td style="text-align:center"><input type="checkbox" class="chk-edital" ${topico.estudado ? 'checked' : ''} onchange="toggleEditalCheck('${cat.materia}', ${topico.id}, 'estudado', this.checked)"></td>
-                            <td style="text-align:center"><input type="checkbox" class="chk-edital" ${topico.revisado ? 'checked' : ''} onchange="toggleEditalCheck('${cat.materia}', ${topico.id}, 'revisado', this.checked)"></td>
-                            <td style="text-align:center"><button class="btn-icon btn-del" style="width:25px; height:25px; font-size:10px; background:transparent; color:#ef5350;" onclick="excluirTopicoEdital('${cat.materia}', ${topico.id})"><i class="fas fa-times"></i></button></td>
-                        </tr>
-                    `;
+                    tb.innerHTML += `<tr class="edital-item-row"><td class="edital-num">${index + 1}.${tIndex + 1}</td><td>${topico.nome}</td><td style="text-align:center"><input type="checkbox" class="chk-edital" ${topico.estudado ? 'checked' : ''} onchange="toggleEditalCheck('${cat.materia}', ${topico.id}, 'estudado', this.checked)"></td><td style="text-align:center"><input type="checkbox" class="chk-edital" ${topico.revisado ? 'checked' : ''} onchange="toggleEditalCheck('${cat.materia}', ${topico.id}, 'revisado', this.checked)"></td><td style="text-align:center"><button class="btn-icon btn-del" style="width:25px; height:25px; font-size:10px; background:transparent; color:#ef5350;" onclick="excluirTopicoEdital('${cat.materia}', ${topico.id})"><i class="fas fa-times"></i></button></td></tr>`;
                 });
             });
 
@@ -881,7 +918,9 @@
         }
 
         function toggleEditalCheck(materiaNome, topicoId, campo, isChecked) {
-            const mat = dbEdital.find(m => m.materia === materiaNome);
+            const currentEdital = dbEditais.find(e => e.id === currentEditalId);
+            if(!currentEdital) return;
+            const mat = currentEdital.materias.find(m => m.materia === materiaNome);
             if(mat) {
                 const top = mat.topicos.find(t => t.id === topicoId);
                 if(top) { top[campo] = isChecked; salvarLocal(); renderEdital(); }
@@ -889,6 +928,7 @@
         }
 
         function abrirModalImportar() {
+            if(!currentEditalId) return alert("Crie um edital primeiro!");
             document.getElementById('import-texto').value = '';
             document.getElementById('modal-importar').style.display = 'flex';
         }
@@ -896,6 +936,9 @@
         function processarImportacao() {
             const txt = document.getElementById('import-texto').value;
             if(!txt.trim()) return alert("Cole o texto do edital primeiro.");
+
+            const currentEdital = dbEditais.find(e => e.id === currentEditalId);
+            if(!currentEdital) return;
 
             const linhas = txt.split('\n');
             let materiaAtualObj = null;
@@ -914,29 +957,29 @@
                 if(matchTopico) {
                     if(!materiaAtualObj) {
                         materiaAtualObj = { materia: "CONTEÚDO EXTRA", topicos: [] };
-                        dbEdital.push(materiaAtualObj);
+                        currentEdital.materias.push(materiaAtualObj);
                     }
                     materiaAtualObj.topicos.push({ id: Date.now() + Math.random(), nome: matchTopico[2], estudado: false, revisado: false });
                     importados++;
                 } else if (matchMateria) {
                     let nomeMat = matchMateria[2].toUpperCase();
-                    materiaAtualObj = dbEdital.find(m => m.materia === nomeMat);
+                    materiaAtualObj = currentEdital.materias.find(m => m.materia === nomeMat);
                     if(!materiaAtualObj) {
                         materiaAtualObj = { materia: nomeMat, topicos: [] };
-                        dbEdital.push(materiaAtualObj);
+                        currentEdital.materias.push(materiaAtualObj);
                     }
                 } else {
                     if(l === l.toUpperCase() && l.length > 3) {
                         let nomeMat = l;
-                        materiaAtualObj = dbEdital.find(m => m.materia === nomeMat);
+                        materiaAtualObj = currentEdital.materias.find(m => m.materia === nomeMat);
                         if(!materiaAtualObj) {
                             materiaAtualObj = { materia: nomeMat, topicos: [] };
-                            dbEdital.push(materiaAtualObj);
+                            currentEdital.materias.push(materiaAtualObj);
                         }
                     } else {
                         if(!materiaAtualObj) {
                             materiaAtualObj = { materia: "DIVERSOS", topicos: [] };
-                            dbEdital.push(materiaAtualObj);
+                            currentEdital.materias.push(materiaAtualObj);
                         }
                         materiaAtualObj.topicos.push({ id: Date.now() + Math.random(), nome: l, estudado: false, revisado: false });
                         importados++;
@@ -946,19 +989,23 @@
 
             salvarLocal(); atualizarSelectsMaterias(); renderEdital();
             document.getElementById('modal-importar').style.display = 'none';
-            mostrarToast(`Importação concluída! ${importados} tópicos processados.`);
+            mostrarToast(`Importação concluída! ${importados} tópicos adicionados.`);
         }
 
         function salvarNovoTopicoEdital() {
+            if(!currentEditalId) return alert("Crie um edital primeiro!");
+            const currentEdital = dbEditais.find(e => e.id === currentEditalId);
+
             const matSel = document.getElementById('nova-topico-materia').value;
             const topNome = document.getElementById('nova-topico-input').value.trim();
             if(!topNome) return alert("Digite o nome da matéria/tópico!");
+            
             if(matSel) {
-                const mat = dbEdital.find(m => m.materia === matSel);
+                const mat = currentEdital.materias.find(m => m.materia === matSel);
                 mat.topicos.push({ id: Date.now(), nome: topNome, estudado: false, revisado: false });
             } else {
                 const novaMat = topNome.toUpperCase();
-                if(!dbEdital.find(m => m.materia === novaMat)) { dbEdital.push({ materia: novaMat, topicos: [] }); }
+                if(!currentEdital.materias.find(m => m.materia === novaMat)) { currentEdital.materias.push({ materia: novaMat, topicos: [] }); }
             }
             salvarLocal(); atualizarSelectsMaterias(); renderEdital();
             document.getElementById('nova-topico-input').value = '';
@@ -966,8 +1013,20 @@
             mostrarToast("Adicionado ao edital!");
         }
 
-        function excluirMateriaEdital(nome) { if(confirm("Apagar matéria inteira e todos os tópicos?")) { dbEdital = dbEdital.filter(m => m.materia !== nome); salvarLocal(); atualizarSelectsMaterias(); renderEdital(); } }
-        function excluirTopicoEdital(nomeMat, idTopico) { if(confirm("Remover este tópico?")) { const mat = dbEdital.find(m => m.materia === nomeMat); if(mat) { mat.topicos = mat.topicos.filter(t => t.id !== idTopico); salvarLocal(); renderEdital(); } } }
+        function excluirMateriaEdital(nome) { 
+            if(confirm("Apagar matéria inteira e todos os tópicos?")) { 
+                const currentEdital = dbEditais.find(e => e.id === currentEditalId);
+                currentEdital.materias = currentEdital.materias.filter(m => m.materia !== nome); 
+                salvarLocal(); atualizarSelectsMaterias(); renderEdital(); 
+            } 
+        }
+        function excluirTopicoEdital(nomeMat, idTopico) { 
+            if(confirm("Remover este tópico?")) { 
+                const currentEdital = dbEditais.find(e => e.id === currentEditalId);
+                const mat = currentEdital.materias.find(m => m.materia === nomeMat); 
+                if(mat) { mat.topicos = mat.topicos.filter(t => t.id !== idTopico); salvarLocal(); renderEdital(); } 
+            } 
+        }
 
         // --- ABA: ANÁLISE ---
         function setAnalisePeriod(periodo) {
