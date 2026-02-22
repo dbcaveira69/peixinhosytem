@@ -47,6 +47,51 @@
         .btn-icon { width: 35px; height: 35px; padding: 0; border-radius: 4px; color: white; font-size: 14px; }
         .btn-edit { background: #ffa000; color: #000; }
         
+        /* --- GAMIFICAÇÃO: ESTRUTURA LADO A LADO --- */
+        .gamification-card { 
+            background: linear-gradient(135deg, #2b0a16 0%, #1e2124 100%); 
+            border: 1px solid var(--primary); 
+            border-radius: 8px; 
+            padding: 20px 30px; 
+            margin-bottom: 25px; 
+            position: relative; 
+            overflow: hidden; 
+            box-shadow: 0 0 15px rgba(255, 64, 129, 0.1); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            flex-wrap: wrap; 
+            gap: 20px; 
+        }
+        .gamification-card::before { content: ''; position: absolute; top: -50px; left: -50px; width: 150px; height: 150px; background: radial-gradient(circle, rgba(255,64,129,0.2) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
+        
+        .streak-header { display: flex; align-items: center; gap: 15px; flex: 1; min-width: 250px; z-index: 1; }
+        .streak-icon { font-size: 45px; color: #444; transition: 0.5s; }
+        .streak-icon.active { color: var(--tech-accent); text-shadow: 0 0 15px rgba(255, 64, 129, 0.8); animation: burn 1.5s infinite alternate; }
+        @keyframes burn { 0% { transform: scale(1) rotate(-2deg); opacity: 0.8; text-shadow: 0 0 10px rgba(255, 64, 129, 0.5); } 100% { transform: scale(1.1) rotate(2deg); opacity: 1; text-shadow: 0 0 25px rgba(255, 64, 129, 1); } }
+        
+        .streak-info h2 { margin: 0; font-family: 'Rajdhani', sans-serif; font-size: 26px; color: var(--text-main); text-transform: uppercase; letter-spacing: 1px; }
+        .streak-info p { margin: 2px 0 0 0; font-size: 13px; color: var(--text-muted); }
+        
+        .streak-days { 
+            display: flex; 
+            justify-content: space-between; 
+            flex: 1; 
+            min-width: 300px; 
+            max-width: 600px; 
+            background: rgba(0,0,0,0.2); 
+            padding: 15px 25px; 
+            border-radius: 8px; 
+            border: 1px solid rgba(255,255,255,0.05); 
+            z-index: 1;
+        }
+        .streak-day { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+        .day-label { font-size: 11px; color: var(--text-muted); font-weight: bold; text-transform: uppercase; }
+        .day-circle { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; background: #121416; border: 2px solid var(--border); color: #555; transition: 0.3s; }
+        .streak-day.done .day-label { color: var(--tech-accent); }
+        .streak-day.done .day-circle { background: rgba(255, 64, 129, 0.15); border-color: var(--tech-accent); color: var(--tech-accent); box-shadow: 0 0 10px rgba(255, 64, 129, 0.3); }
+        .streak-day.today .day-circle { border-color: #aaa; color: #aaa; border-style: dashed; }
+
         .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
         .card-stat { background: linear-gradient(135deg, #1e2124 0%, #181a1d 100%); padding: 20px; border-radius: 4px; border: 1px solid var(--border); text-align: center; border-left: 4px solid var(--primary); }
         .card-stat h4 { color: #888; font-size: 12px; text-transform: uppercase; margin-bottom: 10px; }
@@ -164,6 +209,8 @@
             .edital-tabs-container { padding-bottom: 10px; }
             #sync-status { position: static; margin-top: 15px; justify-content: center; }
             .main-header { flex-direction: column; }
+            .gamification-card { justify-content: center; text-align: center; padding: 20px; }
+            .streak-header { justify-content: center; }
         }
 
         /* --- LIGHT MODE --- */
@@ -202,10 +249,8 @@
         body.light-mode .edital-header-row td { color: #880e4f; }
         body.light-mode .edital-item-row { background: #ffffff; }
         body.light-mode .edital-item-row:hover { background: #f4f4f5; }
-
         body.light-mode .btn-edital-tab { background: #e4e4e7; color: #555; border-color: #d4d4d8; }
         body.light-mode .btn-edital-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
-
         body.light-mode .crono-header { background: #fce4ec; color: #880e4f; }
         body.light-mode .crono-card { background: #f4f4f5; border-left-color: var(--primary); color: #555; }
         body.light-mode .crono-card:hover { background: #e4e4e7; }
@@ -214,6 +259,11 @@
         body.light-mode .btn-add-crono { border-color: #a1a1aa; color: #555; }
         body.light-mode #cd-conteudo, body.light-mode #cd-notas { color: #333; }
         body.light-mode #cd-materia { color: var(--primary); }
+        
+        body.light-mode .gamification-card { background: linear-gradient(135deg, #fce4ec 0%, #ffffff 100%); border-color: #f48fb1; }
+        body.light-mode .streak-days { background: rgba(255,255,255,0.6); border-color: #f48fb1; }
+        body.light-mode .day-circle { background: #ffffff; border-color: #d4d4d8; }
+        body.light-mode .streak-day.today .day-circle { border-color: var(--primary); color: var(--primary); }
     </style>
 </head>
 <body>
@@ -335,6 +385,19 @@
         </div>
 
         <div id="dashboard" class="content active">
+            
+            <div class="gamification-card">
+                <div class="streak-header">
+                    <i class="fas fa-fire streak-icon" id="fire-icon"></i>
+                    <div class="streak-info">
+                        <h2 id="streak-count">0 DIAS SEGUIDOS</h2>
+                        <p id="streak-msg">A ofensiva caiu. Inicie uma nova sequência hoje!</p>
+                    </div>
+                </div>
+                <div class="streak-days" id="streak-days-container">
+                    </div>
+            </div>
+
             <div class="dashboard-grid">
                 <div class="card-stat"><h4>Horas Hoje</h4><div class="value" id="dash-hoje">0h 0m</div></div>
                 <div class="card-stat"><h4>Horas na Semana</h4><div class="value" id="dash-semana">0h 0m</div></div>
@@ -460,8 +523,8 @@
 
         window.onload = function() {
             if(localStorage.getItem('peixinho_theme') === 'light') document.body.classList.add('light-mode');
-            carregarLocal(); // Garante que a tela não fica vazia enquanto busca
-            carregarBancoServidor(); // Puxa os dados da nuvem para atualizar
+            carregarLocal(); 
+            carregarBancoServidor(); 
         };
 
         // --- SISTEMA DE NUVEM (SINCRONIZAÇÃO) ---
@@ -525,7 +588,6 @@
                 statusBadge.style.color = '#4caf50';
                 statusBadge.style.borderColor = '#4caf50';
             } catch(e) {
-                console.warn("Falha ao salvar na Nuvem. Dado salvo apenas no celular/PC atual.");
                 statusBadge.innerHTML = '<i class="fas fa-hdd"></i> Salvo Localmente';
                 statusBadge.style.color = '#f39c12';
                 statusBadge.style.borderColor = '#f39c12';
@@ -537,8 +599,6 @@
             localStorage.setItem(DB_KEY, JSON.stringify(dbEstudos));
             localStorage.setItem(EDITAIS_KEY, JSON.stringify(dbEditais));
             localStorage.setItem(CRONOGRAMA_KEY, JSON.stringify(dbCronograma));
-            
-            // Dispara o salvamento na nuvem em toda e qualquer alteração!
             salvarNoServidor(); 
         }
 
@@ -559,7 +619,6 @@
             t.style.display = 'block'; setTimeout(() => { t.style.display='none'; }, 3000);
         }
 
-        // Restante das funções do seu código seguem intactas (como já estavam estruturadas)
         function atualizarSelectsMaterias() { const sels = ['m-materia', 'c-materia', 'f-materia', 'an-filtro-cat', 'nova-topico-materia', 'cr-materia']; let allMats = new Set(); dbEditais.forEach(ed => { ed.materias.forEach(m => allMats.add(m.materia)); }); const materias = Array.from(allMats).sort(); sels.forEach(id => { const el = document.getElementById(id); if(!el) return; const isFiltro = (id === 'f-materia' || id === 'an-filtro-cat'); if(id === 'nova-topico-materia') { el.innerHTML = '<option value="">[ + CRIAR NOVA MATÉRIA ]</option>'; } else { el.innerHTML = isFiltro ? '<option value="">Todas as Matérias</option>' : '<option value="">-- Escolha uma matéria --</option>'; } materias.forEach(m => el.add(new Option(m, m))); }); }
         function atualizarTopicosRegistro() { const matName = document.getElementById('m-materia').value; const selTop = document.getElementById('m-conteudo'); selTop.innerHTML = '<option value="">-- Escolha um conteúdo --</option>'; let allTops = new Set(); dbEditais.forEach(ed => { const cat = ed.materias.find(c => c.materia === matName); if(cat && cat.topicos) cat.topicos.forEach(t => allTops.add(t.nome)); }); Array.from(allTops).sort().forEach(t => selTop.add(new Option(t, t))); }
         function atualizarTopicosCronometro() { const matName = document.getElementById('c-materia').value; const selTop = document.getElementById('c-conteudo'); selTop.innerHTML = '<option value="">-- Opcional --</option>'; let allTops = new Set(); dbEditais.forEach(ed => { const cat = ed.materias.find(c => c.materia === matName); if(cat && cat.topicos) cat.topicos.forEach(t => allTops.add(t.nome)); }); Array.from(allTops).sort().forEach(t => selTop.add(new Option(t, t))); }
@@ -570,6 +629,86 @@
         function formataDecimal(minutosTotal) { return (minutosTotal / 60).toFixed(1); }
         function getDataFormatada(dateObj) { return `${dateObj.getFullYear()}-${String(dateObj.getMonth()+1).padStart(2,'0')}-${String(dateObj.getDate()).padStart(2,'0')}`; }
         function parseDataBR(dataISO) { return dataISO.split('-').reverse().join('/'); }
+
+        // --- SISTEMA INTELIGENTE DE GAMIFICAÇÃO (OFENSIVA) ---
+        function calcularOfensiva() {
+            const container = document.getElementById('streak-days-container');
+            const fireIcon = document.getElementById('fire-icon');
+            const streakCountEl = document.getElementById('streak-count');
+            const streakMsgEl = document.getElementById('streak-msg');
+            
+            const datasEstudadas = new Set(dbEstudos.map(e => e.data));
+            
+            let streak = 0;
+            let hoje = new Date();
+            let dataAtual = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+            const strHoje = getDataFormatada(dataAtual);
+            
+            let dataVerificacao = new Date(dataAtual);
+            
+            // Lógica: Conta os dias seguidos de trás pra frente
+            if (datasEstudadas.has(getDataFormatada(dataVerificacao))) {
+                while(datasEstudadas.has(getDataFormatada(dataVerificacao))) {
+                    streak++; dataVerificacao.setDate(dataVerificacao.getDate() - 1);
+                }
+            } else {
+                dataVerificacao.setDate(dataVerificacao.getDate() - 1);
+                if (datasEstudadas.has(getDataFormatada(dataVerificacao))) {
+                    while(datasEstudadas.has(getDataFormatada(dataVerificacao))) {
+                        streak++; dataVerificacao.setDate(dataVerificacao.getDate() - 1);
+                    }
+                } else { streak = 0; }
+            }
+            
+            // Atualiza UI de Fogo
+            if(streak > 0) {
+                fireIcon.classList.add('active');
+                streakCountEl.innerText = `${streak} DIA${streak > 1 ? 'S' : ''} SEGUIDO${streak > 1 ? 'S' : ''}`;
+                if(datasEstudadas.has(strHoje)) { streakMsgEl.innerText = "Missão cumprida hoje! O fogo continua aceso."; } 
+                else { streakMsgEl.innerText = "Ofensiva Tática! Não quebre a corrente hoje."; }
+            } else {
+                fireIcon.classList.remove('active');
+                streakCountEl.innerText = "0 DIAS SEGUIDOS";
+                streakMsgEl.innerText = "A ofensiva caiu. Inicie uma nova sequência hoje!";
+            }
+            
+            // Atualiza Mapa da Semana
+            container.innerHTML = '';
+            let diaDaSemana = hoje.getDay(); 
+            let diffParaSegunda = diaDaSemana === 0 ? -6 : 1 - diaDaSemana;
+            let inicioDaSemana = new Date(dataAtual);
+            inicioDaSemana.setDate(dataAtual.getDate() + diffParaSegunda);
+            
+            const nomesDias = ["SEG", "TER", "QUA", "QUI", "SEX", "SÁB", "DOM"];
+            for(let i=0; i<7; i++) {
+                let d = new Date(inicioDaSemana); d.setDate(inicioDaSemana.getDate() + i);
+                let strD = getDataFormatada(d);
+                let isHoje = (strD === strHoje);
+                let isEstudado = datasEstudadas.has(strD);
+                
+                let divClass = "streak-day";
+                if(isEstudado) divClass += " done"; else if(isHoje) divClass += " today";
+                
+                let content = "-";
+                if(isEstudado) content = '<i class="fas fa-check"></i>'; else if(isHoje) content = '<i class="fas fa-lock"></i>';
+                
+                container.innerHTML += `<div class="${divClass}"><span class="day-label">${nomesDias[i]}</span><div class="day-circle">${content}</div></div>`;
+            }
+        }
+
+        // --- DASHBOARD ---
+        function renderDashboard() {
+            calcularOfensiva(); // Aciona a inteligência da Gamificação
+            
+            const hoje = new Date(); const hojeStr = getDataFormatada(hoje); const diaSemana = hoje.getDay(); const inicioSemana = new Date(hoje); inicioSemana.setDate(hoje.getDate() - diaSemana); const inicioSemanaStr = getDataFormatada(inicioSemana);
+            let minHoje = 0, minSemana = 0, minTotal = 0; const ultimos7Dias = {};
+            for(let i=6; i>=0; i--) { let d = new Date(); d.setDate(d.getDate() - i); let label = d.toLocaleDateString('pt-BR', {weekday: 'short'}); if(i===0) label = "hoje"; ultimos7Dias[getDataFormatada(d)] = { label: label, min: 0 }; }
+            dbEstudos.forEach(e => { const min = parseInt(e.duracao); minTotal += min; if(e.data === hojeStr) minHoje += min; if(e.data >= inicioSemanaStr && e.data <= hojeStr) minSemana += min; if(ultimos7Dias[e.data]) ultimos7Dias[e.data].min += min; });
+            document.getElementById('dash-hoje').innerText = formataHoras(minHoje); document.getElementById('dash-semana').innerText = formataHoras(minSemana); document.getElementById('dash-total').innerText = formataHoras(minTotal);
+            const labelsBar = []; const dataBar = []; for (let dt in ultimos7Dias) { labelsBar.push(ultimos7Dias[dt].label); dataBar.push(formataDecimal(ultimos7Dias[dt].min)); }
+            const ctxEvo = document.getElementById('chartEvo').getContext('2d'); if(chartEvoInstance) chartEvoInstance.destroy();
+            chartEvoInstance = new Chart(ctxEvo, { type: 'bar', data: { labels: labelsBar, datasets: [{ label: 'Horas Estudadas', data: dataBar, backgroundColor: '#ff4081', borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {display: false} }, scales: { y: { grid: { color: '#333' } }, x: { grid: { display: false } } } } });
+        }
 
         function renderCronograma() { const container = document.getElementById('crono-grid-container'); container.innerHTML = ''; diasSemana.forEach(dia => { const itensDia = dbCronograma.filter(c => c.dia === dia); let htmlItens = ''; itensDia.forEach(item => { const doneClass = item.concluido ? 'crono-card-done' : ''; htmlItens += `<div class="crono-card ${doneClass}"><div class="crono-card-click-area" onclick="abrirDetalhesCronograma(${item.id})"><div class="crono-card-title">${item.materia}</div><div style="font-size:11px; margin-bottom:5px;">${item.conteudo || 'Missão de Estudo'}</div>${item.notas ? `<div style="color:var(--text-muted); font-style:italic; font-size:10px;"><i class="fas fa-link"></i> Contém anotações...</div>` : ''}</div><input type="checkbox" class="chk-crono" ${item.concluido ? 'checked' : ''} onchange="toggleConcluidoCronograma(${item.id}, this.checked)"></div>`; }); container.innerHTML += `<div class="crono-col"><div class="crono-header">${dia}</div><div class="crono-body">${htmlItens}<button class="btn-add-crono" onclick="abrirModalCronograma('${dia}')"><i class="fas fa-plus"></i> Missão</button></div></div>`; }); }
         function toggleConcluidoCronograma(id, isChecked) { const item = dbCronograma.find(x => x.id === id); if(item) { item.concluido = isChecked; salvarLocal(); renderCronograma(); if(currentCronoID === id) { abrirDetalhesCronograma(id); } } }
@@ -601,7 +740,7 @@
         function excluirAtividade(id) { if(confirm("Excluir definitivamente este registro?")) { dbEstudos = dbEstudos.filter(x => x.id != id); salvarLocal(); renderizarTudo(); if(document.getElementById('analise').classList.contains('active')) renderAnalise(); } }
         function limparFiltrosHistorico() { document.getElementById('f-data-ini').value = ''; document.getElementById('f-data-fim').value = ''; document.getElementById('f-materia').value = ''; document.getElementById('f-busca').value = ''; renderHistorico(); }
         function renderHistorico() { const dtIni = document.getElementById('f-data-ini').value; const dtFim = document.getElementById('f-data-fim').value; const materiaFiltro = document.getElementById('f-materia').value; const busca = document.getElementById('f-busca').value.toLowerCase(); let lista = [...dbEstudos]; if(dtIni) lista = lista.filter(d => d.data >= dtIni); if(dtFim) lista = lista.filter(d => d.data <= dtFim); if(materiaFiltro) lista = lista.filter(d => d.materia === materiaFiltro); if(busca) { lista = lista.filter(d => (d.conteudo && d.conteudo.toLowerCase().includes(busca)) || (d.notas && d.notas.toLowerCase().includes(busca))); } lista.sort((a,b) => new Date(b.data) - new Date(a.data)); const tb = document.getElementById('tbody-atividades'); tb.innerHTML = ''; if(lista.length === 0) { tb.innerHTML = '<tr><td colspan="5" align="center" style="padding:20px; color:#888;">Nenhum estudo encontrado.</td></tr>'; return; } lista.forEach(d => { let detalhesHtml = ''; if(d.conteudo) detalhesHtml += `<div style="font-size:12px; color:var(--text-muted);">${d.conteudo}</div>`; if(d.notas) detalhesHtml += `<div style="font-size:11px; color:#888; font-style:italic; margin-top:2px;">"${d.notas.substring(0,30)}..."</div>`; tb.innerHTML += `<tr><td style="white-space:nowrap; font-weight:bold;">${parseDataBR(d.data)}</td><td><span class="subject-badge">${d.materia}</span>${detalhesHtml}</td><td style="text-align:center; font-family:'Courier New';">-</td><td style="font-family:'Rajdhani'; font-weight:bold; font-size:16px; color:var(--tech-accent); text-align:center">${formataHoras(d.duracao)}</td><td style="white-space:nowrap"><button class="btn-icon btn-edit" onclick="abrirModal(${d.id})"><i class="fas fa-pen"></i></button> <button class="btn-icon btn-del" onclick="excluirAtividade(${d.id})"><i class="fas fa-trash"></i></button></td></tr>`; }); }
-        function renderDashboard() { const hoje = new Date(); const hojeStr = getDataFormatada(hoje); const diaSemana = hoje.getDay(); const inicioSemana = new Date(hoje); inicioSemana.setDate(hoje.getDate() - diaSemana); const inicioSemanaStr = getDataFormatada(inicioSemana); let minHoje = 0, minSemana = 0, minTotal = 0; const ultimos7Dias = {}; for(let i=6; i>=0; i--) { let d = new Date(); d.setDate(d.getDate() - i); let label = d.toLocaleDateString('pt-BR', {weekday: 'short'}); if(i===0) label = "hoje"; ultimos7Dias[getDataFormatada(d)] = { label: label, min: 0 }; } dbEstudos.forEach(e => { const min = parseInt(e.duracao); minTotal += min; if(e.data === hojeStr) minHoje += min; if(e.data >= inicioSemanaStr && e.data <= hojeStr) minSemana += min; if(ultimos7Dias[e.data]) ultimos7Dias[e.data].min += min; }); document.getElementById('dash-hoje').innerText = formataHoras(minHoje); document.getElementById('dash-semana').innerText = formataHoras(minSemana); document.getElementById('dash-total').innerText = formataHoras(minTotal); const labelsBar = []; const dataBar = []; for (let dt in ultimos7Dias) { labelsBar.push(ultimos7Dias[dt].label); dataBar.push(formataDecimal(ultimos7Dias[dt].min)); } const ctxEvo = document.getElementById('chartEvo').getContext('2d'); if(chartEvoInstance) chartEvoInstance.destroy(); chartEvoInstance = new Chart(ctxEvo, { type: 'bar', data: { labels: labelsBar, datasets: [{ label: 'Horas Estudadas', data: dataBar, backgroundColor: '#ff4081', borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {display: false} }, scales: { y: { grid: { color: '#333' } }, x: { grid: { display: false } } } } }); }
+        
         const nomeMeses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro']; function mudarMes(delta) { dataAtual.setMonth(dataAtual.getMonth() + delta); renderCalendario(); } function renderCalendario() { const grid = document.getElementById('calendar-grid'); const titulo = document.getElementById('cal-titulo'); grid.innerHTML = ''; const y = dataAtual.getFullYear(); const m = dataAtual.getMonth(); const hojeReal = new Date(); titulo.innerText = `${nomeMeses[m]} ${y}`; ['DOM','SEG','TER','QUA','QUI','SEX','SÁB'].forEach(d => { grid.innerHTML += `<div style="text-align:center; font-size:12px; font-weight:bold; color:var(--primary); padding:5px;">${d}</div>`; }); const firstDay = new Date(y, m, 1).getDay(); const daysInMonth = new Date(y, m+1, 0).getDate(); for(let i=0; i<firstDay; i++) { grid.innerHTML += `<div></div>`; } for(let d=1; d<=daysInMonth; d++) { const dt = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; const isToday = (d === hojeReal.getDate() && m === hojeReal.getMonth() && y === hojeReal.getFullYear()); const minDia = dbEstudos.filter(e => e.data === dt).reduce((acc, curr) => acc + curr.duracao, 0); let html = `<div class="day-cell ${minDia > 0 ? 'day-studied' : ''}" style="${isToday ? 'border: 2px solid var(--tech-accent)' : ''}"><span class="day-num" style="${isToday ? 'color:var(--tech-accent)' : ''}">${d}</span>`; if(minDia > 0) { html += `<span class="day-hours">${formataHoras(minDia)}</span>`; } html += `</div>`; grid.innerHTML += html; } }
         function atualizarDisplayTimer() { const h = Math.floor(timerSeconds / 3600); const m = Math.floor((timerSeconds % 3600) / 60); const s = timerSeconds % 60; document.getElementById('timer-display').innerText = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; } function iniciarCronometro() { if(timerRunning) return; timerRunning = true; document.getElementById('btn-start-timer').style.display = 'none'; document.getElementById('btn-pause-timer').style.display = 'inline-flex'; timerInterval = setInterval(() => { timerSeconds++; atualizarDisplayTimer(); }, 1000); } function pausarCronometro() { timerRunning = false; clearInterval(timerInterval); document.getElementById('btn-start-timer').style.display = 'inline-flex'; document.getElementById('btn-pause-timer').style.display = 'none'; document.getElementById('btn-start-timer').innerHTML = '<i class="fas fa-play"></i> Continuar'; } function zerarCronometro() { pausarCronometro(); timerSeconds = 0; atualizarDisplayTimer(); document.getElementById('btn-start-timer').innerHTML = '<i class="fas fa-play"></i> Iniciar'; }
         function salvarDoCronometro() { const minutos = Math.floor(timerSeconds / 60); if(minutos < 1) { alert("Sessão muito curta! Estude pelo menos 1 minuto."); return; } const mat = document.getElementById('c-materia').value; const cont = document.getElementById('c-conteudo').value; if(!mat) { alert("Selecione a Matéria Alvo antes de salvar a sessão."); return; } dbEstudos.push({ id: Date.now(), materia: mat, conteudo: cont, data: getDataFormatada(new Date()), duracao: minutos, notas: "Estudo Cronometrado" }); zerarCronometro(); document.getElementById('c-materia').value = ''; document.getElementById('c-conteudo').value = ''; salvarLocal(); renderizarTudo(); mostrarToast(`Sessão de ${minutos} min salva!`); }
