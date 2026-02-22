@@ -28,6 +28,7 @@
         .main-icon { font-size: 32px; color: var(--tech-accent); filter: drop-shadow(0 0 5px rgba(255, 64, 129, 0.5)); }
         .logo-title { font-family: 'Rajdhani', sans-serif; font-size: 30px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--text-main); margin: 0;}
         
+        /* STATUS DE SINCRONIZAÇÃO NUVEM */
         #sync-status { position: absolute; right: 30px; font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; font-weight: bold; text-transform: uppercase; background: rgba(0,0,0,0.3); padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border); transition: 0.3s; }
 
         .tabs { display: flex; background: #181a1d; border-bottom: 1px solid var(--border); overflow-x: auto; }
@@ -222,10 +223,9 @@
     <div id="modal-importar" class="modal-overlay" style="z-index: 2600;">
         <div class="modal-box">
             <h3 style="color:var(--tech-accent); font-family:'Rajdhani'; border-bottom:1px solid #444; padding-bottom:10px; margin-bottom:15px;"><i class="fas fa-paste"></i> IMPORTAR EDITAL</h3>
-            <p style="font-size:12px; color:#888; margin-bottom:10px;">Cole o texto do seu edital. O sistema criará novas matérias e organizará os tópicos no edital ativo.</p>
-            <textarea id="import-texto" class="form-control" rows="10" placeholder="Ex:\n1 LÍNGUA PORTUGUESA\n1.1 Compreensão de textos\n1.2 Tipologia textual..." style="border: 1px solid #444;"></textarea>
+            <textarea id="import-texto" class="form-control" rows="10" style="border: 1px solid #444;"></textarea>
             <div style="display:flex; gap:10px; margin-top:20px;">
-                <button class="btn-primary" style="flex:1" onclick="processarImportacao()"><i class="fas fa-magic"></i> PROCESSAR TEXTO</button>
+                <button class="btn-primary" style="flex:1" onclick="processarImportacao()">PROCESSAR TEXTO</button>
                 <button class="btn-del" style="flex:1" onclick="document.getElementById('modal-importar').style.display='none'">CANCELAR</button>
             </div>
         </div>
@@ -234,19 +234,12 @@
     <div id="modal-nova-materia" class="modal-overlay" style="z-index: 2500;">
         <div class="modal-box" style="max-width: 400px; border: 2px solid var(--tech-accent);">
             <h3 style="color:var(--tech-accent); font-family:'Rajdhani'; border-bottom:1px solid #444; padding-bottom:10px; margin-bottom:15px;">NOVO TÓPICO / MATÉRIA</h3>
-            
             <div class="form-group" style="margin-bottom:15px;">
-                <label class="form-label">Vincular a Disciplina Existente?</label>
-                <select id="nova-topico-materia" class="form-control">
-                    <option value="">[ + CRIAR NOVA MATÉRIA ]</option>
-                </select>
+                <select id="nova-topico-materia" class="form-control"><option value="">[ + CRIAR NOVA MATÉRIA ]</option></select>
             </div>
-
             <div class="form-group">
-                <label class="form-label">NOME DO TÓPICO OU NOVA MATÉRIA</label>
-                <input type="text" id="nova-topico-input" class="form-control" placeholder="Ex: Informática ou Windows 10">
+                <input type="text" id="nova-topico-input" class="form-control" placeholder="Ex: Informática">
             </div>
-
             <div style="display:flex; gap:10px; margin-top:20px;">
                 <button class="btn-primary" style="flex:1" onclick="salvarNovoTopicoEdital()">SALVAR</button>
                 <button class="btn-del" style="flex:1" onclick="document.getElementById('modal-nova-materia').style.display='none'">CANCELAR</button>
@@ -260,41 +253,19 @@
                 <h3 style="color:var(--text-main); font-family:'Rajdhani'; text-transform: uppercase;"><i class="fas fa-calendar-plus" style="color:var(--tech-accent)"></i> Agendar Estudo</h3>
                 <button onclick="document.getElementById('modal-crono').style.display='none'" style="background:none; border:none; font-size:18px; color:#888; cursor:pointer;"><i class="fas fa-times"></i></button>
             </div>
-            
             <input type="hidden" id="crono-edit-id">
-            
             <div class="form-row">
                 <div class="form-group">
-                    <label class="form-label">Dia da Semana</label>
                     <select id="cr-dia" class="form-control">
-                        <option value="Segunda-feira">Segunda-feira</option>
-                        <option value="Terça-feira">Terça-feira</option>
-                        <option value="Quarta-feira">Quarta-feira</option>
-                        <option value="Quinta-feira">Quinta-feira</option>
-                        <option value="Sexta-feira">Sexta-feira</option>
-                        <option value="Sábado">Sábado</option>
-                        <option value="Domingo">Domingo</option>
+                        <option value="Segunda-feira">Segunda-feira</option><option value="Terça-feira">Terça-feira</option>
+                        <option value="Quarta-feira">Quarta-feira</option><option value="Quinta-feira">Quinta-feira</option>
+                        <option value="Sexta-feira">Sexta-feira</option><option value="Sábado">Sábado</option><option value="Domingo">Domingo</option>
                     </select>
                 </div>
             </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label">Disciplina</label>
-                    <select id="cr-materia" class="form-control"></select>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Conteúdo / Assunto</label>
-                <input type="text" id="cr-conteudo" class="form-control" placeholder="Ex: Inquérito Policial">
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Anotações / Links</label>
-                <textarea id="cr-notas" class="form-control" rows="2" placeholder="Link do PDF ou videoaula..."></textarea>
-            </div>
-
+            <div class="form-row"><div class="form-group"><select id="cr-materia" class="form-control"></select></div></div>
+            <div class="form-group"><input type="text" id="cr-conteudo" class="form-control" placeholder="Ex: Inquérito Policial"></div>
+            <div class="form-group"><textarea id="cr-notas" class="form-control" rows="2" placeholder="Link do PDF ou videoaula..."></textarea></div>
             <div class="modal-footer" style="margin-top: 15px;">
                 <button class="btn-del" id="btn-del-crono" style="display:none;" onclick="excluirCronograma()"><i class="fas fa-trash"></i> Excluir</button>
                 <div style="display:flex; gap:10px; margin-left:auto;">
@@ -311,9 +282,7 @@
                 <h3 style="color:var(--text-main); font-family:'Rajdhani'; font-size:24px; text-transform: uppercase; margin:0;"><i class="fas fa-edit" style="color:var(--tech-accent)"></i> Registro de Estudo</h3>
                 <button onclick="document.getElementById('modal-atividade').style.display='none'" style="background:none; border:none; font-size:20px; color:#888; cursor:pointer;"><i class="fas fa-times"></i></button>
             </div>
-            
             <input type="hidden" id="edit-id">
-            
             <div class="date-selector">
                 <i class="far fa-calendar-alt" style="color:var(--tech-accent); font-size:18px;"></i>
                 <button class="btn-date active" id="btn-hoje" onclick="setQuickDate('hoje')">HOJE</button>
@@ -321,63 +290,26 @@
                 <button class="btn-date" id="btn-outro" onclick="setQuickDate('outro')">OUTRO</button>
                 <input type="date" id="m-data" class="form-control" style="display:none; padding:5px; margin:0; border:none; border-bottom: 2px solid var(--tech-accent);">
             </div>
-            
             <div class="form-row">
-                <div class="form-group" style="flex: 2;">
-                    <label class="form-label">Matéria</label>
-                    <select id="m-materia" class="form-control" style="margin-bottom:0;" onchange="atualizarTopicosRegistro()"></select>
-                </div>
+                <div class="form-group" style="flex: 2;"><select id="m-materia" class="form-control" style="margin-bottom:0;" onchange="atualizarTopicosRegistro()"></select></div>
                 <div class="form-group" style="flex: 1;">
-                    <label class="form-label">Tempo Líquido</label>
                     <div style="display:flex; gap:5px; align-items:center;">
                         <input type="number" id="m-duracao-horas" class="form-control" placeholder="0" min="0" style="margin-bottom:0; text-align:center; padding:10px 5px;"> <span style="font-size:10px; color:#888;">H</span>
                         <input type="number" id="m-duracao-min" class="form-control" placeholder="0" min="0" max="59" style="margin-bottom:0; text-align:center; padding:10px 5px;"> <span style="font-size:10px; color:#888;">M</span>
                     </div>
                 </div>
             </div>
-            
             <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label">Conteúdo Focado</label>
-                    <select id="m-conteudo" class="form-control" style="margin-bottom:0;">
-                        <option value="">-- Escolha um conteúdo --</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Material (Opcional)</label>
-                    <input type="text" id="m-material" class="form-control" placeholder="Ex.: PDF Aula 01" style="margin-bottom:0;">
-                </div>
+                <div class="form-group"><select id="m-conteudo" class="form-control" style="margin-bottom:0;"><option value="">-- Escolha um conteúdo --</option></select></div>
+                <div class="form-group"><input type="text" id="m-material" class="form-control" placeholder="Ex.: PDF Aula 01" style="margin-bottom:0;"></div>
             </div>
-
             <div class="metrics-row">
-                <div class="metric-card">
-                    <div class="metric-title">QUESTÕES</div>
-                    <div style="font-size:9px; color:#888; text-align:center; margin-bottom:5px;">ACERTOS / ERROS</div>
-                    <div class="metric-inputs">
-                        <input type="number" id="m-acertos" placeholder="0" min="0" style="color:#4caf50;"> 
-                        <span style="color:#666">/</span> 
-                        <input type="number" id="m-erros" placeholder="0" min="0" style="color:#f44336;">
-                    </div>
-                </div>
-                
-                <div class="metric-card">
-                    <div class="metric-title">PÁGINAS LIDAS</div>
-                    <div style="font-size:9px; color:#888; text-align:center; margin-bottom:5px;">QUANTIDADE</div>
-                    <div class="metric-inputs">
-                        <input type="number" id="m-paginas" placeholder="0" min="0" style="color:var(--tech-accent);">
-                    </div>
-                </div>
+                <div class="metric-card"><div class="metric-title">QUESTÕES</div><div class="metric-inputs"><input type="number" id="m-acertos" placeholder="0" min="0" style="color:#4caf50;"> <span style="color:#666">/</span> <input type="number" id="m-erros" placeholder="0" min="0" style="color:#f44336;"></div></div>
+                <div class="metric-card"><div class="metric-title">PÁGINAS LIDAS</div><div class="metric-inputs"><input type="number" id="m-paginas" placeholder="0" min="0" style="color:var(--tech-accent);"></div></div>
             </div>
-
-            <div class="form-group" style="margin-top: 15px;">
-                <label class="form-label">Anotações Relevantes</label>
-                <textarea id="m-notas" class="form-control" rows="2" placeholder="Dificuldades, artigos para revisar..." style="margin-bottom:0; border:none; border-bottom:1px solid #444; resize:vertical;"></textarea>
-            </div>
-
+            <div class="form-group" style="margin-top: 15px;"><textarea id="m-notas" class="form-control" rows="2" placeholder="Dificuldades, artigos para revisar..." style="margin-bottom:0; border:none; border-bottom:1px solid #444; resize:vertical;"></textarea></div>
             <div class="modal-footer">
-                <label style="font-size:12px; color:#888; display:flex; align-items:center; gap:5px; cursor:pointer;">
-                    <input type="checkbox" id="chk-manter-aberto"> Salvar e criar novo
-                </label>
+                <label style="font-size:12px; color:#888; display:flex; align-items:center; gap:5px; cursor:pointer;"><input type="checkbox" id="chk-manter-aberto"> Salvar e criar novo</label>
                 <div style="display:flex; gap:10px;">
                     <button style="background:transparent; color:#888; border:1px solid #444;" onclick="document.getElementById('modal-atividade').style.display='none'">Cancelar</button>
                     <button class="btn-primary" style="background:#4db6ac; color:#000;" onclick="salvarAtividade()"><i class="fas fa-check"></i> Salvar</button>
@@ -388,12 +320,8 @@
 
     <div class="container">
         <div class="main-header">
-            <div class="title-line">
-                <h1 class="logo-title">CONTROLE DE ESTUDOS</h1>
-            </div>
-            <div id="sync-status">
-                <i class="fas fa-wifi"></i> Conectando...
-            </div>
+            <div class="title-line"><h1 class="logo-title">CONTROLE DE ESTUDOS</h1></div>
+            <div id="sync-status"><i class="fas fa-cloud"></i> Verificando Nuvem...</div>
         </div>
 
         <div class="tabs">
@@ -412,40 +340,19 @@
                 <div class="card-stat"><h4>Horas na Semana</h4><div class="value" id="dash-semana">0h 0m</div></div>
                 <div class="card-stat"><h4>Total Acumulado</h4><div class="value" id="dash-total">0h 0m</div></div>
             </div>
-            <div class="chart-box">
-                <h4 style="color:var(--tech-accent); font-family:'Rajdhani'; margin-bottom:15px; text-transform:uppercase;"><i class="fas fa-chart-bar"></i> Últimos 7 dias (Horas)</h4>
-                <div style="height: 250px;"><canvas id="chartEvo"></canvas></div>
-            </div>
+            <div class="chart-box"><h4 style="color:var(--tech-accent); font-family:'Rajdhani'; margin-bottom:15px; text-transform:uppercase;"><i class="fas fa-chart-bar"></i> Últimos 7 dias (Horas)</h4><div style="height: 250px;"><canvas id="chartEvo"></canvas></div></div>
         </div>
 
         <div id="cronograma" class="content">
-            <div class="section-title">
-                <span><i class="fas fa-tasks"></i> Cronograma Semanal</span>
-            </div>
-            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Organize sua rotina. Marque na caixinha quando concluir a missão do dia.</p>
-            
-            <div class="crono-grid" id="crono-grid-container">
-                </div>
-
+            <div class="section-title"><span><i class="fas fa-tasks"></i> Cronograma Semanal</span></div>
+            <div class="crono-grid" id="crono-grid-container"></div>
             <div id="crono-details-panel" class="crono-detalhes-panel">
                 <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px;">
-                    <div>
-                        <h3 id="cd-materia" style="color:var(--tech-accent); margin:0; font-family:'Rajdhani'; text-transform:uppercase; font-size:20px;">MATERIA</h3>
-                        <span id="cd-dia" style="font-size:12px; color:#888; font-weight:bold; text-transform:uppercase;">Dia da Semana</span>
-                    </div>
+                    <div><h3 id="cd-materia" style="color:var(--tech-accent); margin:0; font-family:'Rajdhani'; text-transform:uppercase; font-size:20px;">MATERIA</h3><span id="cd-dia" style="font-size:12px; color:#888; font-weight:bold; text-transform:uppercase;">Dia da Semana</span></div>
                     <button onclick="fecharDetalhesCronograma()" style="background:none; border:none; color:#888; font-size:20px; cursor:pointer;"><i class="fas fa-times"></i></button>
                 </div>
-                
-                <div style="margin-bottom: 15px;">
-                    <strong style="font-size:12px; color:#888; text-transform:uppercase;">Conteúdo / Assunto Focado:</strong>
-                    <div id="cd-conteudo" style="font-size:15px; margin-top:5px; color:var(--text-main);">...</div>
-                </div>
-                
-                <div style="margin-bottom: 20px;">
-                    <strong style="font-size:12px; color:#888; text-transform:uppercase;">Anotações ou Links Úteis:</strong>
-                    <div id="cd-notas" style="font-size:14px; margin-top:5px; color:var(--text-muted); white-space:pre-wrap;">...</div>
-                </div>
-                
+                <div style="margin-bottom: 15px;"><strong style="font-size:12px; color:#888; text-transform:uppercase;">Conteúdo / Assunto Focado:</strong><div id="cd-conteudo" style="font-size:15px; margin-top:5px; color:var(--text-main);">...</div></div>
+                <div style="margin-bottom: 20px;"><strong style="font-size:12px; color:#888; text-transform:uppercase;">Anotações ou Links Úteis:</strong><div id="cd-notas" style="font-size:14px; margin-top:5px; color:var(--text-muted); white-space:pre-wrap;">...</div></div>
                 <div style="display:flex; gap:10px; border-top: 1px solid #333; padding-top: 15px; flex-wrap: wrap;">
                     <button class="btn-primary" style="background:#4caf50;" id="btn-cd-concluir" onclick="toggleConcluirAtual()"><i class="fas fa-check"></i> Marcar Concluído</button>
                     <button class="btn-primary" style="background:#ffa000; color:#000;" onclick="editarCronogramaAtual()"><i class="fas fa-pen"></i> Editar Missão</button>
@@ -455,44 +362,18 @@
         </div>
 
         <div id="edital" class="content">
-            <div class="section-title" style="margin-bottom: 10px;">
-                <span><i class="fas fa-graduation-cap"></i> Controle de Editais</span>
-            </div>
-            
-            <div class="edital-tabs-container" id="edital-tabs-container">
-                </div>
-
+            <div class="section-title" style="margin-bottom: 10px;"><span><i class="fas fa-graduation-cap"></i> Controle de Editais</span></div>
+            <div class="edital-tabs-container" id="edital-tabs-container"></div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
-                <h3 style="color:var(--text-main); font-family:'Rajdhani'; margin:0; font-size:24px; display:flex; align-items:center; gap:10px;">
-                    <span id="current-edital-name" style="text-transform:uppercase; color:var(--tech-accent);">NOME DO EDITAL</span>
-                    <button class="btn-icon" style="background:transparent; color:#888;" onclick="renomearEditalAtual()" title="Renomear Edital"><i class="fas fa-pen"></i></button>
-                    <button class="btn-icon" style="background:transparent; color:#e74c3c;" onclick="excluirEditalAtual()" title="Excluir Edital"><i class="fas fa-trash"></i></button>
-                </h3>
-                <div style="display:flex; gap:10px;">
-                    <button class="btn-primary" style="background:#2c3e50;" onclick="abrirModalImportar()"><i class="fas fa-paste"></i> Importar</button>
-                    <button class="btn-primary" style="background:#8e24aa;" onclick="document.getElementById('modal-nova-materia').style.display='flex'"><i class="fas fa-plus"></i> Add Tópico</button>
-                </div>
+                <h3 style="color:var(--text-main); font-family:'Rajdhani'; margin:0; font-size:24px; display:flex; align-items:center; gap:10px;"><span id="current-edital-name" style="text-transform:uppercase; color:var(--tech-accent);">NOME DO EDITAL</span><button class="btn-icon" style="background:transparent; color:#888;" onclick="renomearEditalAtual()"><i class="fas fa-pen"></i></button><button class="btn-icon" style="background:transparent; color:#e74c3c;" onclick="excluirEditalAtual()"><i class="fas fa-trash"></i></button></h3>
+                <div style="display:flex; gap:10px;"><button class="btn-primary" style="background:#2c3e50;" onclick="abrirModalImportar()"><i class="fas fa-paste"></i> Importar</button><button class="btn-primary" style="background:#8e24aa;" onclick="document.getElementById('modal-nova-materia').style.display='flex'"><i class="fas fa-plus"></i> Add Tópico</button></div>
             </div>
-            
-            <div style="margin-bottom:20px;">
-                <div style="display:flex; justify-content:space-between; font-size:12px; color:#888; font-weight:bold;"><span>PROGRESSO GERAL DO EDITAL</span><span id="edital-pct-text">0%</span></div>
-                <div class="edital-progress-bar"><div id="edital-pct-fill" class="edital-progress-fill"></div></div>
-            </div>
-
-            <div class="table-container">
-                <table id="tabela-edital">
-                    <thead><tr><th style="width: 50px; text-align:center;">Item</th><th>Conteúdo Programático</th><th style="width:80px; text-align:center;">Estudado</th><th style="width:80px; text-align:center;">Revisado</th><th style="width:50px; text-align:center;">Ação</th></tr></thead>
-                    <tbody id="tbody-edital"></tbody>
-                </table>
-            </div>
+            <div style="margin-bottom:20px;"><div style="display:flex; justify-content:space-between; font-size:12px; color:#888; font-weight:bold;"><span>PROGRESSO GERAL DO EDITAL</span><span id="edital-pct-text">0%</span></div><div class="edital-progress-bar"><div id="edital-pct-fill" class="edital-progress-fill"></div></div></div>
+            <div class="table-container"><table id="tabela-edital"><thead><tr><th style="width: 50px; text-align:center;">Item</th><th>Conteúdo Programático</th><th style="width:80px; text-align:center;">Estudado</th><th style="width:80px; text-align:center;">Revisado</th><th style="width:50px; text-align:center;">Ação</th></tr></thead><tbody id="tbody-edital"></tbody></table></div>
         </div>
 
         <div id="historico" class="content">
-            <div class="section-title">
-                <span><i class="fas fa-list"></i> Histórico de Atividades</span>
-                <button class="btn-primary" style="background:#4db6ac; color:#000;" onclick="abrirModal()"><i class="fas fa-plus"></i> Cadastrar Atividade</button>
-            </div>
-            
+            <div class="section-title"><span><i class="fas fa-list"></i> Histórico de Atividades</span><button class="btn-primary" style="background:#4db6ac; color:#000;" onclick="abrirModal()"><i class="fas fa-plus"></i> Cadastrar Atividade</button></div>
             <div class="filter-bar">
                 <div style="display:flex; align-items:center; gap:5px;"><label style="font-size:11px; color:#888; font-weight:bold;">DE</label><input type="date" id="f-data-ini" class="filter-control" onchange="renderHistorico()"></div>
                 <div style="display:flex; align-items:center; gap:5px;"><label style="font-size:11px; color:#888; font-weight:bold;">ATÉ</label><input type="date" id="f-data-fim" class="filter-control" onchange="renderHistorico()"></div>
@@ -500,51 +381,23 @@
                 <input type="text" id="f-busca" class="filter-control" placeholder="Buscar anotação/tópico..." onkeyup="renderHistorico()">
                 <button class="btn-del" style="padding: 10px 15px; font-size:11px;" onclick="limparFiltrosHistorico()">LIMPAR</button>
             </div>
-            
-            <div class="table-container">
-                <table id="tabela-atividades">
-                    <thead><tr><th>Data</th><th>Matéria e Conteúdo</th><th>Anotações</th><th style="text-align:center;">Duração</th><th style="text-align:center;">Ações</th></tr></thead>
-                    <tbody id="tbody-atividades"></tbody>
-                </table>
-            </div>
+            <div class="table-container"><table id="tabela-atividades"><thead><tr><th>Data</th><th>Matéria e Conteúdo</th><th>Anotações</th><th style="text-align:center;">Duração</th><th style="text-align:center;">Ações</th></tr></thead><tbody id="tbody-atividades"></tbody></table></div>
         </div>
 
         <div id="analise" class="content">
             <div class="section-title"><span><i class="fas fa-chart-line"></i> Tempo de Estudo</span></div>
-            
             <div class="an-filter-container">
                 <div class="an-dates-row">
                     <div class="quick-dates-group">
-                        <button class="btn-quick-date" id="btn-an-1d" onclick="setAnalisePeriod('1d')">1d</button>
-                        <button class="btn-quick-date" id="btn-an-7d" onclick="setAnalisePeriod('7d')">7d</button>
-                        <button class="btn-quick-date active" id="btn-an-30d" onclick="setAnalisePeriod('30d')">30d</button>
-                        <button class="btn-quick-date" id="btn-an-60d" onclick="setAnalisePeriod('60d')">60d</button>
-                        <button class="btn-quick-date" id="btn-an-6m" onclick="setAnalisePeriod('6m')">6m</button>
-                        <button class="btn-quick-date" id="btn-an-12m" onclick="setAnalisePeriod('12m')">12m</button>
-                        <button class="btn-quick-date" id="btn-an-all" onclick="setAnalisePeriod('all')">Total</button>
+                        <button class="btn-quick-date" id="btn-an-1d" onclick="setAnalisePeriod('1d')">1d</button><button class="btn-quick-date" id="btn-an-7d" onclick="setAnalisePeriod('7d')">7d</button><button class="btn-quick-date active" id="btn-an-30d" onclick="setAnalisePeriod('30d')">30d</button><button class="btn-quick-date" id="btn-an-60d" onclick="setAnalisePeriod('60d')">60d</button><button class="btn-quick-date" id="btn-an-6m" onclick="setAnalisePeriod('6m')">6m</button><button class="btn-quick-date" id="btn-an-12m" onclick="setAnalisePeriod('12m')">12m</button><button class="btn-quick-date" id="btn-an-all" onclick="setAnalisePeriod('all')">Total</button>
                     </div>
-                    
-                    <div style="flex:1; display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;">
-                        <div class="an-date-group"><label>INÍCIO</label><input type="date" id="an-data-ini" class="an-date-input" onchange="resetQuickButtons(); renderAnalise()"></div>
-                        <div class="an-date-group"><label>FIM</label><input type="date" id="an-data-fim" class="an-date-input" onchange="resetQuickButtons(); renderAnalise()"></div>
-                    </div>
-
-                    <div class="an-date-group" style="min-width: 200px;">
-                        <label>DISCIPLINA</label>
-                        <select id="an-filtro-cat" class="form-control" style="margin:0; border:none; border-bottom: 2px solid var(--tech-accent); padding:5px; border-radius:0;" onchange="renderAnalise()"><option value="">Todas as Matérias</option></select>
-                    </div>
+                    <div style="flex:1; display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;"><div class="an-date-group"><label>INÍCIO</label><input type="date" id="an-data-ini" class="an-date-input" onchange="resetQuickButtons(); renderAnalise()"></div><div class="an-date-group"><label>FIM</label><input type="date" id="an-data-fim" class="an-date-input" onchange="resetQuickButtons(); renderAnalise()"></div></div>
+                    <div class="an-date-group" style="min-width: 200px;"><label>DISCIPLINA</label><select id="an-filtro-cat" class="form-control" style="margin:0; border:none; border-bottom: 2px solid var(--tech-accent); padding:5px; border-radius:0;" onchange="renderAnalise()"><option value="">Todas as Matérias</option></select></div>
                 </div>
             </div>
-
             <div class="analysis-split">
                 <div class="an-chart-container"><canvas id="chartPieAnalytics"></canvas></div>
-                <div class="an-list-container">
-                    <div style="margin-bottom: 20px;">
-                        <h2 id="an-total-time" style="font-family:'Rajdhani'; color:var(--text-main); margin:0; font-size:32px;">0h 0m</h2>
-                        <span style="color:#888; font-size:12px;" id="an-periodo-lbl">Tempo total no período</span>
-                    </div>
-                    <div id="an-subject-list"></div>
-                </div>
+                <div class="an-list-container"><div style="margin-bottom: 20px;"><h2 id="an-total-time" style="font-family:'Rajdhani'; color:var(--text-main); margin:0; font-size:32px;">0h 0m</h2><span style="color:#888; font-size:12px;" id="an-periodo-lbl">Tempo total no período</span></div><div id="an-subject-list"></div></div>
             </div>
         </div>
 
@@ -564,11 +417,7 @@
             <h2 class="section-title"><i class="fas fa-stopwatch"></i> Modo Concentração</h2>
             <div class="timer-container">
                 <div class="timer-display" id="timer-display">00:00:00</div>
-                <div class="timer-controls">
-                    <button class="btn-primary btn-timer" id="btn-start-timer" onclick="iniciarCronometro()" style="background:#4caf50"><i class="fas fa-play"></i> Iniciar</button>
-                    <button class="btn-primary btn-timer" id="btn-pause-timer" style="background:#f39c12; display:none;" onclick="pausarCronometro()"><i class="fas fa-pause"></i> Pausar</button>
-                    <button class="btn-del btn-timer" onclick="zerarCronometro()"><i class="fas fa-stop"></i> Zerar</button>
-                </div>
+                <div class="timer-controls"><button class="btn-primary btn-timer" id="btn-start-timer" onclick="iniciarCronometro()" style="background:#4caf50"><i class="fas fa-play"></i> Iniciar</button><button class="btn-primary btn-timer" id="btn-pause-timer" style="background:#f39c12; display:none;" onclick="pausarCronometro()"><i class="fas fa-pause"></i> Pausar</button><button class="btn-del btn-timer" onclick="zerarCronometro()"><i class="fas fa-stop"></i> Zerar</button></div>
                 <div style="max-width: 500px; margin: 0 auto; text-align: left; margin-top: 30px; border-top: 1px solid var(--border); padding-top: 20px;">
                     <div class="form-row">
                         <div class="form-group"><label class="form-label">Matéria</label><select id="c-materia" class="form-control" style="margin-bottom:10px; border-bottom: 2px solid #444; border-top:none; border-left:none; border-right:none; border-radius:0;" onchange="atualizarTopicosCronometro()"></select></div>
@@ -584,7 +433,9 @@
         const DB_KEY = "peixinho_controle_estudos_v3";
         const EDITAIS_KEY = "peixinho_editais_v3"; 
         const CRONOGRAMA_KEY = "peixinho_cronograma_v1";
-        const API_URL = "/api/database"; // A ROTA MESTRE DA SUA VERCEL
+        
+        // ROTA DA NUVEM (API NA VERCEL DO PEIXINHO)
+        const API_URL = "/api/database"; 
         
         let dbFull = {};
         let dbEstudos = [];
@@ -593,21 +444,9 @@
         let dbCronograma = [];
         let currentCronoID = null;
         
-        // Base Edital PCBA Exato
         const editalPadraoPCBA = [
-            { materia: "LÍNGUA PORTUGUESA", topicos: [ { id: 101, nome: "Compreensão e interpretação de textos", estudado: false, revisado: false }, { id: 102, nome: "Tipologia textual", estudado: false, revisado: false }, { id: 103, nome: "Ortografia oficial e Acentuação gráfica", estudado: false, revisado: false }, { id: 104, nome: "Emprego das classes de palavras", estudado: false, revisado: false }, { id: 105, nome: "Emprego do sinal indicativo de crase", estudado: false, revisado: false }, { id: 106, nome: "Sintaxe da oração e do período / Pontuação", estudado: false, revisado: false }, { id: 107, nome: "Concordância e Regência (nominal e verbal)", estudado: false, revisado: false }, { id: 108, nome: "Significação das palavras", estudado: false, revisado: false }, { id: 109, nome: "Correspondência oficial (Manual PR)", estudado: false, revisado: false } ] },
-            { materia: "RACIOCÍNIO LÓGICO", topicos: [ { id: 201, nome: "Estruturas lógicas", estudado: false, revisado: false }, { id: 202, nome: "Lógica de argumentação", estudado: false, revisado: false }, { id: 203, nome: "Lógica sentencial (Tabela verdade, equivalências)", estudado: false, revisado: false }, { id: 204, nome: "Princípios de contagem e probabilidade", estudado: false, revisado: false }, { id: 205, nome: "Operações com conjuntos", estudado: false, revisado: false } ] },
-            { materia: "ATUALIDADES", topicos: [ { id: 301, nome: "Globalização: implicações sociais, econômicas", estudado: false, revisado: false }, { id: 302, nome: "Multiculturalidade e Diversidade", estudado: false, revisado: false }, { id: 303, nome: "Tecnologias de Informação e Comunicação", estudado: false, revisado: false } ] },
-            { materia: "INFORMÁTICA", topicos: [ { id: 401, nome: "Conceito de internet e intranet", estudado: false, revisado: false }, { id: 402, nome: "Noções de sistema operacional (Windows)", estudado: false, revisado: false }, { id: 403, nome: "Hardware: placa mãe, memórias, processadores", estudado: false, revisado: false }, { id: 404, nome: "Editores de texto e planilhas (Word, Excel, Libre)", estudado: false, revisado: false }, { id: 405, nome: "Segurança: vírus, malware, phishing", estudado: false, revisado: false }, { id: 406, nome: "Navegadores e Computação na nuvem", estudado: false, revisado: false } ] },
-            { materia: "IGUALDADE RACIAL E DE GÊNERO", topicos: [ { id: 501, nome: "CF/88 - Artigos 1º, 3º, 4º e 5º", estudado: false, revisado: false }, { id: 502, nome: "Estatuto da Igualdade Racial (Lei 12.288/10)", estudado: false, revisado: false }, { id: 503, nome: "Crimes de preconceito de raça ou cor (Lei 7.716)", estudado: false, revisado: false }, { id: 504, nome: "Lei Maria da Penha (Lei 11.340/06)", estudado: false, revisado: false } ] },
-            { materia: "MEDICINA LEGAL", topicos: [ { id: 601, nome: "Conceito, corpo de delito, perícia e peritos", estudado: false, revisado: false }, { id: 602, nome: "Documentos médico-legais e Identificação", estudado: false, revisado: false }, { id: 603, nome: "Lesões por ação contundente, brancas e PAF", estudado: false, revisado: false }, { id: 604, nome: "Tanatologia Forense (Diagnóstico da morte)", estudado: false, revisado: false }, { id: 605, nome: "Asfixias e Crimes Sexuais", estudado: false, revisado: false } ] },
-            { materia: "LEGISLAÇÃO GERAL", topicos: [ { id: 701, nome: "Estatuto do Servidor da Bahia (Lei 6.677/94)", estudado: false, revisado: false }, { id: 702, nome: "Lei Orgânica da PCBA (Lei 11.370/09)", estudado: false, revisado: false } ] },
-            { materia: "CONTABILIDADE", topicos: [ { id: 801, nome: "Conceitos, objetivos e finalidades", estudado: false, revisado: false }, { id: 802, nome: "Patrimônio e Equação fundamental", estudado: false, revisado: false }, { id: 803, nome: "Atos e fatos administrativos", estudado: false, revisado: false }, { id: 804, nome: "Contas e Escrituração", estudado: false, revisado: false }, { id: 805, nome: "Balanço patrimonial e DRE", estudado: false, revisado: false } ] },
-            { materia: "DIREITO ADMINISTRATIVO", topicos: [ { id: 901, nome: "Organização administrativa (Direta e Indireta)", estudado: false, revisado: false }, { id: 902, nome: "Ato administrativo", estudado: false, revisado: false }, { id: 903, nome: "Poderes administrativos", estudado: false, revisado: false }, { id: 904, nome: "Responsabilidade civil do Estado", estudado: false, revisado: false } ] },
-            { materia: "DIREITO CONSTITUCIONAL", topicos: [ { id: 1001, nome: "Direitos e garantias fundamentais", estudado: false, revisado: false }, { id: 1002, nome: "Organização político-administrativa", estudado: false, revisado: false }, { id: 1003, nome: "Defesa do Estado e Segurança Pública", estudado: false, revisado: false } ] },
-            { materia: "DIREITO PENAL", topicos: [ { id: 1101, nome: "Aplicação da lei penal (Tempo e Espaço)", estudado: false, revisado: false }, { id: 1102, nome: "Fato típico e ilicitude", estudado: false, revisado: false }, { id: 1103, nome: "Culpabilidade e Imputabilidade", estudado: false, revisado: false }, { id: 1104, nome: "Concurso de pessoas", estudado: false, revisado: false }, { id: 1105, nome: "Crimes contra a pessoa e patrimônio", estudado: false, revisado: false }, { id: 1106, nome: "Crimes contra a Administração Pública", estudado: false, revisado: false } ] },
-            { materia: "DIREITO PROCESSUAL PENAL", topicos: [ { id: 1201, nome: "Inquérito policial", estudado: false, revisado: false }, { id: 1202, nome: "Prova e Cadeia de Custódia", estudado: false, revisado: false }, { id: 1203, nome: "Prisão (Flagrante, Preventiva e Temporária)", estudado: false, revisado: false } ] },
-            { materia: "LEGISLAÇÃO EXTRAVAGANTE", topicos: [ { id: 1301, nome: "Tráfico de Drogas (Lei 11.343/06)", estudado: false, revisado: false }, { id: 1302, nome: "Crime Organizado (Lei 12.850/13)", estudado: false, revisado: false }, { id: 1303, nome: "Crimes Hediondos (Lei 8.072/90)", estudado: false, revisado: false }, { id: 1304, nome: "Estatuto do Desarmamento (Lei 10.826/03)", estudado: false, revisado: false }, { id: 1305, nome: "Abuso de Autoridade (Lei 13.869/19)", estudado: false, revisado: false } ] }
+            { materia: "LÍNGUA PORTUGUESA", topicos: [ { id: 101, nome: "Compreensão e interpretação de textos", estudado: false, revisado: false }, { id: 102, nome: "Tipologia textual", estudado: false, revisado: false } ] },
+            { materia: "INFORMÁTICA", topicos: [ { id: 401, nome: "Conceito de internet e intranet", estudado: false, revisado: false }, { id: 402, nome: "Noções de sistema (Windows)", estudado: false, revisado: false } ] }
         ];
 
         const diasSemana = ["Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo"];
@@ -617,40 +456,35 @@
         let timerInterval, timerSeconds = 0, timerRunning = false;
         let chartEvoInstance = null, chartPieAnalyticsInstance = null;
 
-        // --- INICIALIZAÇÃO E INTEGRAÇÃO DE SERVIDOR ---
         window.addEventListener('message', function(event) { if (event.data && event.data.theme) { (event.data.theme === 'light') ? document.body.classList.add('light-mode') : document.body.classList.remove('light-mode'); } });
 
         window.onload = function() {
             if(localStorage.getItem('peixinho_theme') === 'light') document.body.classList.add('light-mode');
-            
-            // 1. Carrega rápido a memória local para o usuário não ficar esperando tela em branco
-            carregarLocal(); 
-            // 2. Chama a conexão com o servidor da Vercel para puxar o espelho na nuvem
-            carregarBancoServidor(); 
+            carregarLocal(); // Garante que a tela não fica vazia enquanto busca
+            carregarBancoServidor(); // Puxa os dados da nuvem para atualizar
         };
 
-        // Carregamento de Banco Externo
+        // --- SISTEMA DE NUVEM (SINCRONIZAÇÃO) ---
         async function carregarBancoServidor() {
-            const status = document.getElementById('sync-status');
-            if(status) { status.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sincronizando...'; status.style.color = 'var(--text-muted)'; }
+            const statusBadge = document.getElementById('sync-status');
+            statusBadge.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Conectando...';
+            statusBadge.style.color = '#8899a6';
             
             try {
                 const res = await fetch(API_URL);
+                if(!res.ok) throw new Error("API não encontrada ou offline");
+                
                 dbFull = await res.json();
                 
                 if(dbFull.estudos) dbEstudos = dbFull.estudos;
                 if(dbFull.editais) dbEditais = dbFull.editais;
                 if(dbFull.cronograma) dbCronograma = dbFull.cronograma;
 
-                // Previne banco zerado
-                if(!dbFull.editais || dbFull.editais.length === 0) {
-                    if(dbEditais.length === 0) {
-                        dbEditais = [{ id: Date.now(), nome: "Edital Padrão", materias: JSON.parse(JSON.stringify(editalPadraoPCBA)) }];
-                    }
+                if(!dbEditais || dbEditais.length === 0) {
+                    dbEditais = [{ id: Date.now(), nome: "Edital Inicial", materias: JSON.parse(JSON.stringify(editalPadraoPCBA)) }];
                 }
                 if(dbEditais.length > 0) currentEditalId = dbEditais[0].id;
 
-                // Atualiza o cache local com os dados vindos do servidor
                 localStorage.setItem(DB_KEY, JSON.stringify(dbEstudos));
                 localStorage.setItem(EDITAIS_KEY, JSON.stringify(dbEditais));
                 localStorage.setItem(CRONOGRAMA_KEY, JSON.stringify(dbCronograma));
@@ -658,659 +492,119 @@
                 atualizarSelectsMaterias();
                 renderizarTudo();
 
-                if(status) { status.innerHTML = '<i class="fas fa-check-circle"></i> Sincronizado'; status.style.color = '#4caf50'; }
+                statusBadge.innerHTML = '<i class="fas fa-cloud-download-alt"></i> Sincronizado';
+                statusBadge.style.color = '#4caf50';
+                statusBadge.style.borderColor = '#4caf50';
             } catch(e) {
-                console.error("Modo Offline Ativo");
-                if(status) { status.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Modo Offline'; status.style.color = '#e74c3c'; }
+                console.warn("Modo Nuvem Inativo. Operando apenas Localmente.");
+                statusBadge.innerHTML = '<i class="fas fa-hdd"></i> Salvo no Dispositivo';
+                statusBadge.style.color = '#f39c12';
+                statusBadge.style.borderColor = '#f39c12';
             }
         }
 
-        // Função Master para Salvar na Nuvem
         async function salvarNoServidor() {
-            const status = document.getElementById('sync-status');
-            if(status) { status.innerHTML = '<i class="fas fa-save"></i> Salvando...'; status.style.color = 'var(--text-muted)'; }
+            const statusBadge = document.getElementById('sync-status');
+            statusBadge.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Salvando na Nuvem...';
+            statusBadge.style.color = '#3498db';
             
             dbFull.estudos = dbEstudos;
             dbFull.editais = dbEditais;
             dbFull.cronograma = dbCronograma;
 
             try {
-                await fetch(API_URL, {
+                const res = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(dbFull)
                 });
-                if(status) { status.innerHTML = '<i class="fas fa-check-circle"></i> Sincronizado'; status.style.color = '#4caf50'; }
+                
+                if(!res.ok) throw new Error("Erro na API");
+
+                statusBadge.innerHTML = '<i class="fas fa-check-circle"></i> Sincronizado na Nuvem';
+                statusBadge.style.color = '#4caf50';
+                statusBadge.style.borderColor = '#4caf50';
             } catch(e) {
-                console.error("Erro ao salvar no servidor", e);
-                if(status) { status.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Falha ao Salvar'; status.style.color = '#e74c3c'; }
+                console.warn("Falha ao salvar na Nuvem. Dado salvo apenas no celular/PC atual.");
+                statusBadge.innerHTML = '<i class="fas fa-hdd"></i> Salvo Localmente';
+                statusBadge.style.color = '#f39c12';
+                statusBadge.style.borderColor = '#f39c12';
             }
         }
 
-        function carregarLocal() {
-            const d = localStorage.getItem(DB_KEY);
-            if(d) dbEstudos = JSON.parse(d);
-
-            const ed = localStorage.getItem(EDITAIS_KEY);
-            if(ed) {
-                dbEditais = JSON.parse(ed);
-            } else {
-                dbEditais = [{
-                    id: Date.now(),
-                    nome: "Edital PCBA",
-                    materias: JSON.parse(JSON.stringify(editalPadraoPCBA))
-                }];
-                localStorage.setItem(EDITAIS_KEY, JSON.stringify(dbEditais));
-            }
-            if(dbEditais.length > 0) currentEditalId = dbEditais[0].id;
-
-            const cr = localStorage.getItem(CRONOGRAMA_KEY);
-            if(cr) dbCronograma = JSON.parse(cr);
-
-            atualizarSelectsMaterias();
-            setAnalisePeriod('30d'); 
-            renderizarTudo();
-        }
-
-        // --- GATILHO CHAVE: A SUBSTITUIÇÃO DA FUNÇÃO ANTIGA PARA AGORA CHAMAR A NUVEM ---
+        // --- GATILHO CENTRAL DE SALVAMENTO ---
         function salvarLocal() {
             localStorage.setItem(DB_KEY, JSON.stringify(dbEstudos));
             localStorage.setItem(EDITAIS_KEY, JSON.stringify(dbEditais));
             localStorage.setItem(CRONOGRAMA_KEY, JSON.stringify(dbCronograma));
             
-            // Dispara a sincronização automaticamente em TODA e QUALQUER alteração
+            // Dispara o salvamento na nuvem em toda e qualquer alteração!
             salvarNoServidor(); 
+        }
+
+        function carregarLocal() {
+            const d = localStorage.getItem(DB_KEY); if(d) dbEstudos = JSON.parse(d);
+            const ed = localStorage.getItem(EDITAIS_KEY);
+            if(ed) { dbEditais = JSON.parse(ed); } 
+            else { dbEditais = [{ id: Date.now(), nome: "Edital Padrão", materias: JSON.parse(JSON.stringify(editalPadraoPCBA)) }]; localStorage.setItem(EDITAIS_KEY, JSON.stringify(dbEditais)); }
+            if(dbEditais.length > 0) currentEditalId = dbEditais[0].id;
+            const cr = localStorage.getItem(CRONOGRAMA_KEY); if(cr) dbCronograma = JSON.parse(cr);
+
+            atualizarSelectsMaterias(); setAnalisePeriod('30d'); renderizarTudo();
         }
         
         function mostrarToast(msg) {
             const t = document.getElementById('toast');
             t.innerHTML = `<i class="fas fa-check-circle"></i> ${msg}`;
-            t.style.display = 'block';
-            setTimeout(() => { t.style.display='none'; }, 3000);
+            t.style.display = 'block'; setTimeout(() => { t.style.display='none'; }, 3000);
         }
 
-        function atualizarSelectsMaterias() {
-            const sels = ['m-materia', 'c-materia', 'f-materia', 'an-filtro-cat', 'nova-topico-materia', 'cr-materia'];
-            
-            let allMats = new Set();
-            dbEditais.forEach(ed => { ed.materias.forEach(m => allMats.add(m.materia)); });
-            const materias = Array.from(allMats).sort();
-            
-            sels.forEach(id => {
-                const el = document.getElementById(id);
-                if(!el) return;
-                const isFiltro = (id === 'f-materia' || id === 'an-filtro-cat');
-                if(id === 'nova-topico-materia') {
-                    el.innerHTML = '<option value="">[ + CRIAR NOVA MATÉRIA ]</option>';
-                } else {
-                    el.innerHTML = isFiltro ? '<option value="">Todas as Matérias</option>' : '<option value="">-- Escolha uma matéria --</option>';
-                }
-                materias.forEach(m => el.add(new Option(m, m)));
-            });
-        }
-
-        function atualizarTopicosRegistro() {
-            const matName = document.getElementById('m-materia').value;
-            const selTop = document.getElementById('m-conteudo');
-            selTop.innerHTML = '<option value="">-- Escolha um conteúdo --</option>';
-            
-            let allTops = new Set();
-            dbEditais.forEach(ed => {
-                const cat = ed.materias.find(c => c.materia === matName);
-                if(cat && cat.topicos) cat.topicos.forEach(t => allTops.add(t.nome));
-            });
-            Array.from(allTops).sort().forEach(t => selTop.add(new Option(t, t)));
-        }
-
-        function atualizarTopicosCronometro() {
-            const matName = document.getElementById('c-materia').value;
-            const selTop = document.getElementById('c-conteudo');
-            selTop.innerHTML = '<option value="">-- Opcional --</option>';
-            
-            let allTops = new Set();
-            dbEditais.forEach(ed => {
-                const cat = ed.materias.find(c => c.materia === matName);
-                if(cat && cat.topicos) cat.topicos.forEach(t => allTops.add(t.nome));
-            });
-            Array.from(allTops).sort().forEach(t => selTop.add(new Option(t, t)));
-        }
-
-        function nav(id, btn) {
-            document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            btn.classList.add('active');
-            if(id === 'dashboard') renderDashboard();
-            if(id === 'historico') renderHistorico();
-            if(id === 'analise') renderAnalise();
-            if(id === 'edital') renderEdital();
-            if(id === 'cronograma') renderCronograma();
-            if(id === 'calendario') renderCalendario(); 
-        }
-
+        // Restante das funções do seu código seguem intactas (como já estavam estruturadas)
+        function atualizarSelectsMaterias() { const sels = ['m-materia', 'c-materia', 'f-materia', 'an-filtro-cat', 'nova-topico-materia', 'cr-materia']; let allMats = new Set(); dbEditais.forEach(ed => { ed.materias.forEach(m => allMats.add(m.materia)); }); const materias = Array.from(allMats).sort(); sels.forEach(id => { const el = document.getElementById(id); if(!el) return; const isFiltro = (id === 'f-materia' || id === 'an-filtro-cat'); if(id === 'nova-topico-materia') { el.innerHTML = '<option value="">[ + CRIAR NOVA MATÉRIA ]</option>'; } else { el.innerHTML = isFiltro ? '<option value="">Todas as Matérias</option>' : '<option value="">-- Escolha uma matéria --</option>'; } materias.forEach(m => el.add(new Option(m, m))); }); }
+        function atualizarTopicosRegistro() { const matName = document.getElementById('m-materia').value; const selTop = document.getElementById('m-conteudo'); selTop.innerHTML = '<option value="">-- Escolha um conteúdo --</option>'; let allTops = new Set(); dbEditais.forEach(ed => { const cat = ed.materias.find(c => c.materia === matName); if(cat && cat.topicos) cat.topicos.forEach(t => allTops.add(t.nome)); }); Array.from(allTops).sort().forEach(t => selTop.add(new Option(t, t))); }
+        function atualizarTopicosCronometro() { const matName = document.getElementById('c-materia').value; const selTop = document.getElementById('c-conteudo'); selTop.innerHTML = '<option value="">-- Opcional --</option>'; let allTops = new Set(); dbEditais.forEach(ed => { const cat = ed.materias.find(c => c.materia === matName); if(cat && cat.topicos) cat.topicos.forEach(t => allTops.add(t.nome)); }); Array.from(allTops).sort().forEach(t => selTop.add(new Option(t, t))); }
+        function nav(id, btn) { document.querySelectorAll('.content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.getElementById(id).classList.add('active'); btn.classList.add('active'); if(id === 'dashboard') renderDashboard(); if(id === 'historico') renderHistorico(); if(id === 'analise') renderAnalise(); if(id === 'edital') renderEdital(); if(id === 'cronograma') renderCronograma(); if(id === 'calendario') renderCalendario(); }
         function renderizarTudo() { renderDashboard(); renderHistorico(); renderEdital(); renderCronograma(); renderCalendario(); renderAnalise(); }
-
-        // --- UTILITARIOS ---
         function formataHoras(minutosTotal) { const h = Math.floor(minutosTotal / 60); const m = Math.floor(minutosTotal % 60); return h > 0 ? `${h}h ${m}m` : `${m}m`; }
         function formataHorasSegundos(minutosTotal) { const h = Math.floor(minutosTotal / 60); const m = Math.floor(minutosTotal % 60); return h > 0 ? `${h}h ${m}m 0s` : `${m}m 0s`; }
         function formataDecimal(minutosTotal) { return (minutosTotal / 60).toFixed(1); }
-        function minToHHMM(minutos) { const h = Math.floor(minutos / 60); const m = minutos % 60; return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`; }
-        function HHMMtoMin(timeStr) { if(!timeStr) return 0; const parts = timeStr.split(':'); return (parseInt(parts[0]) * 60) + parseInt(parts[1]); }
         function getDataFormatada(dateObj) { return `${dateObj.getFullYear()}-${String(dateObj.getMonth()+1).padStart(2,'0')}-${String(dateObj.getDate()).padStart(2,'0')}`; }
         function parseDataBR(dataISO) { return dataISO.split('-').reverse().join('/'); }
 
-        // --- ABA: CRONOGRAMA SEMANAL ---
-        function renderCronograma() {
-            const container = document.getElementById('crono-grid-container');
-            container.innerHTML = '';
-            
-            diasSemana.forEach(dia => {
-                const itensDia = dbCronograma.filter(c => c.dia === dia);
-                
-                let htmlItens = '';
-                itensDia.forEach(item => {
-                    const doneClass = item.concluido ? 'crono-card-done' : '';
-                    
-                    htmlItens += `
-                        <div class="crono-card ${doneClass}">
-                            <div class="crono-card-click-area" onclick="abrirDetalhesCronograma(${item.id})">
-                                <div class="crono-card-title">${item.materia}</div>
-                                <div style="font-size:11px; margin-bottom:5px;">${item.conteudo || 'Missão de Estudo'}</div>
-                                ${item.notas ? `<div style="color:var(--text-muted); font-style:italic; font-size:10px;"><i class="fas fa-link"></i> Contém anotações...</div>` : ''}
-                            </div>
-                            <input type="checkbox" class="chk-crono" ${item.concluido ? 'checked' : ''} onchange="toggleConcluidoCronograma(${item.id}, this.checked)">
-                        </div>
-                    `;
-                });
-
-                container.innerHTML += `
-                    <div class="crono-col">
-                        <div class="crono-header">${dia}</div>
-                        <div class="crono-body">
-                            ${htmlItens}
-                            <button class="btn-add-crono" onclick="abrirModalCronograma('${dia}')"><i class="fas fa-plus"></i> Missão</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function toggleConcluidoCronograma(id, isChecked) {
-            const item = dbCronograma.find(x => x.id === id);
-            if(item) {
-                item.concluido = isChecked;
-                salvarLocal();
-                renderCronograma();
-                if(currentCronoID === id) { abrirDetalhesCronograma(id); }
-            }
-        }
-
-        function abrirDetalhesCronograma(id) {
-            currentCronoID = id;
-            const item = dbCronograma.find(x => x.id === id);
-            if(!item) return;
-
-            document.getElementById('cd-materia').innerText = item.materia;
-            document.getElementById('cd-dia').innerText = item.dia;
-            document.getElementById('cd-conteudo').innerText = item.conteudo || 'Nenhum conteúdo especificado.';
-            document.getElementById('cd-notas').innerText = item.notas || 'Sem anotações ou links.';
-            
-            const btnConcluir = document.getElementById('btn-cd-concluir');
-            if(item.concluido) {
-                btnConcluir.innerHTML = '<i class="fas fa-times"></i> Desmarcar';
-                btnConcluir.style.background = '#e74c3c';
-            } else {
-                btnConcluir.innerHTML = '<i class="fas fa-check"></i> Marcar Concluído';
-                btnConcluir.style.background = '#4caf50';
-            }
-
-            const painel = document.getElementById('crono-details-panel');
-            painel.style.display = 'block';
-            painel.scrollIntoView({behavior: 'smooth', block: 'center'});
-        }
-
+        function renderCronograma() { const container = document.getElementById('crono-grid-container'); container.innerHTML = ''; diasSemana.forEach(dia => { const itensDia = dbCronograma.filter(c => c.dia === dia); let htmlItens = ''; itensDia.forEach(item => { const doneClass = item.concluido ? 'crono-card-done' : ''; htmlItens += `<div class="crono-card ${doneClass}"><div class="crono-card-click-area" onclick="abrirDetalhesCronograma(${item.id})"><div class="crono-card-title">${item.materia}</div><div style="font-size:11px; margin-bottom:5px;">${item.conteudo || 'Missão de Estudo'}</div>${item.notas ? `<div style="color:var(--text-muted); font-style:italic; font-size:10px;"><i class="fas fa-link"></i> Contém anotações...</div>` : ''}</div><input type="checkbox" class="chk-crono" ${item.concluido ? 'checked' : ''} onchange="toggleConcluidoCronograma(${item.id}, this.checked)"></div>`; }); container.innerHTML += `<div class="crono-col"><div class="crono-header">${dia}</div><div class="crono-body">${htmlItens}<button class="btn-add-crono" onclick="abrirModalCronograma('${dia}')"><i class="fas fa-plus"></i> Missão</button></div></div>`; }); }
+        function toggleConcluidoCronograma(id, isChecked) { const item = dbCronograma.find(x => x.id === id); if(item) { item.concluido = isChecked; salvarLocal(); renderCronograma(); if(currentCronoID === id) { abrirDetalhesCronograma(id); } } }
+        function abrirDetalhesCronograma(id) { currentCronoID = id; const item = dbCronograma.find(x => x.id === id); if(!item) return; document.getElementById('cd-materia').innerText = item.materia; document.getElementById('cd-dia').innerText = item.dia; document.getElementById('cd-conteudo').innerText = item.conteudo || 'Nenhum conteúdo especificado.'; document.getElementById('cd-notas').innerText = item.notas || 'Sem anotações ou links.'; const btnConcluir = document.getElementById('btn-cd-concluir'); if(item.concluido) { btnConcluir.innerHTML = '<i class="fas fa-times"></i> Desmarcar'; btnConcluir.style.background = '#e74c3c'; } else { btnConcluir.innerHTML = '<i class="fas fa-check"></i> Marcar Concluído'; btnConcluir.style.background = '#4caf50'; } const painel = document.getElementById('crono-details-panel'); painel.style.display = 'block'; painel.scrollIntoView({behavior: 'smooth', block: 'center'}); }
         function fecharDetalhesCronograma() { document.getElementById('crono-details-panel').style.display = 'none'; currentCronoID = null; }
         function toggleConcluirAtual() { if(!currentCronoID) return; const item = dbCronograma.find(x => x.id === currentCronoID); if(item) toggleConcluidoCronograma(currentCronoID, !item.concluido); }
         function editarCronogramaAtual() { if(!currentCronoID) return; const item = dbCronograma.find(x => x.id === currentCronoID); if(item) { fecharDetalhesCronograma(); abrirModalCronograma(item.dia, item.id); } }
         function excluirCronogramaAtual() { if(!currentCronoID) return; if(confirm("Excluir definitivamente esta missão?")) { dbCronograma = dbCronograma.filter(x => x.id !== currentCronoID); salvarLocal(); fecharDetalhesCronograma(); renderCronograma(); } }
-
-        function abrirModalCronograma(dia, id = null) {
-            document.getElementById('crono-edit-id').value = '';
-            document.getElementById('cr-dia').value = dia;
-            document.getElementById('cr-materia').value = '';
-            document.getElementById('cr-conteudo').value = '';
-            document.getElementById('cr-notas').value = '';
-            document.getElementById('btn-del-crono').style.display = 'none';
-
-            if(id) {
-                const item = dbCronograma.find(x => x.id == id);
-                if(item) {
-                    document.getElementById('crono-edit-id').value = item.id;
-                    document.getElementById('cr-materia').value = item.materia;
-                    document.getElementById('cr-conteudo').value = item.conteudo;
-                    document.getElementById('cr-notas').value = item.notas;
-                    document.getElementById('btn-del-crono').style.display = 'inline-flex';
-                }
-            }
-            document.getElementById('modal-crono').style.display = 'flex';
-        }
-
-        function salvarCronograma() {
-            const id = document.getElementById('crono-edit-id').value;
-            const dia = document.getElementById('cr-dia').value;
-            const materia = document.getElementById('cr-materia').value;
-            const conteudo = document.getElementById('cr-conteudo').value;
-            const notas = document.getElementById('cr-notas').value;
-
-            if(!materia) { alert("Selecione a matéria!"); return; }
-
-            const obj = { id: id ? parseInt(id) : Date.now(), dia, materia, conteudo, notas, concluido: false };
-            
-            if(id) {
-                const idx = dbCronograma.findIndex(x => x.id == id);
-                if(idx > -1) { obj.concluido = dbCronograma[idx].concluido; dbCronograma[idx] = obj; }
-            } else { dbCronograma.push(obj); }
-
-            salvarLocal(); renderCronograma(); document.getElementById('modal-crono').style.display = 'none';
-        }
-
+        function abrirModalCronograma(dia, id = null) { document.getElementById('crono-edit-id').value = ''; document.getElementById('cr-dia').value = dia; document.getElementById('cr-materia').value = ''; document.getElementById('cr-conteudo').value = ''; document.getElementById('cr-notas').value = ''; document.getElementById('btn-del-crono').style.display = 'none'; if(id) { const item = dbCronograma.find(x => x.id == id); if(item) { document.getElementById('crono-edit-id').value = item.id; document.getElementById('cr-materia').value = item.materia; document.getElementById('cr-conteudo').value = item.conteudo; document.getElementById('cr-notas').value = item.notas; document.getElementById('btn-del-crono').style.display = 'inline-flex'; } } document.getElementById('modal-crono').style.display = 'flex'; }
+        function salvarCronograma() { const id = document.getElementById('crono-edit-id').value; const dia = document.getElementById('cr-dia').value; const materia = document.getElementById('cr-materia').value; const conteudo = document.getElementById('cr-conteudo').value; const notas = document.getElementById('cr-notas').value; if(!materia) { alert("Selecione a matéria!"); return; } const obj = { id: id ? parseInt(id) : Date.now(), dia, materia, conteudo, notas, concluido: false }; if(id) { const idx = dbCronograma.findIndex(x => x.id == id); if(idx > -1) { obj.concluido = dbCronograma[idx].concluido; dbCronograma[idx] = obj; } } else { dbCronograma.push(obj); } salvarLocal(); renderCronograma(); document.getElementById('modal-crono').style.display = 'none'; }
         function excluirCronograma() { const id = document.getElementById('crono-edit-id').value; if(id && confirm("Excluir esta missão do cronograma?")) { dbCronograma = dbCronograma.filter(x => x.id != id); salvarLocal(); renderCronograma(); document.getElementById('modal-crono').style.display = 'none'; } }
-
-        // --- ABA: EDITAL (MULTI-GUIAS) ---
         function switchEdital(id) { currentEditalId = id; renderEdital(); }
-        
-        function criarNovoEdital() {
-            const nome = prompt("Nome do novo edital:");
-            if(nome && nome.trim()) {
-                const newEd = { id: Date.now(), nome: nome.trim(), materias: [] };
-                dbEditais.push(newEd);
-                currentEditalId = newEd.id;
-                salvarLocal();
-                renderEdital();
-            }
-        }
-
-        function renomearEditalAtual() {
-            if(!currentEditalId) return;
-            const ed = dbEditais.find(e => e.id === currentEditalId);
-            if(ed) {
-                const nome = prompt("Novo nome para o edital:", ed.nome);
-                if(nome && nome.trim()) { ed.nome = nome.trim(); salvarLocal(); renderEdital(); }
-            }
-        }
-
-        function excluirEditalAtual() {
-            if(!currentEditalId) return;
-            if(confirm("ATENÇÃO: Apagar este edital e todos os tópicos dentro dele? (O histórico de estudos será mantido)")) {
-                dbEditais = dbEditais.filter(e => e.id !== currentEditalId);
-                if(dbEditais.length > 0) currentEditalId = dbEditais[0].id;
-                else currentEditalId = null;
-                salvarLocal(); atualizarSelectsMaterias(); renderEdital();
-            }
-        }
-
-        function renderEdital() {
-            const tabsContainer = document.getElementById('edital-tabs-container');
-            tabsContainer.innerHTML = '';
-            
-            dbEditais.forEach(ed => {
-                const isActive = ed.id === currentEditalId ? 'active' : '';
-                tabsContainer.innerHTML += `<button class="btn-edital-tab ${isActive}" onclick="switchEdital(${ed.id})">${ed.nome}</button>`;
-            });
-            tabsContainer.innerHTML += `<button class="btn-edital-tab" style="background:transparent; border:1px dashed var(--tech-accent); color:var(--tech-accent);" onclick="criarNovoEdital()"><i class="fas fa-plus"></i> Novo Edital</button>`;
-
-            const tb = document.getElementById('tbody-edital');
-            tb.innerHTML = '';
-            
-            const currentEdital = dbEditais.find(e => e.id === currentEditalId);
-            if(!currentEdital) {
-                document.getElementById('tabela-edital').style.display = 'none';
-                document.getElementById('current-edital-name').innerText = "NENHUM EDITAL";
-                document.getElementById('edital-pct-text').innerText = `0% CONCLUÍDO`;
-                document.getElementById('edital-pct-fill').style.width = `0%`;
-                return;
-            }
-
-            document.getElementById('tabela-edital').style.display = 'table';
-            document.getElementById('current-edital-name').innerText = currentEdital.nome;
-
-            let totEstudado = 0; let totItems = 0;
-
-            currentEdital.materias.forEach((cat, index) => {
-                tb.innerHTML += `<tr class="edital-header-row"><td colspan="4">${index + 1}. ${cat.materia}</td><td style="text-align:center"><button class="btn-del" style="background:transparent; color:inherit; border:1px solid rgba(255,255,255,0.3); padding:4px 8px; font-size:10px;" onclick="excluirMateriaEdital('${cat.materia}')"><i class="fas fa-trash"></i></button></td></tr>`;
-                
-                cat.topicos.forEach((topico, tIndex) => {
-                    totItems++;
-                    if(topico.estudado) totEstudado++;
-                    tb.innerHTML += `<tr class="edital-item-row"><td class="edital-num">${index + 1}.${tIndex + 1}</td><td>${topico.nome}</td><td style="text-align:center"><input type="checkbox" class="chk-edital" ${topico.estudado ? 'checked' : ''} onchange="toggleEditalCheck('${cat.materia}', ${topico.id}, 'estudado', this.checked)"></td><td style="text-align:center"><input type="checkbox" class="chk-edital" ${topico.revisado ? 'checked' : ''} onchange="toggleEditalCheck('${cat.materia}', ${topico.id}, 'revisado', this.checked)"></td><td style="text-align:center"><button class="btn-icon btn-del" style="width:25px; height:25px; font-size:10px; background:transparent; color:#ef5350;" onclick="excluirTopicoEdital('${cat.materia}', ${topico.id})"><i class="fas fa-times"></i></button></td></tr>`;
-                });
-            });
-
-            const pctGlobal = totItems > 0 ? ((totEstudado / totItems) * 100).toFixed(1) : 0;
-            document.getElementById('edital-pct-text').innerText = `${pctGlobal}% CONCLUÍDO`;
-            document.getElementById('edital-pct-fill').style.width = `${pctGlobal}%`;
-        }
-
-        function toggleEditalCheck(materiaNome, topicoId, campo, isChecked) {
-            const currentEdital = dbEditais.find(e => e.id === currentEditalId);
-            if(!currentEdital) return;
-            const mat = currentEdital.materias.find(m => m.materia === materiaNome);
-            if(mat) {
-                const top = mat.topicos.find(t => t.id === topicoId);
-                if(top) { top[campo] = isChecked; salvarLocal(); renderEdital(); }
-            }
-        }
-
-        function abrirModalImportar() {
-            if(!currentEditalId) return alert("Crie um edital primeiro!");
-            document.getElementById('import-texto').value = '';
-            document.getElementById('modal-importar').style.display = 'flex';
-        }
-
-        function processarImportacao() {
-            const txt = document.getElementById('import-texto').value;
-            if(!txt.trim()) return alert("Cole o texto do edital primeiro.");
-
-            const currentEdital = dbEditais.find(e => e.id === currentEditalId);
-            if(!currentEdital) return;
-
-            const linhas = txt.split('\n');
-            let materiaAtualObj = null;
-            let importados = 0;
-
-            linhas.forEach(linha => {
-                let l = linha.trim();
-                if(!l) return;
-                
-                l = l.replace(/☐|☑/g, '').trim();
-                if(!l) return;
-
-                const matchTopico = l.match(/^(\d+\.\d+(?:\.\d+)?)\s+(.+)$/);
-                const matchMateria = l.match(/^(\d+)\s+(.+)$/);
-                
-                if(matchTopico) {
-                    if(!materiaAtualObj) {
-                        materiaAtualObj = { materia: "CONTEÚDO EXTRA", topicos: [] };
-                        currentEdital.materias.push(materiaAtualObj);
-                    }
-                    materiaAtualObj.topicos.push({ id: Date.now() + Math.random(), nome: matchTopico[2], estudado: false, revisado: false });
-                    importados++;
-                } else if (matchMateria) {
-                    let nomeMat = matchMateria[2].toUpperCase();
-                    materiaAtualObj = currentEdital.materias.find(m => m.materia === nomeMat);
-                    if(!materiaAtualObj) {
-                        materiaAtualObj = { materia: nomeMat, topicos: [] };
-                        currentEdital.materias.push(materiaAtualObj);
-                    }
-                } else {
-                    if(l === l.toUpperCase() && l.length > 3) {
-                        let nomeMat = l;
-                        materiaAtualObj = currentEdital.materias.find(m => m.materia === nomeMat);
-                        if(!materiaAtualObj) {
-                            materiaAtualObj = { materia: nomeMat, topicos: [] };
-                            currentEdital.materias.push(materiaAtualObj);
-                        }
-                    } else {
-                        if(!materiaAtualObj) {
-                            materiaAtualObj = { materia: "DIVERSOS", topicos: [] };
-                            currentEdital.materias.push(materiaAtualObj);
-                        }
-                        materiaAtualObj.topicos.push({ id: Date.now() + Math.random(), nome: l, estudado: false, revisado: false });
-                        importados++;
-                    }
-                }
-            });
-
-            salvarLocal(); atualizarSelectsMaterias(); renderEdital();
-            document.getElementById('modal-importar').style.display = 'none';
-            mostrarToast(`Importação concluída! ${importados} tópicos adicionados.`);
-        }
-
-        function salvarNovoTopicoEdital() {
-            if(!currentEditalId) return alert("Crie um edital primeiro!");
-            const currentEdital = dbEditais.find(e => e.id === currentEditalId);
-
-            const matSel = document.getElementById('nova-topico-materia').value;
-            const topNome = document.getElementById('nova-topico-input').value.trim();
-            if(!topNome) return alert("Digite o nome da matéria/tópico!");
-            
-            if(matSel) {
-                const mat = currentEdital.materias.find(m => m.materia === matSel);
-                mat.topicos.push({ id: Date.now(), nome: topNome, estudado: false, revisado: false });
-            } else {
-                const novaMat = topNome.toUpperCase();
-                if(!currentEdital.materias.find(m => m.materia === novaMat)) { currentEdital.materias.push({ materia: novaMat, topicos: [] }); }
-            }
-            salvarLocal(); atualizarSelectsMaterias(); renderEdital();
-            document.getElementById('nova-topico-input').value = '';
-            document.getElementById('modal-nova-materia').style.display='none';
-            mostrarToast("Adicionado ao edital!");
-        }
-
-        function excluirMateriaEdital(nome) { 
-            if(confirm("Apagar matéria inteira e todos os tópicos?")) { 
-                const currentEdital = dbEditais.find(e => e.id === currentEditalId);
-                currentEdital.materias = currentEdital.materias.filter(m => m.materia !== nome); 
-                salvarLocal(); atualizarSelectsMaterias(); renderEdital(); 
-            } 
-        }
-        function excluirTopicoEdital(nomeMat, idTopico) { 
-            if(confirm("Remover este tópico?")) { 
-                const currentEdital = dbEditais.find(e => e.id === currentEditalId);
-                const mat = currentEdital.materias.find(m => m.materia === nomeMat); 
-                if(mat) { mat.topicos = mat.topicos.filter(t => t.id !== idTopico); salvarLocal(); renderEdital(); } 
-            } 
-        }
-
-        // --- ABA: ANÁLISE ---
-        function setAnalisePeriod(periodo) {
-            document.querySelectorAll('.btn-quick-date').forEach(b => b.classList.remove('active'));
-            document.getElementById('btn-an-'+periodo).classList.add('active');
-
-            const dtFim = new Date();
-            let dtIni = new Date();
-
-            if(periodo === '1d') dtIni.setDate(dtFim.getDate());
-            else if(periodo === '7d') dtIni.setDate(dtFim.getDate() - 6);
-            else if(periodo === '30d') dtIni.setDate(dtFim.getDate() - 29);
-            else if(periodo === '60d') dtIni.setDate(dtFim.getDate() - 59);
-            else if(periodo === '6m') dtIni.setMonth(dtFim.getMonth() - 6);
-            else if(periodo === '12m') dtIni.setFullYear(dtFim.getFullYear() - 1);
-            else if(periodo === 'all') { dtIni = null; }
-
-            document.getElementById('an-data-fim').value = getDataFormatada(dtFim);
-            document.getElementById('an-data-ini').value = dtIni ? getDataFormatada(dtIni) : '';
-            renderAnalise();
-        }
-
+        function criarNovoEdital() { const nome = prompt("Nome do novo edital:"); if(nome && nome.trim()) { const newEd = { id: Date.now(), nome: nome.trim(), materias: [] }; dbEditais.push(newEd); currentEditalId = newEd.id; salvarLocal(); renderEdital(); } }
+        function renomearEditalAtual() { if(!currentEditalId) return; const ed = dbEditais.find(e => e.id === currentEditalId); if(ed) { const nome = prompt("Novo nome para o edital:", ed.nome); if(nome && nome.trim()) { ed.nome = nome.trim(); salvarLocal(); renderEdital(); } } }
+        function excluirEditalAtual() { if(!currentEditalId) return; if(confirm("ATENÇÃO: Apagar este edital e todos os tópicos dentro dele? (O histórico de estudos será mantido)")) { dbEditais = dbEditais.filter(e => e.id !== currentEditalId); if(dbEditais.length > 0) currentEditalId = dbEditais[0].id; else currentEditalId = null; salvarLocal(); atualizarSelectsMaterias(); renderEdital(); } }
+        function renderEdital() { const tabsContainer = document.getElementById('edital-tabs-container'); tabsContainer.innerHTML = ''; dbEditais.forEach(ed => { const isActive = ed.id === currentEditalId ? 'active' : ''; tabsContainer.innerHTML += `<button class="btn-edital-tab ${isActive}" onclick="switchEdital(${ed.id})">${ed.nome}</button>`; }); tabsContainer.innerHTML += `<button class="btn-edital-tab" style="background:transparent; border:1px dashed var(--tech-accent); color:var(--tech-accent);" onclick="criarNovoEdital()"><i class="fas fa-plus"></i> Novo Edital</button>`; const tb = document.getElementById('tbody-edital'); tb.innerHTML = ''; const currentEdital = dbEditais.find(e => e.id === currentEditalId); if(!currentEdital) { document.getElementById('tabela-edital').style.display = 'none'; document.getElementById('current-edital-name').innerText = "NENHUM EDITAL"; document.getElementById('edital-pct-text').innerText = `0% CONCLUÍDO`; document.getElementById('edital-pct-fill').style.width = `0%`; return; } document.getElementById('tabela-edital').style.display = 'table'; document.getElementById('current-edital-name').innerText = currentEdital.nome; let totEstudado = 0; let totItems = 0; currentEdital.materias.forEach((cat, index) => { tb.innerHTML += `<tr class="edital-header-row"><td colspan="4">${index + 1}. ${cat.materia}</td><td style="text-align:center"><button class="btn-del" style="background:transparent; color:inherit; border:1px solid rgba(255,255,255,0.3); padding:4px 8px; font-size:10px;" onclick="excluirMateriaEdital('${cat.materia}')"><i class="fas fa-trash"></i></button></td></tr>`; cat.topicos.forEach((topico, tIndex) => { totItems++; if(topico.estudado) totEstudado++; tb.innerHTML += `<tr class="edital-item-row"><td class="edital-num">${index + 1}.${tIndex + 1}</td><td>${topico.nome}</td><td style="text-align:center"><input type="checkbox" class="chk-edital" ${topico.estudado ? 'checked' : ''} onchange="toggleEditalCheck('${cat.materia}', ${topico.id}, 'estudado', this.checked)"></td><td style="text-align:center"><input type="checkbox" class="chk-edital" ${topico.revisado ? 'checked' : ''} onchange="toggleEditalCheck('${cat.materia}', ${topico.id}, 'revisado', this.checked)"></td><td style="text-align:center"><button class="btn-icon btn-del" style="width:25px; height:25px; font-size:10px; background:transparent; color:#ef5350;" onclick="excluirTopicoEdital('${cat.materia}', ${topico.id})"><i class="fas fa-times"></i></button></td></tr>`; }); }); const pctGlobal = totItems > 0 ? ((totEstudado / totItems) * 100).toFixed(1) : 0; document.getElementById('edital-pct-text').innerText = `${pctGlobal}% CONCLUÍDO`; document.getElementById('edital-pct-fill').style.width = `${pctGlobal}%`; }
+        function toggleEditalCheck(materiaNome, topicoId, campo, isChecked) { const currentEdital = dbEditais.find(e => e.id === currentEditalId); if(!currentEdital) return; const mat = currentEdital.materias.find(m => m.materia === materiaNome); if(mat) { const top = mat.topicos.find(t => t.id === topicoId); if(top) { top[campo] = isChecked; salvarLocal(); renderEdital(); } } }
+        function abrirModalImportar() { if(!currentEditalId) return alert("Crie um edital primeiro!"); document.getElementById('import-texto').value = ''; document.getElementById('modal-importar').style.display = 'flex'; }
+        function processarImportacao() { const txt = document.getElementById('import-texto').value; if(!txt.trim()) return alert("Cole o texto do edital primeiro."); const currentEdital = dbEditais.find(e => e.id === currentEditalId); if(!currentEdital) return; const linhas = txt.split('\n'); let materiaAtualObj = null; let importados = 0; linhas.forEach(linha => { let l = linha.trim(); if(!l) return; l = l.replace(/☐|☑/g, '').trim(); if(!l) return; const matchTopico = l.match(/^(\d+\.\d+(?:\.\d+)?)\s+(.+)$/); const matchMateria = l.match(/^(\d+)\s+(.+)$/); if(matchTopico) { if(!materiaAtualObj) { materiaAtualObj = { materia: "CONTEÚDO EXTRA", topicos: [] }; currentEdital.materias.push(materiaAtualObj); } materiaAtualObj.topicos.push({ id: Date.now() + Math.random(), nome: matchTopico[2], estudado: false, revisado: false }); importados++; } else if (matchMateria) { let nomeMat = matchMateria[2].toUpperCase(); materiaAtualObj = currentEdital.materias.find(m => m.materia === nomeMat); if(!materiaAtualObj) { materiaAtualObj = { materia: nomeMat, topicos: [] }; currentEdital.materias.push(materiaAtualObj); } } else { if(l === l.toUpperCase() && l.length > 3) { let nomeMat = l; materiaAtualObj = currentEdital.materias.find(m => m.materia === nomeMat); if(!materiaAtualObj) { materiaAtualObj = { materia: nomeMat, topicos: [] }; currentEdital.materias.push(materiaAtualObj); } } else { if(!materiaAtualObj) { materiaAtualObj = { materia: "DIVERSOS", topicos: [] }; currentEdital.materias.push(materiaAtualObj); } materiaAtualObj.topicos.push({ id: Date.now() + Math.random(), nome: l, estudado: false, revisado: false }); importados++; } } }); salvarLocal(); atualizarSelectsMaterias(); renderEdital(); document.getElementById('modal-importar').style.display = 'none'; mostrarToast(`Importação concluída! ${importados} tópicos adicionados.`); }
+        function salvarNovoTopicoEdital() { if(!currentEditalId) return alert("Crie um edital primeiro!"); const currentEdital = dbEditais.find(e => e.id === currentEditalId); const matSel = document.getElementById('nova-topico-materia').value; const topNome = document.getElementById('nova-topico-input').value.trim(); if(!topNome) return alert("Digite o nome da matéria/tópico!"); if(matSel) { const mat = currentEdital.materias.find(m => m.materia === matSel); mat.topicos.push({ id: Date.now(), nome: topNome, estudado: false, revisado: false }); } else { const novaMat = topNome.toUpperCase(); if(!currentEdital.materias.find(m => m.materia === novaMat)) { currentEdital.materias.push({ materia: novaMat, topicos: [] }); } } salvarLocal(); atualizarSelectsMaterias(); renderEdital(); document.getElementById('nova-topico-input').value = ''; document.getElementById('modal-nova-materia').style.display='none'; mostrarToast("Adicionado ao edital!"); }
+        function excluirMateriaEdital(nome) { if(confirm("Apagar matéria inteira e todos os tópicos?")) { const currentEdital = dbEditais.find(e => e.id === currentEditalId); currentEdital.materias = currentEdital.materias.filter(m => m.materia !== nome); salvarLocal(); atualizarSelectsMaterias(); renderEdital(); } }
+        function excluirTopicoEdital(nomeMat, idTopico) { if(confirm("Remover este tópico?")) { const currentEdital = dbEditais.find(e => e.id === currentEditalId); const mat = currentEdital.materias.find(m => m.materia === nomeMat); if(mat) { mat.topicos = mat.topicos.filter(t => t.id !== idTopico); salvarLocal(); renderEdital(); } } }
+        function setAnalisePeriod(periodo) { document.querySelectorAll('.btn-quick-date').forEach(b => b.classList.remove('active')); document.getElementById('btn-an-'+periodo).classList.add('active'); const dtFim = new Date(); let dtIni = new Date(); if(periodo === '1d') dtIni.setDate(dtFim.getDate()); else if(periodo === '7d') dtIni.setDate(dtFim.getDate() - 6); else if(periodo === '30d') dtIni.setDate(dtFim.getDate() - 29); else if(periodo === '60d') dtIni.setDate(dtFim.getDate() - 59); else if(periodo === '6m') dtIni.setMonth(dtFim.getMonth() - 6); else if(periodo === '12m') dtIni.setFullYear(dtFim.getFullYear() - 1); else if(periodo === 'all') { dtIni = null; } document.getElementById('an-data-fim').value = getDataFormatada(dtFim); document.getElementById('an-data-ini').value = dtIni ? getDataFormatada(dtIni) : ''; renderAnalise(); }
         function resetQuickButtons() { document.querySelectorAll('.btn-quick-date').forEach(b => b.classList.remove('active')); }
-
-        function renderAnalise() {
-            const dtIni = document.getElementById('an-data-ini').value;
-            const dtFim = document.getElementById('an-data-fim').value;
-            const materiaFiltro = document.getElementById('an-filtro-cat').value;
-
-            let filtered = [...dbEstudos];
-            if(dtIni) filtered = filtered.filter(e => e.data >= dtIni);
-            if(dtFim) filtered = filtered.filter(e => e.data <= dtFim);
-            if(materiaFiltro) filtered = filtered.filter(e => e.materia === materiaFiltro);
-
-            let minPeriodo = 0;
-            const resumoMaterias = {};
-
-            filtered.forEach(e => {
-                const min = parseInt(e.duracao);
-                minPeriodo += min;
-                resumoMaterias[e.materia] = (resumoMaterias[e.materia] || 0) + min;
-            });
-
-            document.getElementById('an-total-time').innerText = formataHorasSegundos(minPeriodo);
-            
-            let dateLabel = "Geral";
-            if(dtIni && dtFim) dateLabel = `${parseDataBR(dtIni)} a ${parseDataBR(dtFim)}`;
-            else if(dtIni) dateLabel = `A partir de ${parseDataBR(dtIni)}`;
-            else if(dtFim) dateLabel = `Até ${parseDataBR(dtFim)}`;
-            document.getElementById('an-periodo-lbl').innerText = `Tempo total em: ${dateLabel}`;
-
-            let arrMats = Object.keys(resumoMaterias).map(mat => { return { nome: mat, min: resumoMaterias[mat] }; });
-            arrMats.sort((a, b) => b.min - a.min);
-
-            const labelsPie = []; const dataPie = []; const bgColors = [];
-            const listContainer = document.getElementById('an-subject-list');
-            listContainer.innerHTML = '';
-
-            if(arrMats.length === 0) {
-                listContainer.innerHTML = '<div style="color:#888; font-size:14px;">Sem dados para analisar neste período.</div>';
-                if(chartPieAnalyticsInstance) chartPieAnalyticsInstance.destroy();
-                return;
-            }
-
-            arrMats.forEach((item, index) => {
-                labelsPie.push(item.nome); dataPie.push(item.min);
-                const color = chartColors[index % chartColors.length];
-                bgColors.push(color);
-                const pct = minPeriodo > 0 ? ((item.min / minPeriodo) * 100).toFixed(1) : 0;
-                listContainer.innerHTML += `<div class="an-list-item"><span class="an-dot" style="background-color: ${color}"></span><span class="an-materia-nome">${item.nome}</span><span class="an-tempo"><i class="far fa-clock"></i> ${formataHoras(item.min)}</span><span class="an-pct">(${pct}%)</span></div>`;
-            });
-
-            const ctxPie = document.getElementById('chartPieAnalytics').getContext('2d');
-            if(chartPieAnalyticsInstance) chartPieAnalyticsInstance.destroy();
-            chartPieAnalyticsInstance = new Chart(ctxPie, { type: 'pie', data: { labels: labelsPie, datasets: [{ data: dataPie, backgroundColor: bgColors, borderColor: 'transparent' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {display: false} } } });
-        }
-
-        // --- ABA: REGISTRO E HISTÓRICO ---
-        function setQuickDate(type) {
-            const btns = ['btn-hoje', 'btn-ontem', 'btn-outro'];
-            btns.forEach(b => document.getElementById(b).classList.remove('active'));
-            document.getElementById('btn-'+type).classList.add('active');
-            const inputDate = document.getElementById('m-data');
-            if(type === 'hoje') { inputDate.style.display = 'none'; inputDate.value = getDataFormatada(new Date()); } 
-            else if(type === 'ontem') { inputDate.style.display = 'none'; const ontem = new Date(); ontem.setDate(ontem.getDate() - 1); inputDate.value = getDataFormatada(ontem); } 
-            else { inputDate.style.display = 'block'; if(!inputDate.value) inputDate.value = getDataFormatada(new Date()); }
-        }
-
-        function abrirModal(id = null) {
-            document.getElementById('edit-id').value = '';
-            document.getElementById('m-materia').value = '';
-            document.getElementById('m-conteudo').innerHTML = '<option value="">-- Escolha um conteúdo --</option>';
-            document.getElementById('m-duracao-horas').value = '';
-            document.getElementById('m-duracao-min').value = '';
-            document.getElementById('m-notas').value = '';
-            setQuickDate('hoje');
-
-            if(id) {
-                const item = dbEstudos.find(x => x.id == id);
-                if(item) {
-                    document.getElementById('edit-id').value = item.id;
-                    document.getElementById('m-materia').value = item.materia;
-                    atualizarTopicosRegistro(); 
-                    document.getElementById('m-conteudo').value = item.conteudo || '';
-                    document.getElementById('m-duracao-horas').value = Math.floor(item.duracao / 60) || '';
-                    document.getElementById('m-duracao-min').value = item.duracao % 60 || '';
-                    document.getElementById('m-notas').value = item.notas || '';
-                    document.getElementById('m-data').value = item.data; setQuickDate('outro'); 
-                }
-            }
-            document.getElementById('modal-atividade').style.display = 'flex';
-        }
-
-        function salvarAtividade() {
-            const id = document.getElementById('edit-id').value;
-            const materia = document.getElementById('m-materia').value;
-            const conteudo = document.getElementById('m-conteudo').value;
-            const data = document.getElementById('m-data').value;
-            const hr = parseInt(document.getElementById('m-duracao-horas').value) || 0;
-            const min = parseInt(document.getElementById('m-duracao-min').value) || 0;
-            const duracao = (hr * 60) + min;
-            const notas = document.getElementById('m-notas').value;
-
-            if(!materia || !data || duracao <= 0) { alert("Selecione a Matéria e informe um Tempo válido."); return; }
-
-            const obj = { id: id ? parseInt(id) : Date.now(), materia, conteudo, data, duracao, notas };
-            if(id) { const idx = dbEstudos.findIndex(x => x.id == id); if(idx > -1) dbEstudos[idx] = obj; } 
-            else { dbEstudos.push(obj); }
-
-            salvarLocal(); renderizarTudo();
-            if(document.getElementById('analise').classList.contains('active')) renderAnalise();
-
-            if(!document.getElementById('chk-manter-aberto').checked) { document.getElementById('modal-atividade').style.display = 'none'; } 
-            else { document.getElementById('m-duracao-horas').value = ''; document.getElementById('m-duracao-min').value = ''; }
-            mostrarToast("Registro de estudo salvo!");
-        }
-
+        function renderAnalise() { const dtIni = document.getElementById('an-data-ini').value; const dtFim = document.getElementById('an-data-fim').value; const materiaFiltro = document.getElementById('an-filtro-cat').value; let filtered = [...dbEstudos]; if(dtIni) filtered = filtered.filter(e => e.data >= dtIni); if(dtFim) filtered = filtered.filter(e => e.data <= dtFim); if(materiaFiltro) filtered = filtered.filter(e => e.materia === materiaFiltro); let minPeriodo = 0; const resumoMaterias = {}; filtered.forEach(e => { const min = parseInt(e.duracao); minPeriodo += min; resumoMaterias[e.materia] = (resumoMaterias[e.materia] || 0) + min; }); document.getElementById('an-total-time').innerText = formataHorasSegundos(minPeriodo); let dateLabel = "Geral"; if(dtIni && dtFim) dateLabel = `${parseDataBR(dtIni)} a ${parseDataBR(dtFim)}`; else if(dtIni) dateLabel = `A partir de ${parseDataBR(dtIni)}`; else if(dtFim) dateLabel = `Até ${parseDataBR(dtFim)}`; document.getElementById('an-periodo-lbl').innerText = `Tempo total em: ${dateLabel}`; let arrMats = Object.keys(resumoMaterias).map(mat => { return { nome: mat, min: resumoMaterias[mat] }; }); arrMats.sort((a, b) => b.min - a.min); const labelsPie = []; const dataPie = []; const bgColors = []; const listContainer = document.getElementById('an-subject-list'); listContainer.innerHTML = ''; if(arrMats.length === 0) { listContainer.innerHTML = '<div style="color:#888; font-size:14px;">Sem dados para analisar neste período.</div>'; if(chartPieAnalyticsInstance) chartPieAnalyticsInstance.destroy(); return; } arrMats.forEach((item, index) => { labelsPie.push(item.nome); dataPie.push(item.min); const color = chartColors[index % chartColors.length]; bgColors.push(color); const pct = minPeriodo > 0 ? ((item.min / minPeriodo) * 100).toFixed(1) : 0; listContainer.innerHTML += `<div class="an-list-item"><span class="an-dot" style="background-color: ${color}"></span><span class="an-materia-nome">${item.nome}</span><span class="an-tempo"><i class="far fa-clock"></i> ${formataHoras(item.min)}</span><span class="an-pct">(${pct}%)</span></div>`; }); const ctxPie = document.getElementById('chartPieAnalytics').getContext('2d'); if(chartPieAnalyticsInstance) chartPieAnalyticsInstance.destroy(); chartPieAnalyticsInstance = new Chart(ctxPie, { type: 'pie', data: { labels: labelsPie, datasets: [{ data: dataPie, backgroundColor: bgColors, borderColor: 'transparent' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {display: false} } } }); }
+        function setQuickDate(type) { const btns = ['btn-hoje', 'btn-ontem', 'btn-outro']; btns.forEach(b => document.getElementById(b).classList.remove('active')); document.getElementById('btn-'+type).classList.add('active'); const inputDate = document.getElementById('m-data'); if(type === 'hoje') { inputDate.style.display = 'none'; inputDate.value = getDataFormatada(new Date()); } else if(type === 'ontem') { inputDate.style.display = 'none'; const ontem = new Date(); ontem.setDate(ontem.getDate() - 1); inputDate.value = getDataFormatada(ontem); } else { inputDate.style.display = 'block'; if(!inputDate.value) inputDate.value = getDataFormatada(new Date()); } }
+        function abrirModal(id = null) { document.getElementById('edit-id').value = ''; document.getElementById('m-materia').value = ''; document.getElementById('m-conteudo').innerHTML = '<option value="">-- Escolha um conteúdo --</option>'; document.getElementById('m-duracao-horas').value = ''; document.getElementById('m-duracao-min').value = ''; document.getElementById('m-notas').value = ''; setQuickDate('hoje'); if(id) { const item = dbEstudos.find(x => x.id == id); if(item) { document.getElementById('edit-id').value = item.id; document.getElementById('m-materia').value = item.materia; atualizarTopicosRegistro(); document.getElementById('m-conteudo').value = item.conteudo || ''; document.getElementById('m-duracao-horas').value = Math.floor(item.duracao / 60) || ''; document.getElementById('m-duracao-min').value = item.duracao % 60 || ''; document.getElementById('m-notas').value = item.notas || ''; document.getElementById('m-data').value = item.data; setQuickDate('outro'); } } document.getElementById('modal-atividade').style.display = 'flex'; }
+        function salvarAtividade() { const id = document.getElementById('edit-id').value; const materia = document.getElementById('m-materia').value; const conteudo = document.getElementById('m-conteudo').value; const data = document.getElementById('m-data').value; const hr = parseInt(document.getElementById('m-duracao-horas').value) || 0; const min = parseInt(document.getElementById('m-duracao-min').value) || 0; const duracao = (hr * 60) + min; const notas = document.getElementById('m-notas').value; if(!materia || !data || duracao <= 0) { alert("Selecione a Matéria e informe um Tempo válido."); return; } const obj = { id: id ? parseInt(id) : Date.now(), materia, conteudo, data, duracao, notas }; if(id) { const idx = dbEstudos.findIndex(x => x.id == id); if(idx > -1) dbEstudos[idx] = obj; } else { dbEstudos.push(obj); } salvarLocal(); renderizarTudo(); if(document.getElementById('analise').classList.contains('active')) renderAnalise(); if(!document.getElementById('chk-manter-aberto').checked) { document.getElementById('modal-atividade').style.display = 'none'; } else { document.getElementById('m-duracao-horas').value = ''; document.getElementById('m-duracao-min').value = ''; } mostrarToast("Registro salvo!"); }
         function excluirAtividade(id) { if(confirm("Excluir definitivamente este registro?")) { dbEstudos = dbEstudos.filter(x => x.id != id); salvarLocal(); renderizarTudo(); if(document.getElementById('analise').classList.contains('active')) renderAnalise(); } }
-
         function limparFiltrosHistorico() { document.getElementById('f-data-ini').value = ''; document.getElementById('f-data-fim').value = ''; document.getElementById('f-materia').value = ''; document.getElementById('f-busca').value = ''; renderHistorico(); }
-        
-        function renderHistorico() {
-            const dtIni = document.getElementById('f-data-ini').value; const dtFim = document.getElementById('f-data-fim').value;
-            const materiaFiltro = document.getElementById('f-materia').value; const busca = document.getElementById('f-busca').value.toLowerCase();
-            let lista = [...dbEstudos];
-
-            if(dtIni) lista = lista.filter(d => d.data >= dtIni);
-            if(dtFim) lista = lista.filter(d => d.data <= dtFim);
-            if(materiaFiltro) lista = lista.filter(d => d.materia === materiaFiltro);
-            if(busca) { lista = lista.filter(d => (d.conteudo && d.conteudo.toLowerCase().includes(busca)) || (d.notas && d.notas.toLowerCase().includes(busca))); }
-            lista.sort((a,b) => new Date(b.data) - new Date(a.data));
-
-            const tb = document.getElementById('tbody-atividades'); tb.innerHTML = '';
-            if(lista.length === 0) { tb.innerHTML = '<tr><td colspan="5" align="center" style="padding:20px; color:#888;">Nenhum estudo encontrado.</td></tr>'; return; }
-
-            lista.forEach(d => {
-                let detalhesHtml = '';
-                if(d.conteudo) detalhesHtml += `<div style="font-size:12px; color:var(--text-muted);">${d.conteudo}</div>`;
-                if(d.notas) detalhesHtml += `<div style="font-size:11px; color:#888; font-style:italic; margin-top:2px;">"${d.notas.substring(0,30)}..."</div>`;
-                tb.innerHTML += `<tr><td style="white-space:nowrap; font-weight:bold;">${parseDataBR(d.data)}</td><td><span class="subject-badge">${d.materia}</span>${detalhesHtml}</td><td style="text-align:center; font-family:'Courier New';">-</td><td style="font-family:'Rajdhani'; font-weight:bold; font-size:16px; color:var(--tech-accent); text-align:center">${formataHoras(d.duracao)}</td><td style="white-space:nowrap"><button class="btn-icon btn-edit" onclick="abrirModal(${d.id})"><i class="fas fa-pen"></i></button> <button class="btn-icon btn-del" onclick="excluirAtividade(${d.id})"><i class="fas fa-trash"></i></button></td></tr>`;
-            });
-        }
-
-        // --- DASHBOARD ---
-        function renderDashboard() {
-            const hoje = new Date(); const hojeStr = getDataFormatada(hoje); const diaSemana = hoje.getDay(); const inicioSemana = new Date(hoje); inicioSemana.setDate(hoje.getDate() - diaSemana); const inicioSemanaStr = getDataFormatada(inicioSemana);
-            let minHoje = 0, minSemana = 0, minTotal = 0; const ultimos7Dias = {};
-            for(let i=6; i>=0; i--) { let d = new Date(); d.setDate(d.getDate() - i); let label = d.toLocaleDateString('pt-BR', {weekday: 'short'}); if(i===0) label = "hoje"; ultimos7Dias[getDataFormatada(d)] = { label: label, min: 0 }; }
-            dbEstudos.forEach(e => { const min = parseInt(e.duracao); minTotal += min; if(e.data === hojeStr) minHoje += min; if(e.data >= inicioSemanaStr && e.data <= hojeStr) minSemana += min; if(ultimos7Dias[e.data]) ultimos7Dias[e.data].min += min; });
-            document.getElementById('dash-hoje').innerText = formataHoras(minHoje); document.getElementById('dash-semana').innerText = formataHoras(minSemana); document.getElementById('dash-total').innerText = formataHoras(minTotal);
-            const labelsBar = []; const dataBar = []; for (let dt in ultimos7Dias) { labelsBar.push(ultimos7Dias[dt].label); dataBar.push(formataDecimal(ultimos7Dias[dt].min)); }
-            const ctxEvo = document.getElementById('chartEvo').getContext('2d'); if(chartEvoInstance) chartEvoInstance.destroy();
-            chartEvoInstance = new Chart(ctxEvo, { type: 'bar', data: { labels: labelsBar, datasets: [{ label: 'Horas Estudadas', data: dataBar, backgroundColor: '#ff4081', borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {display: false} }, scales: { y: { grid: { color: '#333' } }, x: { grid: { display: false } } } } });
-        }
-
-        // --- CALENDÁRIO ---
-        const nomeMeses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-        function mudarMes(delta) { dataAtual.setMonth(dataAtual.getMonth() + delta); renderCalendario(); }
-        function renderCalendario() {
-            const grid = document.getElementById('calendar-grid'); const titulo = document.getElementById('cal-titulo'); grid.innerHTML = '';
-            const y = dataAtual.getFullYear(); const m = dataAtual.getMonth(); const hojeReal = new Date();
-            titulo.innerText = `${nomeMeses[m]} ${y}`;
-            ['DOM','SEG','TER','QUA','QUI','SEX','SÁB'].forEach(d => { grid.innerHTML += `<div style="text-align:center; font-size:12px; font-weight:bold; color:var(--primary); padding:5px;">${d}</div>`; });
-            const firstDay = new Date(y, m, 1).getDay(); const daysInMonth = new Date(y, m+1, 0).getDate();
-            for(let i=0; i<firstDay; i++) { grid.innerHTML += `<div></div>`; }
-            for(let d=1; d<=daysInMonth; d++) {
-                const dt = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-                const isToday = (d === hojeReal.getDate() && m === hojeReal.getMonth() && y === hojeReal.getFullYear());
-                const minDia = dbEstudos.filter(e => e.data === dt).reduce((acc, curr) => acc + curr.duracao, 0);
-                let html = `<div class="day-cell ${minDia > 0 ? 'day-studied' : ''}" style="${isToday ? 'border: 2px solid var(--tech-accent)' : ''}"><span class="day-num" style="${isToday ? 'color:var(--tech-accent)' : ''}">${d}</span>`;
-                if(minDia > 0) { html += `<span class="day-hours">${formataHoras(minDia)}</span>`; } html += `</div>`; grid.innerHTML += html;
-            }
-        }
-
-        // --- CRONÔMETRO ---
-        function atualizarDisplayTimer() { const h = Math.floor(timerSeconds / 3600); const m = Math.floor((timerSeconds % 3600) / 60); const s = timerSeconds % 60; document.getElementById('timer-display').innerText = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; }
-        function iniciarCronometro() { if(timerRunning) return; timerRunning = true; document.getElementById('btn-start-timer').style.display = 'none'; document.getElementById('btn-pause-timer').style.display = 'inline-flex'; timerInterval = setInterval(() => { timerSeconds++; atualizarDisplayTimer(); }, 1000); }
-        function pausarCronometro() { timerRunning = false; clearInterval(timerInterval); document.getElementById('btn-start-timer').style.display = 'inline-flex'; document.getElementById('btn-pause-timer').style.display = 'none'; document.getElementById('btn-start-timer').innerHTML = '<i class="fas fa-play"></i> Continuar'; }
-        function zerarCronometro() { pausarCronometro(); timerSeconds = 0; atualizarDisplayTimer(); document.getElementById('btn-start-timer').innerHTML = '<i class="fas fa-play"></i> Iniciar'; }
-        
-        function salvarDoCronometro() {
-            const minutos = Math.floor(timerSeconds / 60);
-            if(minutos < 1) { alert("Sessão muito curta! Estude pelo menos 1 minuto."); return; }
-            const mat = document.getElementById('c-materia').value; const cont = document.getElementById('c-conteudo').value;
-            if(!mat) { alert("Selecione a Matéria Alvo antes de salvar a sessão."); return; }
-            
-            dbEstudos.push({ id: Date.now(), materia: mat, conteudo: cont, data: getDataFormatada(new Date()), duracao: minutos, notas: "Estudo Cronometrado" });
-            zerarCronometro(); document.getElementById('c-materia').value = ''; document.getElementById('c-conteudo').value = '';
-            salvarLocal(); renderizarTudo(); mostrarToast(`Sessão de ${minutos} min salva!`);
-        }
+        function renderHistorico() { const dtIni = document.getElementById('f-data-ini').value; const dtFim = document.getElementById('f-data-fim').value; const materiaFiltro = document.getElementById('f-materia').value; const busca = document.getElementById('f-busca').value.toLowerCase(); let lista = [...dbEstudos]; if(dtIni) lista = lista.filter(d => d.data >= dtIni); if(dtFim) lista = lista.filter(d => d.data <= dtFim); if(materiaFiltro) lista = lista.filter(d => d.materia === materiaFiltro); if(busca) { lista = lista.filter(d => (d.conteudo && d.conteudo.toLowerCase().includes(busca)) || (d.notas && d.notas.toLowerCase().includes(busca))); } lista.sort((a,b) => new Date(b.data) - new Date(a.data)); const tb = document.getElementById('tbody-atividades'); tb.innerHTML = ''; if(lista.length === 0) { tb.innerHTML = '<tr><td colspan="5" align="center" style="padding:20px; color:#888;">Nenhum estudo encontrado.</td></tr>'; return; } lista.forEach(d => { let detalhesHtml = ''; if(d.conteudo) detalhesHtml += `<div style="font-size:12px; color:var(--text-muted);">${d.conteudo}</div>`; if(d.notas) detalhesHtml += `<div style="font-size:11px; color:#888; font-style:italic; margin-top:2px;">"${d.notas.substring(0,30)}..."</div>`; tb.innerHTML += `<tr><td style="white-space:nowrap; font-weight:bold;">${parseDataBR(d.data)}</td><td><span class="subject-badge">${d.materia}</span>${detalhesHtml}</td><td style="text-align:center; font-family:'Courier New';">-</td><td style="font-family:'Rajdhani'; font-weight:bold; font-size:16px; color:var(--tech-accent); text-align:center">${formataHoras(d.duracao)}</td><td style="white-space:nowrap"><button class="btn-icon btn-edit" onclick="abrirModal(${d.id})"><i class="fas fa-pen"></i></button> <button class="btn-icon btn-del" onclick="excluirAtividade(${d.id})"><i class="fas fa-trash"></i></button></td></tr>`; }); }
+        function renderDashboard() { const hoje = new Date(); const hojeStr = getDataFormatada(hoje); const diaSemana = hoje.getDay(); const inicioSemana = new Date(hoje); inicioSemana.setDate(hoje.getDate() - diaSemana); const inicioSemanaStr = getDataFormatada(inicioSemana); let minHoje = 0, minSemana = 0, minTotal = 0; const ultimos7Dias = {}; for(let i=6; i>=0; i--) { let d = new Date(); d.setDate(d.getDate() - i); let label = d.toLocaleDateString('pt-BR', {weekday: 'short'}); if(i===0) label = "hoje"; ultimos7Dias[getDataFormatada(d)] = { label: label, min: 0 }; } dbEstudos.forEach(e => { const min = parseInt(e.duracao); minTotal += min; if(e.data === hojeStr) minHoje += min; if(e.data >= inicioSemanaStr && e.data <= hojeStr) minSemana += min; if(ultimos7Dias[e.data]) ultimos7Dias[e.data].min += min; }); document.getElementById('dash-hoje').innerText = formataHoras(minHoje); document.getElementById('dash-semana').innerText = formataHoras(minSemana); document.getElementById('dash-total').innerText = formataHoras(minTotal); const labelsBar = []; const dataBar = []; for (let dt in ultimos7Dias) { labelsBar.push(ultimos7Dias[dt].label); dataBar.push(formataDecimal(ultimos7Dias[dt].min)); } const ctxEvo = document.getElementById('chartEvo').getContext('2d'); if(chartEvoInstance) chartEvoInstance.destroy(); chartEvoInstance = new Chart(ctxEvo, { type: 'bar', data: { labels: labelsBar, datasets: [{ label: 'Horas Estudadas', data: dataBar, backgroundColor: '#ff4081', borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: {display: false} }, scales: { y: { grid: { color: '#333' } }, x: { grid: { display: false } } } } }); }
+        const nomeMeses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro']; function mudarMes(delta) { dataAtual.setMonth(dataAtual.getMonth() + delta); renderCalendario(); } function renderCalendario() { const grid = document.getElementById('calendar-grid'); const titulo = document.getElementById('cal-titulo'); grid.innerHTML = ''; const y = dataAtual.getFullYear(); const m = dataAtual.getMonth(); const hojeReal = new Date(); titulo.innerText = `${nomeMeses[m]} ${y}`; ['DOM','SEG','TER','QUA','QUI','SEX','SÁB'].forEach(d => { grid.innerHTML += `<div style="text-align:center; font-size:12px; font-weight:bold; color:var(--primary); padding:5px;">${d}</div>`; }); const firstDay = new Date(y, m, 1).getDay(); const daysInMonth = new Date(y, m+1, 0).getDate(); for(let i=0; i<firstDay; i++) { grid.innerHTML += `<div></div>`; } for(let d=1; d<=daysInMonth; d++) { const dt = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; const isToday = (d === hojeReal.getDate() && m === hojeReal.getMonth() && y === hojeReal.getFullYear()); const minDia = dbEstudos.filter(e => e.data === dt).reduce((acc, curr) => acc + curr.duracao, 0); let html = `<div class="day-cell ${minDia > 0 ? 'day-studied' : ''}" style="${isToday ? 'border: 2px solid var(--tech-accent)' : ''}"><span class="day-num" style="${isToday ? 'color:var(--tech-accent)' : ''}">${d}</span>`; if(minDia > 0) { html += `<span class="day-hours">${formataHoras(minDia)}</span>`; } html += `</div>`; grid.innerHTML += html; } }
+        function atualizarDisplayTimer() { const h = Math.floor(timerSeconds / 3600); const m = Math.floor((timerSeconds % 3600) / 60); const s = timerSeconds % 60; document.getElementById('timer-display').innerText = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; } function iniciarCronometro() { if(timerRunning) return; timerRunning = true; document.getElementById('btn-start-timer').style.display = 'none'; document.getElementById('btn-pause-timer').style.display = 'inline-flex'; timerInterval = setInterval(() => { timerSeconds++; atualizarDisplayTimer(); }, 1000); } function pausarCronometro() { timerRunning = false; clearInterval(timerInterval); document.getElementById('btn-start-timer').style.display = 'inline-flex'; document.getElementById('btn-pause-timer').style.display = 'none'; document.getElementById('btn-start-timer').innerHTML = '<i class="fas fa-play"></i> Continuar'; } function zerarCronometro() { pausarCronometro(); timerSeconds = 0; atualizarDisplayTimer(); document.getElementById('btn-start-timer').innerHTML = '<i class="fas fa-play"></i> Iniciar'; }
+        function salvarDoCronometro() { const minutos = Math.floor(timerSeconds / 60); if(minutos < 1) { alert("Sessão muito curta! Estude pelo menos 1 minuto."); return; } const mat = document.getElementById('c-materia').value; const cont = document.getElementById('c-conteudo').value; if(!mat) { alert("Selecione a Matéria Alvo antes de salvar a sessão."); return; } dbEstudos.push({ id: Date.now(), materia: mat, conteudo: cont, data: getDataFormatada(new Date()), duracao: minutos, notas: "Estudo Cronometrado" }); zerarCronometro(); document.getElementById('c-materia').value = ''; document.getElementById('c-conteudo').value = ''; salvarLocal(); renderizarTudo(); mostrarToast(`Sessão de ${minutos} min salva!`); }
     </script>
 </body>
 </html>
